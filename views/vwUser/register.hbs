@@ -1,0 +1,175 @@
+{{#section "signupcss"}}
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+    <link rel="stylesheet" href="/static/css/cssUser/register.css">
+{{/section}}
+
+{{#section "signupjs"}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+</script>
+<script>
+
+    function checkValidEmail() {
+        const email = document.querySelector('#txtEmail').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Định dạng cơ bản cho email
+        if (email.length === 0 || !emailRegex.test(email)) {
+            document.querySelector('#txtEmail').select();
+            return false; 
+        }
+        return true; 
+    }
+    function checkValidPassword(){
+       
+        const password = document.querySelector('#txtPassword').value;
+
+        const minLength = 8;
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecialChar = /[!@#\$%\^\&*\)\(+=._-]/.test(password);
+
+        if (password.length < minLength) {
+            Swal.fire({
+                title: 'Warning',
+                text: "Password must be at least 8 characters long.",
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            document.querySelector('#txtPassword').select();
+            return false;
+        }
+
+        if (!hasUpper || !hasLower || !hasNumber || !hasSpecialChar) {
+            Swal.fire({
+                title: 'Warning',
+                text: "Password must include uppercase, lowercase, number, and special character.",
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            document.querySelector('#txtPassword').select();
+            return false;
+        }
+
+        return true;
+    }
+    $('#fmSignup').on('submit', function (e) {
+        e.preventDefault();
+        const username = $('#txtUsername').val();
+        const dob = $('#txtDOB').val(); // Lấy giá trị ngày sinh
+        const password = $('#txtPassword').val();
+        const confirmPassword = $('#txtConfirmPassword').val();
+
+        if(!checkValidPassword()){
+            return;
+        }
+        if (password !== confirmPassword) {
+            Swal.fire({
+                title: 'Error',
+                text: "Passwords do not match. Please re-enter.",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+        
+        // Kiểm tra tên người dùng
+        if (username.length === 0) {
+            Swal.fire({
+                title: 'Warning',
+                text: "Username cannot be empty. Please provide a valid username.",
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        if (!checkValidEmail()) {
+            Swal.fire({
+                title: 'Error',
+                text: "Invalid email format. Please provide a valid email.",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+        
+        // Kiểm tra username khả dụng qua AJAX
+        $.getJSON(`/user/is-available?username=${username}`, function (data) {
+            if (data === false) {
+                // Username không khả dụng
+                Swal.fire({
+                    title: 'Warning',
+                    text: "Your username is not available. Please choose another one.",
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+
+            } else {
+                // Hiển thị thông báo đăng ký thành công
+                Swal.fire({
+                    title: 'Success!',
+                    text: "You have successfully signed up. Welcome to Newsland!",
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Gửi form nếu người dùng xác nhận
+                        $('#fmSignup').off('submit').submit();
+                    }
+                });
+            }
+
+        }).fail(function () {
+            // Xử lý lỗi kết nối hoặc lỗi server
+            Swal.fire({
+                title: 'Error',
+                text: "Unable to verify username. Please try again later.",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
+    });
+</script>
+{{/section}}
+
+<div id="card-contain" class="card">
+    <div id="signup-card" class="card-body">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <img id="logo-img" src="/static/imgs/NEWSLANDlogoRmBg.png" alt="" class="img-fluid rounded-circle">
+            <h1>Đăng ký NewsLand</h1>
+        </div>
+
+        <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
+            <form id="fmSignup" action="/user/register" method="post">
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtId">ID Number</label>
+                    <input type="text" name="idnumber" id="txtId" class="form-control txt-input" placeholder="">
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtUsername">Username</label>
+                    <input type="text" name="username" id="txtUsername" class="form-control txt-input" placeholder="">
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtEmail">Email</label>
+                    <input type="text" name="email" id="txtEmail" class="form-control txt-input" placeholder="">
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtPassword">Mật khẩu</label>
+                    <input type="password" name="raw_password" id="txtPassword" class="form-control txt-input"
+                        placeholder="">
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtConfirmPassword">Nhập lại mật khẩu</label>
+                    <input type="password" name="confirm_password" id="txtConfirmPassword"
+                        class="form-control txt-input" placeholder="">
+                </div>
+
+                <button type="submit" class="btn btn-info btn-connect mb-3" href="#">Register</button>
+                <div class="d-flex justify-content-center align-items-center gap-10">
+                    <label>Bạn đã có tài khoản?</label>
+                    <label><a href="/user/login" class="link-underline-dark link-pw">Log in</a></label>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,159 @@
+/* Increase the container size */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;  /* Ensure container takes full width */
+    height: 100%; /* Set container height to 100% */
+    max-width: none; /* Remove max-width */
+    flex-direction: column; /* Align children vertically */
+}
+
+/* Card styling */
+.card {
+    width: 100%;
+    max-width: 900px; /* Limit card width */
+    padding: 40px;  /* Padding inside the card */
+    border-radius: 10px;
+    background-color: white; /* Ensure card background is white */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+/* Card Header Styling */
+.card-header {
+    text-align: center;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.card-header span {
+    font-size: 40px; 
+    font-weight: bold; /* Nếu cần chữ đậm */
+    display: block;
+}
+
+/* Card Body Styling */
+.card-body {
+    background-color: white;
+    font-weight: bold; /* Nếu cần chữ đậm */
+    font-size: 20px; /* Kích thước chữ */
+    margin-bottom: 20px;
+}
+
+/* Styling for buttons */
+.btn {
+    width: 100%;
+    padding: 15px; /* Increase button padding */
+    margin-bottom: 15px; /* Increase space between buttons */
+    border-radius: 5px;
+    border: 1px solid black;
+    font-weight: bold; /* Nếu cần chữ đậm */
+    font-size: 20px; /* Reduce font size */
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    transition: all 0.3s ease; /* Add transition for hover effect */
+    display: flex;
+    align-items: center; /* Ensure icon and text are vertically aligned */
+    justify-content: center; /* Center button content */
+}
+
+.btn:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Styling for the icon and text boxes */
+.icon-box, .text-box {
+    display: inline-block; /* Ensure boxes appear inline */
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px; /* Space between icon and text */
+}
+
+/* Specific styles for the icon box */
+.icon-box {
+    padding: 12px; /* Add some padding to make the icon centered */
+}
+
+/* Specific styles for the text box */
+.text-box {
+    background-color: #ffffff; /* Light background for text box */
+    color: black;
+    font-weight: bold;
+}
+
+/* Specific button colors */
+.btn-google {
+    background-color: #ffffff;
+    margin-right: 100px;
+}
+
+.btn-facebook {
+    background-color: #ffffff; /* Blue color for Facebook */
+    margin-right: 100px;
+}
+
+.btn-github {
+    background-color: #ffffff; /* Dark color for GitHub */
+    margin-right: 100px;
+}
+
+.btn-phone {
+    background-color: #ffffff; /* Green color for WhatsApp/Phone */
+    margin-right: 100px;
+}
+.divider {
+    height: 1px; /* Chiều cao đường kẻ */
+    background-color: #000000; /* Màu sắc đường kẻ */
+    margin: 100px 0; /* Khoảng cách trên và dưới đường kẻ */
+}
+
+.form-login .form-control {
+    width: 100%; /* Đặt chiều rộng của text box bằng 100% */
+    height: 50px;
+    font: bold;
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước tổng */
+    margin-bottom: 15px; /* Tạo khoảng cách giữa các text box */
+}
+
+/* Login button style */
+.login-btn {
+    background-color: #F5DEF4; /* Màu nền hồng nhạt */
+    padding: 12px 20px; /* Giảm padding để nút vừa vặn hơn */
+    display: block;
+    width: 100%; /* Nút chiếm toàn bộ chiều rộng */
+    font-weight: 700; /* Chữ đậm */
+    font-size: 18px; /* Font size vừa phải */
+    color: #4a154b; /* Chữ màu tím đậm để tương phản */
+    text-align: center; /* Căn giữa nội dung */
+    cursor: pointer; /* Con trỏ khi hover */
+    border: none; /* Bỏ viền */
+    border-radius: 8px; /* Góc bo tròn hơn */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+    transition: all 0.3s ease; /* Hiệu ứng chuyển màu và scale khi hover */
+}
+
+.login-btn:hover {
+    background-color: #d46e9d; /* Màu nền đậm hơn khi hover */
+    color: white; /* Đổi màu chữ khi hover */
+    transform: translateY(-3px); /* Nút nhảy nhẹ lên trên */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Tăng hiệu ứng đổ bóng */
+}
+
+/* Footer text styling */
+.card-footer {
+    background-color: white;
+    font-weight: bold; /* Nếu cần chữ đậm */
+    text-align: center;
+    font-size: 14px; /* Increase footer text size */
+    margin-top: 20px;
+}
+
+/* Links in the footer */
+.card-footer a {
+    color: #dd5fb7;
+    text-decoration: none;
+}
+
+.card-footer a:hover {
+    text-decoration: underline;
+}

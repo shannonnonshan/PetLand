@@ -1,0 +1,48 @@
+{{#section "signupcss"}}
+<link rel="stylesheet" href="/static/css/cssUser/register.css">
+{{/section}}
+
+<form action="/user/login" method="post">
+    <div id="card-contain" class="card">
+        <div id="signup-card" class="card-body">
+            <div class=" d-flex flex-column justify-content-center align-items-center">
+                <img id="logo-img" src="/static/imgs/NEWSLANDlogoRmBg.png" alt="">
+                <h1>Log in</h1>
+            </div>
+
+            <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
+                {{#if showErrors}}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Login Failed!</strong> Bạn nên kiểm tra lại thông tin.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {{/if}}
+                <button type="button" class="btn btn-light btn-connect"
+                    onclick="window.location.href='/account/login/githubAuth'">
+                    <i class="bi bi-github"></i> Tiếp tục với GitHub
+                </button>
+                <button type="button" class="btn btn-light btn-connect"
+                    onclick="window.location.href='/user/login/googleAuth'">
+                    <i class="bi bi-google"></i> Tiếp tục với Google
+                </button>
+                <hr id="line">
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtUsername">Tên đăng nhập</label>
+                    <input type="text" name="username" id="txtUsername" class="form-control txt-input" placeholder="">
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtPassword">Mật khẩu</label>
+                    <input type="password" name="raw_password" id="txtPassword" class="form-control txt-input"
+                        placeholder="" aria-describedby="helpId">
+                </div>
+                <button type="submit" class="btn btn-info btn-connect">Đăng nhập</button>
+                <label><a href="/user/forgot-password" class="mt-5 link-underline-dark link-pw">Bạn quên mật
+                        khẩu?</a></label>
+                <div class="d-flex justify-content-center align-items-center">
+                    <label>Bạn chưa có tài khoản?</label>
+                    <label><a href="/user/register" class="link-underline-dark link-pw">Sign Up</a></label>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

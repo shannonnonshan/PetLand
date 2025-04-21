@@ -1,0 +1,65 @@
+body {
+    font-size: 14px;
+    color: black;
+    background-color: black;
+}
+.card {
+    min-height: 100vh;
+}
+#card-contain {
+    background-color: black
+}
+
+#signup-card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: white;
+    margin-left: 30%;
+    margin-right: 30%;
+    padding: 0px;
+    border-radius: 10px;
+}
+
+#logo-img {
+    width: 100px;
+    height: 100px;
+}
+
+#card-btn-connect {
+    gap: 15px;
+}
+
+.btn-connect {
+    width: 400px;
+    height: 50px;
+    border-radius: 50px;
+    font-weight: 500;
+    border: solid 1px black;
+}
+
+#line {
+    border: 1px solid #262424;
+    width: 50%;
+    margin: 20px auto;
+}
+
+
+.txt-input {
+    width: 400px;
+    height: 50px;
+}
+
+.link-pw {
+    color: rgb(9, 0, 0);
+}
+
+.link-pw:hover {
+    color: rgb(33, 130, 204);
+    text-decoration: underline;
+}
+
+
+.email-format{
+    color: black;
+    font-weight: bold;
+}
