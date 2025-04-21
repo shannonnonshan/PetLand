@@ -5,7 +5,7 @@ export default function (app) {
             req.session.auth = false;
         }
         res.locals.auth = req.session.auth;
-        res.locals.authUser = req.session.authUser || null; // Đảm bảo authUser luôn có giá trị
+        res.locals.authUser = req.session.authUser || null;
         next();
     });
 }

@@ -14,17 +14,17 @@ export default {
         return User.findOne({ username: username })
     },
     
-    // Tìm người dùng theo email
     findByEmail(email) {
         return User.findOne({ email: email });
     },
 
     // Thêm người dùng mới
     add(entity) {
-        return entity.add()
+        const user = new User(entity);
+        return user.save();
     }, 
 
-    updateUser(id, user) {
-        return User.findByIdAndUpdate(id, user, { new: true });
+    updateUser(username, user) {
+        return User.findByIdAndUpdate(username, user, { new: true });
     }, 
 };

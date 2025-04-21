@@ -5,7 +5,8 @@ mongoose.connect('mongodb+srv://donnade:thanhvyneh@petland.lruap6s.mongodb.net/p
 .then(() => console.log('Connected!'));
 
 const userSchema = new mongoose.Schema({
-  id: String,
+  googleId: String,
+  id: { type: Number, unique: true },
   name: String,
   username: String,
   createAt: { type: Date, default: Date.now },

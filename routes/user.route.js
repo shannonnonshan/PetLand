@@ -1,10 +1,10 @@
 import express from 'express';
-import bcrypt from 'bcryptjs';
-import moment from 'moment'; 
+import bcrypt from 'bcryptjs'; 
 import dotenv from 'dotenv';
 import auth from '../middlewares/auth.mdw.js';
 import userService from '../services/user.service.js';
-
+import configurePassportGoogle from '../controllers/passportGoogle.config.js';
+import passport from 'passport';
 const route = express.Router();
 dotenv.config();
 
@@ -36,7 +36,6 @@ route.post('/login', async function (req, res) {
         username: user.username,
         userid: user.id,
         email: user.email,
-        name: user.name,
     };
 
     const retUrl = req.session.retUrl || '/';
@@ -53,27 +52,15 @@ route.get('/register', function (req, res) {
 route.post('/register', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
     console.log(req.body.raw_dob);
-    const ymd_dob = moment(req.body.raw_dob, 'DD-MM-YYYY').format('YYYY-MM-DD');
     const entity = {
+        id: req.body.idnumber,
         username: req.body.username,
         password: hash_password,
-        name: req.body.name,
         email: req.body.email,
-        dob: ymd_dob,
-        permission: 1
+        createAt: Date.now()
     }
     const ret = await userService.add(entity);
-    const user = await userService.findByUsername(req.body.username);
-    req.session.auth = true;
-    req.session.authUser = {
-        username: user.username,
-        userid: user.id,
-        name: user.name,
-        email: user.email,
-        permission: user.permission,
-        rolename: 'guest'
-    }
-    const retUrl = req.session.retUrl || '/'
+    const retUrl = '/user/login'
     res.redirect(retUrl);
 });
 
@@ -81,7 +68,7 @@ route.get('/is-available', async function (req, res) {
     const username = req.query.username;
     const user = await userService.findByUsername(username);
     if (!user) {
-        return res.json(true); //lay bien du lieu quang xuong
+        return res.json(true);
     }
     res.json(false);
 });
@@ -92,4 +79,24 @@ route.post('/logout', auth, function (req, res) {
     res.redirect('/');
 });
 
+configurePassportGoogle();
+route.get('/login/googleAuth',
+  passport.authenticate('google'));
+
+route.get('/login/googleAuth/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  async function (req, res) {
+    const user = req.user; 
+    if (!user) {
+      return res.redirect('/login');
+     }
+    req.session.auth = true;
+    req.session.authUser = {
+        username: user.username,
+        userid: user.id,
+        email: user.email,
+    };
+    res.redirect('/');
+    })
+  
 export default route;
