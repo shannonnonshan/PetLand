@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-import User from '../models/User.js';
+import {User, OtpUser} from '../models/User.js';
 
 export default {
     findAll() {
@@ -27,4 +27,30 @@ export default {
     updateUser(username, user) {
         return User.findByIdAndUpdate(username, user, { new: true });
     }, 
+
+    addOTP(entity) {
+        const otp = new OtpUser(entity)
+        return otp.save();
+    }, 
+
+    findOTPByEmail(email) {
+        return OtpUser.findOne({ email: email });
+    },
+
+    updatePassword(email, username, newPassword) {
+        return User.findOneAndUpdate(
+            { 
+                email: email, 
+                username: username,
+            },          
+            { $set: { password: newPassword } }, // cập nhật password
+            { new: true }                     // trả về document mới sau khi update
+        );
+    },
+    
+
+    delOTP(otp)
+    {
+        return OtpUser.deleteOne({otp: otp})
+    },
 };

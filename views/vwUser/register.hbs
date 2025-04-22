@@ -1,9 +1,6 @@
 {{#section "signupcss"}}
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
     <link rel="stylesheet" href="/static/css/cssUser/register.css">
 {{/section}}
-
 {{#section "signupjs"}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
 </script>
@@ -131,45 +128,70 @@
     });
 </script>
 {{/section}}
-
-<div id="card-contain" class="card">
-    <div id="signup-card" class="card-body">
-        <div class="d-flex flex-column justify-content-center align-items-center">
-            <img id="logo-img" src="/static/imgs/NEWSLANDlogoRmBg.png" alt="" class="img-fluid rounded-circle">
-            <h1>Đăng ký NewsLand</h1>
+<div class="container">
+    <div class="title">Registration</div>
+    <div class="content">
+      <form id="fmSignup" action="/user/register" method="post">
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details" for="txtFullname">Full Name</span>
+            <input type="text" id="txtFullname" name="fullname" placeholder="Enter your name" required>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtUsername">Username</span>
+            <input type="text" id="txtUsername" name="username" placeholder="Enter your username" required>
+          </div>
+          <!-- Input for Email -->
+          <div class="input-box">
+            <span class="details" for="txtEmail">Email</span>
+            <input type="text" id="txtEmail" name="email" placeholder="Enter your email" required>
+          </div>
+          <!-- Input for Phone Number -->
+          <div class="input-box">
+            <span class="details" for="txtPhone">Phone Number</span>
+            <input type="text" id="txtPhone" name="phone" placeholder="Enter your number" required>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPassword">Password</span>
+            <input type="password" name="raw_password" id="txtPassword" placeholder="Enter your password" required>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPassword" >Confirm Password</span>
+            <input type="password" id="txtConfirmPassword" name="confirm_password" placeholder="Confirm your password" required>
+          </div>
         </div>
-
-        <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
-            <form id="fmSignup" action="/user/register" method="post">
-                <div class="mb-2 form-group">
-                    <label class="form-label" for="txtId">ID Number</label>
-                    <input type="text" name="idnumber" id="txtId" class="form-control txt-input" placeholder="">
-                </div>
-                <div class="mb-2 form-group">
-                    <label class="form-label" for="txtUsername">Username</label>
-                    <input type="text" name="username" id="txtUsername" class="form-control txt-input" placeholder="">
-                </div>
-                <div class="mb-2 form-group">
-                    <label class="form-label" for="txtEmail">Email</label>
-                    <input type="text" name="email" id="txtEmail" class="form-control txt-input" placeholder="">
-                </div>
-                <div class="mb-2 form-group">
-                    <label class="form-label" for="txtPassword">Mật khẩu</label>
-                    <input type="password" name="raw_password" id="txtPassword" class="form-control txt-input"
-                        placeholder="">
-                </div>
-                <div class="mb-2 form-group">
-                    <label class="form-label" for="txtConfirmPassword">Nhập lại mật khẩu</label>
-                    <input type="password" name="confirm_password" id="txtConfirmPassword"
-                        class="form-control txt-input" placeholder="">
-                </div>
-
-                <button type="submit" class="btn btn-info btn-connect mb-3" href="#">Register</button>
-                <div class="d-flex justify-content-center align-items-center gap-10">
-                    <label>Bạn đã có tài khoản?</label>
-                    <label><a href="/user/login" class="link-underline-dark link-pw">Log in</a></label>
-                </div>
-            </form>
+        <div class="gender-details">
+          <!-- Radio buttons for gender selection -->
+          <input type="radio" name="gender" id="dot-1" value="Male">
+          <input type="radio" name="gender" id="dot-2" value="Femail">
+          <input type="radio" name="gender" id="dot-3" value="none">
+          <span class="gender-title">Gender</span>
+          <div class="category">
+            <!-- Label for Male -->
+            <label for="dot-1">
+              <span class="dot one"></span>
+              <span class="gender">Male</span>
+            </label>
+            <!-- Label for Female -->
+            <label for="dot-2">
+              <span class="dot two"></span>
+              <span class="gender">Female</span>
+            </label>
+            <!-- Label for Prefer not to say -->
+            <label for="dot-3">
+              <span class="dot three"></span>
+              <span class="gender">Prefer not to say</span>
+            </label>
+          </div>
         </div>
+        <!-- Submit button -->
+        <div class="button">
+          <input type="submit" value="Register">
+        </div>
+        <div class="d-flex justify-content-center align-items-center gap-10">
+            <label>Already have an account?</label>
+            <label><a href="/user/login" class="link-underline-dark link-pw"> Log in</a></label>
+        </div>
+      </form>
     </div>
-</div>
+  </div>
