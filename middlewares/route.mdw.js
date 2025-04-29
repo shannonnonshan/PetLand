@@ -1,6 +1,6 @@
 
 import userRoute from '../routes/user.route.js';
-
+import petRoute from '../routes/pet.route.js';
 
 export default function (app) {
     
@@ -16,6 +16,6 @@ export default function (app) {
   });
 
     app.use('/user', userRoute);
-
+    app.use('/pet', petRoute);
 }
 

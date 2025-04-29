@@ -128,7 +128,7 @@ route.post('/forgot-password', async function(req, res) {
             });
         }
 
-        const otp = Math.floor(1000 + Math.random() * 900000);
+        const otp = Math.floor(100000 + Math.random() * 900000);
         const expriteAt = new Date(Date.now() + 5 * 60 * 1000);
         const newOTP = {
             otp: otp, 
@@ -264,5 +264,5 @@ route.post('/reset-password', async function (req, res) {
         res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
     }
 });
-  
+
 export default route;

@@ -1,0 +1,171 @@
+{{#section "css"}}
+    <link rel="stylesheet" href="/static/css/cssPet/pet.form.css">
+{{/section}}
+
+{{#section "js"}}
+  <script>
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+      const previewContainer = document.getElementById('imagePreview');
+      previewContainer.innerHTML = ''; // Clear preview
+
+      const files = event.target.files;
+      const maxFiles = 3;
+      
+      for (let i = 0; i < Math.min(files.length, maxFiles); i++) {
+        const file = files[i];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          previewContainer.appendChild(img);
+        };
+
+        reader.readAsDataURL(file);
+      }
+    });
+</script>
+ <script>
+    document.getElementById('txtPhone').addEventListener('input', function (e) {
+      let input = e.target.value;
+      
+      input = input.replace(/\D/g, '');
+
+      if (input.length > 3 && input.length <= 6) {
+        input = input.slice(0, 3) + '-' + input.slice(3);
+      } else if (input.length > 6) {
+        input = input.slice(0, 3) + '-' + input.slice(3, 6) + '-' + input.slice(6, 10);
+      }
+
+      e.target.value = input;
+    });
+  </script>
+{{/section}}
+<div class="container">
+    <div class="tw-flex">
+      <div class="title">Donation Request</div>
+      <img src="https://cdn-icons-png.flaticon.com/256/4288/4288945.png" alt="Donation Icon" class="donation-icon">
+    </div>
+
+    
+    <div class="content">
+      <form id="fmAdopt" action="/pet/adopt" method="post">
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details" for="txtIdCustomer">Your ID</span>
+            <input type="text" id="txtIdCustomer" value="22110093" name="id" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtFullname">Your Name</span>
+            <input type="text" id="txtFullname" name="fullname" value="donnade" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPhone">Phone Number</span>
+            <input type="text" name="phone" id="txtPhone" value="033-334-9999" required>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtEmail">Email</span>
+            <input type="text" name="email" id="txtEmail" value="haha@gmail.com" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPetName">Pet Name</span>
+            <input type="text" id="txtPetName" name="petname" placeholder="Alaska" required>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtSpecie">Specie</span>
+            <select id="txtSpecie" name="specie" required>
+              <option value="" disabled selected>Select pet's specie</option>
+              <option value="Cat">Cat</option>
+              <option value="Dog">Dog</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtBreed">Pet Breed</span>
+            <input type="text" id="txtBreed" name="petbreed" placeholder="Alaskaka">
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtAge">Age</span>
+            <select id="txtAge" name="age" required>
+              <option value="" disabled selected>Select pet's age</option>
+              <option value="less_2_months">Less than 2 months</option>
+              <option value="2_6_months">2 - 6 months</option>
+              <option value="6_12_months">6 - 12 months</option>
+              <option value="others">Others</option>
+            </select>
+          </div>
+          <div class="input-box weight-input-box">
+            <span class="details" for="txtWeight">Weight</span>
+            <div class="input-with-unit">
+              <input type="text" id="txtWeight" name="weight" placeholder="18">
+              <span class="unit">kg</span>
+            </div>
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Gender</span>
+            <div class="category">
+              <label for="gender-male">
+                <input type="radio" name="gender" id="gender-male" value="Male">
+                <span class="dot"></span>
+                <span class="gender">Male</span>
+              </label>
+              <label for="gender-female">
+                <input type="radio" name="gender" id="gender-female" value="Female">
+                <span class="dot"></span>
+                <span class="gender">Female</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Vaccination</span>
+            <div class="category">
+              <label for="vaccine-yes">
+                <input type="radio" name="vaccine" id="vaccine-yes" value="Fully">
+                <span class="dot"></span>
+                <span class="vaccine">Fully</span>
+              </label>
+              <label for="vaccine-no">
+                <input type="radio" name="vaccine" id="vaccine-no" value="None">
+                <span class="dot"></span>
+                <span class="vaccine">None</span>
+              </label>
+            </div>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtDOD">Donate Date</span>
+            <input type="date" id="txtDOD" name="dod" required>
+          </div>
+        </div>
+        <div class="image-box">
+            <span class="details" for="txtDes">Description</span>
+            <textarea id="txtDes" name="description"
+              class="w-100 h-32 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-300"
+              placeholder="Enter your description..."></textarea>
+          </div>
+
+          <div class="image-box">
+            <span class="details">Images</span>
+            <div class="upload-container">
+              <input type="file" id="imageUpload" multiple accept="image/*">
+              <div id="imagePreview" class="image-preview-container"></div>
+            </div>
+          </div>
+        <div class="button-container">
+          <div class="button">
+            <button type="button">
+              <i class="bi bi-arrow-bar-left"></i>
+                Return
+            </button>
+          </div>
+          <div class="button">
+            <button type="submit">
+              <i class="bi bi-send"></i>
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

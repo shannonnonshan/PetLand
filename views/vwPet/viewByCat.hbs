@@ -1,0 +1,18 @@
+
+<hr style="color: #E2E1E1; border: 1px solid; width: 100%">
+<div class="card-body">
+    <div class="row">
+        {{#each list}}
+           <div class="col-12 col-sm-6 col-md-4 mb-3">
+                <div class="card" style="width: 100%;">
+                    <img src="{{imageSrc}}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{name}}</h5>
+                        <p class="card-text" style="font-size: 10pt;">{{truncate description 100}}</p>
+                        <a href="#" class="btn btn-dark">See Details</a>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>

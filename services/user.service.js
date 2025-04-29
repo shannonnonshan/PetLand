@@ -1,6 +1,7 @@
-import mongoose, { Schema } from "mongoose";
 
-import {User, OtpUser} from '../models/User.js';
+
+import User from '../models/User.js';
+import OtpUser from "../models/OtpUser.js";
 
 export default {
     findAll() {
