@@ -25,11 +25,12 @@
   
   .info h2 {
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
   }
   .info .attr {
     margin-bottom: 20px;
     margin-left: 20px;
+    font-size: 14pt;
   }
   .color-box {
     display: inline-block;

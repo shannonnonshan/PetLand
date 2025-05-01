@@ -33,21 +33,20 @@
       <form id="fmAdopt" action="/pet/adopt" method="post">
         <div class="user-details">
           <div class="input-box">
-            <span class="details" for="txtIdCustomer">Your ID</span>
-            <input type="text" id="txtIdCustomer" value="22110093" name="id" readonly>
+            <span class="details" for="txtUsername">Username</span>
+            <input type="text" id="txtUsername" value="{{user.username}}" name="username" readonly>
           </div>
           <div class="input-box">
-            <span class="details" for="txtFullname">Your Name</span>
-            <input type="text" id="txtFullname" name="fullname" value="donnade" readonly>
+            <span class="details" for="txtFullname">Full Name</span>
+            <input type="text" id="txtFullname" name="fullname" value="{{user.name}}" readonly>
           </div>
           <div class="input-box">
             <span class="details" for="txtPetID">Pet ID</span>
-            <input type="text" id="txtPetID" name="petid" value="00112" readonly>
+            <input type="text" id="txtPetID" name="petid" value="{{pet._id}}" readonly>
           </div>
-          <!-- Input for Email -->
           <div class="input-box">
             <span class="details" for="txtPetName">Pet Name</span>
-            <input type="text" id="txtPetName" name="petname" value="Alaska" readonly>
+            <input type="text" id="txtPetName" name="petname" value="{{pet.name}}" readonly>
           </div>
           <div class="input-box">
             <span class="details" for="txtDOR">Receive Date</span>
@@ -55,7 +54,7 @@
           </div>
           <div class="input-box">
             <span class="details" for="txtPhone">Phone Number</span>
-            <input type="text" name="phone" id="txtPhone" value="033-334-9999" required>
+            <input type="text" name="phone" id="txtPhone" value="{{user.phone}}" required>
           </div>
         </div>
         <div class="button-container">
