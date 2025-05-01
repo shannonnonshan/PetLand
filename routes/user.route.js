@@ -32,11 +32,9 @@ route.post('/login', async function (req, res) {
         });
     }
     req.session.auth = true;
-
-
     req.session.authUser = {
-        username: user.username,
-        userid: user.id,
+        name: user.name || user.username || null,
+        id: user.id,
         email: user.email,
     };
 
@@ -96,8 +94,8 @@ route.get('/login/googleAuth/callback',
      }
     req.session.auth = true;
     req.session.authUser = {
-        username: user.username,
-        userid: user.id,
+        name: user.name || user.username || null,
+        id: user.id,
         email: user.email,
     };
     res.redirect('/');

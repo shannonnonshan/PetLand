@@ -1,6 +1,7 @@
 import express from 'express';
 import petService from '../services/pet.service.js';
 import multer from 'multer';
+import moment from 'moment';
 import { approvePet, adoptPet, completeAdoption } from '../controllers/pet.controller.js';
 const route = express.Router();
 
@@ -26,7 +27,9 @@ route.get('/detail', async function(req, res){
 
 route.get('/donate', function(req, res){
     const user = req.session.authUser || null;
+    console.log(user);
     res.render('vwPet/donatePetForm', {
+        layout: 'account-layout',
         user: user
     });
 })
@@ -46,25 +49,26 @@ const storage = multer.diskStorage({
   route.post('/donate', upload.array('images', 3), async function (req, res) {
     const {
       petname, specie, petbreed, age, weight,
-      gender, vaccine, dod, description
+      gender, vaccine, dod, description, id
     } = req.body;
   
     // Danh sách file ảnh đã upload
     const imagePaths = req.files.map(file => '/uploads/' + file.filename); // đường dẫn để client dùng
     const ymd_dod= moment(req.body.raw_dod, 'DD-MM-YYYY').format('YYYY-MM-DD');
-    const newPet = new Pet({
+    const newPet = {
       name: petname,
       specie,
       breed: petbreed,
       age: parseInt(age),
       weight: parseFloat(weight),
+      donator: id,
       gender,
       vaccine,
       dod: ymd_dod,
       description,
       images: imagePaths,
       status: 'pending'
-    });
+    };
   
     await petService.add(newPet);
   
@@ -77,6 +81,7 @@ route.get('/adopt', async function(req, res){
     const pet = await petService.findPetById(id).lean();
     const user = req.session.authUser || null;
     res.render('vwPet/adoptPetForm', {
+      layout: 'account-layout',
         pet: pet,
         user: user
     });
