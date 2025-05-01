@@ -5,16 +5,12 @@ export default function (app) {
     
     app.get('/', function (req, res) {
      if (!req.session.auth || !req.session.authUser) {
-        return res.render('homepage', {
-            layout: false,
-            authUser: req.session.authUser,
-        });
+        return res.render('homepage',);
       }
       
-    //   if (req.session.views) {
-    //       req.session.views++;
-    //   } else req.session.views = 1;
-    //   return res.render('homepage', { layout: false });
+    return res.render('homepage', {
+        authUser: req.session.authUser
+    });
 
   });
 
