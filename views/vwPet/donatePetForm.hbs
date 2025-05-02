@@ -1,0 +1,177 @@
+{{#section "signupcss"}}
+    <link rel="stylesheet" href="/static/css/cssPet/pet.form.css">
+{{/section}}
+
+{{#section "signupjs"}}
+  <script>
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+      const previewContainer = document.getElementById('imagePreview');
+      previewContainer.innerHTML = ''; // Clear preview
+
+      const files = event.target.files;
+      const maxFiles = 3;
+      
+      for (let i = 0; i < Math.min(files.length, maxFiles); i++) {
+        const file = files[i];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          previewContainer.appendChild(img);
+        };
+
+        reader.readAsDataURL(file);
+      }
+    });
+</script>
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Lấy trường phone
+      const phoneInput = document.getElementById('txtPhone');
+
+      function formatPhoneNumber(value) {
+        let phone = value.replace(/\D/g, '');
+        if (phone.length > 3 && phone.length <= 6) {
+          phone = phone.slice(0, 3) + '-' + phone.slice(3);
+        } else if (phone.length > 6) {
+          phone = phone.slice(0, 3) + '-' + phone.slice(3, 6) + '-' + phone.slice(6, 10);
+        }
+        return phone;
+      }
+      if (phoneInput.value) {
+        phoneInput.value = formatPhoneNumber(phoneInput.value);
+      }
+
+      phoneInput.addEventListener('input', function (e) {
+        e.target.value = formatPhoneNumber(e.target.value);
+      });
+    });
+
+  </script>
+{{/section}}
+<div class="container">
+    <div class="tw-flex">
+      <div class="title">Donation Request</div>
+      <img src="https://cdn-icons-png.flaticon.com/256/4288/4288945.png" alt="Donation Icon" class="donation-icon">
+    </div>
+
+    
+    <div class="content">
+      <form id="fmAdopt" action="/pet/donate" method="post" enctype="multipart/form-data">
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details" for="txtIdCustomer">Your ID</span>
+            <input type="text" id="txtIdCustomer" value="{{user.id}}" name="id" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtFullname">Your Name</span>
+            <input type="text" id="txtFullname" name="fullname" value="{{user.name}}" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPhone">Phone Number</span>
+            <input type="text" name="phone" id="txtPhone" value="{{user.phone}}" required>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtEmail">Email</span>
+            <input type="text" name="email" id="txtEmail" value="{{user.email}}" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPetName">Pet Name</span>
+            <input type="text" id="txtPetName" name="petname" placeholder="Alaska" required>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtSpecie">Specie</span>
+            <select id="txtSpecie" name="specie" required>
+              <option value="" disabled selected>Select pet's specie</option>
+              <option value="Cat">Cat</option>
+              <option value="Dog">Dog</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtBreed">Pet Breed</span>
+            <input type="text" id="txtBreed" name="petbreed" placeholder="Alaskaka">
+          </div>
+          <div class="input-box weight-input-box">
+            <span class="details" for="txtAge">Age</span>
+            <div class="input-with-unit">
+              <input type="text" id="txtAge" name="age" placeholder="18" required>
+              <span class="unit">months</span>
+            </div>
+          </div>
+          <div class="input-box weight-input-box">
+            <span class="details" for="txtWeight">Weight</span>
+            <div class="input-with-unit">
+              <input type="text" id="txtWeight" name="weight" placeholder="18" required>
+              <span class="unit">kg</span>
+            </div>
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Gender</span>
+            <div class="category">
+              <label for="gender-male">
+                <input type="radio" name="gender" id="gender-male" value="Male">
+                <span class="dot"></span>
+                <span class="gender">Male</span>
+              </label>
+              <label for="gender-female">
+                <input type="radio" name="gender" id="gender-female" value="Female">
+                <span class="dot"></span>
+                <span class="gender">Female</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Vaccination</span>
+            <div class="category">
+              <label for="vaccine-yes">
+                <input type="radio" name="vaccine" id="vaccine-yes" value="Fully">
+                <span class="dot"></span>
+                <span class="vaccine">Fully</span>
+              </label>
+              <label for="vaccine-no">
+                <input type="radio" name="vaccine" id="vaccine-no" value="None">
+                <span class="dot"></span>
+                <span class="vaccine">None</span>
+              </label>
+            </div>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtDOD">Donate Date</span>
+            <input type="date" id="txtDOD" name="raw_dod" required>
+          </div>
+        </div>
+        <div class="image-box">
+            <span class="details" for="txtDes">Description</span>
+            <textarea id="txtDes" name="description"
+              class="w-100 h-32 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-300"
+              placeholder="Enter your description..."></textarea>
+          </div>
+
+          <div class="image-box">
+            <span class="details">Images</span>
+            <div class="upload-container">
+              <input type="file" id="imageUpload" name="images" multiple accept="image/*">
+              <div id="imagePreview" class="image-preview-container"></div>
+            </div>
+          </div>
+        <div class="button-container">
+          <div class="button">
+            <button type="button">
+              <i class="bi bi-arrow-bar-left"></i>
+                Return
+            </button>
+          </div>
+          <div class="button">
+            <button type="submit">
+              <i class="bi bi-send"></i>
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

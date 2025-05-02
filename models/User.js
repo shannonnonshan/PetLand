@@ -1,16 +1,13 @@
-// models/User.js
 import { randomUUID } from 'crypto';
-import mongoose from 'mongoose';
+import { mongoose } from '../utils/db.js'; 
 
-mongoose.connect('mongodb+srv://donnade:thanhvyneh@petland.lruap6s.mongodb.net/petland?retryWrites=true&w=majority&appName=Petland')
-  .then(() => console.log('Connected!'));
+const { Schema, model } = mongoose;
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   googleId: String,
-  id: { type: String, default: () => randomUUID() },
   name: String,
   username: String,
-  createAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
   password: String,
   gender: String,
   address: String,
@@ -19,19 +16,6 @@ const userSchema = new mongoose.Schema({
   avatar: String
 }, { collection: 'User' });
 
-const otpSchema = new mongoose.Schema({
-  id: { type: String, default: () => randomUUID() },
-  email: String,
-  otp: Number,
-  expire_time: {
-    type: Date,
-    required: true,
-    index: { expires: 0 } // TTL: xóa ngay khi expire_time < Date.now()
-  }
-}, { collection: 'OtpUser' });
+const User = model('User', userSchema);
 
-const User = mongoose.model('User', userSchema);
-const OtpUser = mongoose.model('OtpUser', otpSchema);
-
-// ✅ Export cả hai model theo cách đặt tên
-export { User, OtpUser };
+export default User;

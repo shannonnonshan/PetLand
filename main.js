@@ -14,6 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(express.urlencoded({
     extended: true
 }));
+app.use('/uploads', express.static('public/uploads'));
 
 
 app.use('/static', express.static('static'));

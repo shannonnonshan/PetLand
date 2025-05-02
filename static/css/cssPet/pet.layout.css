@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet");
+
+*{
+  font-family: Raleway;
+  font-size: 14pt;
+}
+.nav-link{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search-container {
+  background: #000000;
+  height: 40px;
+  border-radius: 30px;
+  padding: 5px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.8s;
+}
+
+.search-container:hover > .search-input {
+  width: 200px;
+}
+
+.search-container .search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 0px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: 0.8s;
+  color: rgb(255, 255, 255);
+}
+
+.search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.nav-link .icon-font{
+  font-size: 18pt;
+}
+.search-container i{
+  font: 14pt;
+  color: white;
+}
+
+@keyframes hoverShake {
+  0% {transform: skew(0deg,0deg);}
+  25% {transform: skew(5deg, 5deg);}
+  75% {transform: skew(-5deg, -5deg);}
+  100% {transform: skew(0deg,0deg);}
+}
+
+.search-container:hover {
+  animation: hoverShake 0.15s linear 3;
+}
+

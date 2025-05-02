@@ -32,11 +32,9 @@ route.post('/login', async function (req, res) {
         });
     }
     req.session.auth = true;
-
-
     req.session.authUser = {
-        username: user.username,
-        userid: user.id,
+        name: user.name || user.username || null,
+        id: user.id,
         email: user.email,
     };
 
@@ -96,8 +94,8 @@ route.get('/login/googleAuth/callback',
      }
     req.session.auth = true;
     req.session.authUser = {
-        username: user.username,
-        userid: user.id,
+        name: user.name || user.username || null,
+        id: user.id,
         email: user.email,
     };
     res.redirect('/');
@@ -128,7 +126,7 @@ route.post('/forgot-password', async function(req, res) {
             });
         }
 
-        const otp = Math.floor(1000 + Math.random() * 900000);
+        const otp = Math.floor(100000 + Math.random() * 900000);
         const expriteAt = new Date(Date.now() + 5 * 60 * 1000);
         const newOTP = {
             otp: otp, 
@@ -264,5 +262,5 @@ route.post('/reset-password', async function (req, res) {
         res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
     }
 });
-  
+
 export default route;

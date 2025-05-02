@@ -1,0 +1,113 @@
+{{#section "signupcss"}}
+    <link rel="stylesheet" href="/static/css/cssPet/pet.form.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+{{/section}}
+{{#section "signupjs"}}
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+  </script>
+  <script>
+    document.getElementById('txtPhone').addEventListener('input', function (e) {
+      let input = e.target.value;
+      
+      input = input.replace(/\D/g, '');
+
+      if (input.length > 3 && input.length <= 6) {
+        input = input.slice(0, 3) + '-' + input.slice(3);
+      } else if (input.length > 6) {
+        input = input.slice(0, 3) + '-' + input.slice(3, 6) + '-' + input.slice(6, 10);
+      }
+
+      e.target.value = input;
+    });
+  </script>
+  <script>
+  document.getElementById('btnSubmit').addEventListener('click', async function () {
+    const form = document.getElementById('fmAdopt');
+    const formData = new FormData(form);
+    const payload = {
+      id: formData.get('id'),
+      petid: formData.get('petid'),
+      raw_dor: formData.get('raw_dor')
+    };
+
+    const res = await fetch('/pet/adopt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (data.successMessage) {
+      Swal.fire({
+        title: 'Success',
+        text: data.successMessage,
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = '/pet/byCat';
+      });
+    } else if (data.message) {
+      Swal.fire({
+        title: 'Error',
+        text: data.message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
+  });
+</script>
+
+{{/section}}
+<div class="container">
+    <div class="tw-flex">
+      <div class="title">Adoption Request</div>
+      <img src="https://cdn-icons-png.flaticon.com/256/8524/8524502.png" alt="Donation Icon" class="donation-icon">
+    </div>
+    
+    <div class="content">
+      <form id="fmAdopt">
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details" for="txtId">ID</span>
+            <input type="text" id="txtId" value="{{user.id}}" name="id" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtFullname">Full Name</span>
+            <input type="text" id="txtFullname" name="fullname" value="{{user.name}}" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPetID">Pet ID</span>
+            <input type="text" id="txtPetID" name="petid" value="{{pet._id}}" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPetName">Pet Name</span>
+            <input type="text" id="txtPetName" name="petname" value="{{pet.name}}" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtDOR">Receive Date</span>
+            <input type="date" id="txtDOR" name="raw_dor" placeholder="Enter your number" required>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPhone">Phone Number</span>
+            <input type="text" name="phone" id="txtPhone" value="{{user.phone}}" required>
+          </div>
+        </div>
+        <div class="button-container">
+          <div class="button">
+            <button type="button">
+              <i class="bi bi-arrow-bar-left"></i>
+                Return
+            </button>
+          </div>
+          <div class="button">
+            <button type="button" id="btnSubmit">
+              <i class="bi bi-send"></i>
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

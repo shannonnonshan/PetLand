@@ -1,0 +1,81 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap'); */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    gap: 20px;
+    padding: 0px;
+  }
+  
+  .gallery {
+    flex: 2;
+  }
+  
+  .info {
+    flex: 1;
+    background: #fff;
+    padding-left: 20px;
+    border-radius: 6px;
+  }
+  
+  .info h2 {
+    margin-top: 0;
+    margin-bottom: 40px;
+  }
+  .info .attr {
+    margin-bottom: 20px;
+    margin-left: 20px;
+    font-size: 14pt;
+  }
+  .color-box {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+  }
+  
+  .description {
+    margin-top: 40px;
+  }
+  .see-more {
+    margin-top: 40px;
+  }
+  .see-more h3 {
+    margin-bottom: 20px;
+  }
+  .pet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  .pet-card {
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .gallery .top-row {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .gallery .top-row img {
+    width: 50%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  
+  .gallery .full-width {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  

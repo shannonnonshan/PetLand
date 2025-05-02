@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="/css/tailwind.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="../../static/css/cssPet/pet.layout.css">
+    {{{_sections.css}}}
+</head>
+
+<body>
+    
+    <nav class="nav tw-flex-row tw-items-center tw-justify-center">
+        <img id="brand-logo" class=" tw-w-[45px] tw-h-[45px]" src="/static/imgs/logo.jpg"  alt="logo">
+        <a
+            role="tab"
+            id="tab-services"
+            aria-controls="tabpanel"
+            aria-selected="true"
+            href="#"
+            class="tw-text-white tw-font-bold nav-link"
+            style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"
+            onmouseenter="switchTab('services')"
+        >
+            SERVICES
+        </a>
+        <a
+            role="tab"
+            id="tab-pet"
+            aria-controls="tabpanel"
+            aria-selected="false"
+            href="/pet/byCat"
+            class="tw-text-white tw-font-bold nav-link"
+            style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"
+            onmouseenter="switchTab('pet')"
+        >
+            PET
+        </a>
+        <a
+            role="tab"
+            id="tab-about"
+            aria-controls="tabpanel"
+            aria-selected="false"
+            href="#aboutUs"
+            style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"
+            class="tw-text-white tw-font-bold nav-link"
+        >
+            ABOUT US
+        </a>
+        <div class="nav-link">
+            <div class="search-container">
+                <input type="text" name="search" placeholder="Search..." class="search-input">
+                <i class="bi bi-search"></i>      
+            </div>
+        </div>
+        <div class="nav-link icon-font">
+             <i class="bi bi-calendar-week icon-font"></i>
+        </div>
+        <div class="nav-link icon-font">
+             <i class="bi bi-person-circle icon-font"></i>
+        </div>
+    </nav>
+
+    <div style="padding-left: 15%; padding-right: 15%">
+        {{{body}}}
+    </div>
+    {{{_sections.pet}}}
+</body>
+</html>

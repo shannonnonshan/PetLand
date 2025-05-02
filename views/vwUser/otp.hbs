@@ -5,7 +5,7 @@
 {{#section "signupjs"}}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const errorMessage = "{{this.errorMessage}}"; // Lấy giá trị của errormessage từ template
+            const errorMessage = "{{this.errorMessage}}";
             if (errorMessage.length > 0) {
                Swal.fire({
                     title: 'Error',
