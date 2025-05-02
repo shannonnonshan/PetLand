@@ -7,15 +7,13 @@
   font-family: 'Poppins', sans-serif;
 }
 body {
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
 }
 .container {
-  max-width: 700px;
+  max-width: 800px;
   width: 100%;
   background-color: #fff;
   padding: 25px 30px;
@@ -26,6 +24,9 @@ body {
   font-size: 25px;
   font-weight: 500;
   position: relative;
+  background: linear-gradient(135deg, #FF94BD, #F3EC1C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .container .title::before {
   content: "";
@@ -35,7 +36,7 @@ body {
   height: 3px;
   width: 30px;
   border-radius: 5px;
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+  background: linear-gradient(135deg, #FF94BD, #F3EC1C);
 }
 .content form .user-details {
   display: flex;
@@ -47,12 +48,14 @@ form .user-details .input-box {
   margin-bottom: 15px;
   width: calc(100% / 2 - 20px);
 }
-form .input-box span.details {
+form .input-box span.details,  form .image-box span.details{
   display: block;
   font-weight: 500;
   margin-bottom: 5px;
 }
-.user-details .input-box input {
+.user-details .input-box input,
+.user-details .input-box select
+{
   height: 45px;
   width: 100%;
   outline: none;
@@ -91,34 +94,64 @@ form .category label .dot {
   border: 5px solid transparent;
   transition: all 0.3s ease;
 }
-#dot-1:checked~.category label .one,
-#dot-2:checked~.category label .two,
-#dot-3:checked~.category label .three {
+/* Hide all radio buttons */
+.category input[type="radio"] {
+  display: none;
+}
+
+/* General label design */
+.category label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Dot style */
+.category .dot {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background: #d9d9d9;
+  border: 5px solid transparent;
+  transition: all 0.3s ease;
+}
+
+/* When gender radio is checked -> dot color */
+#gender-male:checked + .dot,
+#gender-female:checked + .dot {
   background: #9b59b6;
   border-color: #d9d9d9;
 }
-form input[type="radio"] {
+
+/* When vaccine radio is checked -> dot color */
+#vaccine-yes:checked + .dot,
+#vaccine-no:checked + .dot {
+  background: #27ae60;
+  border-color: #d9d9d9;
+}
+
+form button[type="radio"] {
   display: none;
 }
 form .button {
   height: 45px;
   margin: 35px 0
 }
-form .button input {
+form .button button {
   height: 100%;
   width: 100%;
   border-radius: 5px;
   border: none;
   color: #fff;
-  font-size: 18px;
   font-weight: 500;
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+  background: linear-gradient(135deg, #FF94BD, #F3EC1C);
 }
-form .button input:hover {
-  background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+form .button button:hover {
+  background: linear-gradient(-135deg, #FF94BD, #F3EC1C);
 }
 /* Responsive media query code for mobile devices */
 @media(max-width: 584px) {
@@ -146,3 +179,73 @@ form .button input:hover {
     flex-direction: column;
   }
 }
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button button {
+  padding: 10px 20px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.row-flex {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.row-flex .gender-details {
+  flex: 1 1 calc(50% - 10px);
+}
+
+.image-preview-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.image-preview-container img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.input-with-unit {
+  position: relative;
+  width: 100%;
+}
+
+.input-with-unit input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.input-with-unit .unit {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.tw-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px; /* khoảng cách giữa chữ và ảnh */
+}
+
+.donation-icon {
+  width: 80px; /* chỉnh lại kích thước ảnh */
+  height: 80px;
+}
+

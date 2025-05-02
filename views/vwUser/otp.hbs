@@ -1,0 +1,85 @@
+{{#section "signupcss"}}
+    <link rel="stylesheet" href="/static/css/cssUser/user.css">
+    <link rel="stylesheet" href="/static/css/cssUser/otp.css">
+{{/section}}
+{{#section "signupjs"}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const errorMessage = "{{this.errorMessage}}"; // Lấy giá trị của errormessage từ template
+            if (errorMessage.length > 0) {
+               Swal.fire({
+                    title: 'Error',
+                    text: errorMessage,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const otpInputs = document.querySelectorAll(".otp-inputbar");
+            const otpHiddenInput = document.getElementById("txtOTP");
+            const form = document.querySelector("form.form-otp");
+
+            // Auto move to next input
+            otpInputs.forEach((input, index) => {
+                input.addEventListener("input", function () {
+                    if (input.value.length === 1 && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    }
+                });
+            });
+
+            form.addEventListener("submit", function () {
+                let otpCode = "";
+                otpInputs.forEach(input => {
+                    otpCode += input.value;
+                });
+                otpHiddenInput.value = otpCode;
+            });
+        });
+    </script>
+
+{{/section}}
+
+<div id="card-contain">
+    <div id="signup-card">
+        <div class="d-flex flex-column justify-content-center align-items-center mb-3">
+            <img id="logo-img" src="/static/imgs/NEWSLANDlogoRmBg.png" alt="" class="img-fluid rounded-circle">
+            <h1>Xác nhận mã OTP</h1>
+        </div>
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+            <div class="alert alert-warning text-center mb-5" role="alert">
+                <h4 class="alert-heading mb-3">Well done!</h4>
+                <p>Email chứa mã OTP 8 kí tự đã được gửi đến Email của người dùng:</p>
+                <p class="email-format">{{this.email}}</p>
+            </div>
+            <form class="form-otp" action="/user/otp" method="POST">
+                <input type="hidden" name="email" value="{{this.email}}">
+                <input type="hidden" name="username" value="{{this.username}}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                        <div class="form-group">
+                                <label class="margin-align">Enter the Code</label>
+                                <div class="form-group-input otp-form-group mb-3">
+                                    <input type="text" minlength="1" maxlength="1" class="form-control otp-inputbar">
+                                    <input type="text" minlength="1" maxlength="1" class="form-control otp-inputbar">
+                                    <input type="text" minlength="1" maxlength="1" class="form-control otp-inputbar">
+                                    <input type="text" minlength="1" maxlength="1" class="form-control otp-inputbar">
+                                    <input type="text" minlength="1" maxlength="1" class="form-control otp-inputbar">
+                                    <input type="text" minlength="1" maxlength="1" class="form-control otp-inputbar">
+                                    </div>
+                                </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <input type="hidden" name="otp" id="txtOTP" class="form-control txt-input">
+                <button type="submit" class="btn btn-info btn-connect">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

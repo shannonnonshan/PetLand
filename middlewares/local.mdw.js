@@ -8,4 +8,5 @@ export default function (app) {
         res.locals.authUser = req.session.authUser || null;
         next();
     });
+    
 }

@@ -1,0 +1,77 @@
+{{#section "css"}}
+    <link rel="stylesheet" href="/static/css/cssPet/pet.form.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+{{/section}}
+{{#section "js"}}
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+  </script>
+  <script>
+    document.getElementById('txtPhone').addEventListener('input', function (e) {
+      let input = e.target.value;
+      
+      input = input.replace(/\D/g, '');
+
+      if (input.length > 3 && input.length <= 6) {
+        input = input.slice(0, 3) + '-' + input.slice(3);
+      } else if (input.length > 6) {
+        input = input.slice(0, 3) + '-' + input.slice(3, 6) + '-' + input.slice(6, 10);
+      }
+
+      e.target.value = input;
+    });
+  </script>
+{{/section}}
+<div class="container">
+    <div class="tw-flex">
+      <div class="title">Adoption Request</div>
+      <img src="https://cdn-icons-png.flaticon.com/256/8524/8524502.png" alt="Donation Icon" class="donation-icon">
+    </div>
+    
+    <div class="content">
+      <form id="fmAdopt" action="/pet/adopt" method="post">
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details" for="txtIdCustomer">Your ID</span>
+            <input type="text" id="txtIdCustomer" value="22110093" name="id" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtFullname">Your Name</span>
+            <input type="text" id="txtFullname" name="fullname" value="donnade" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPetID">Pet ID</span>
+            <input type="text" id="txtPetID" name="petid" value="00112" readonly>
+          </div>
+          <!-- Input for Email -->
+          <div class="input-box">
+            <span class="details" for="txtPetName">Pet Name</span>
+            <input type="text" id="txtPetName" name="petname" value="Alaska" readonly>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtDOR">Receive Date</span>
+            <input type="date" id="txtDOR" name="dor" placeholder="Enter your number" required>
+          </div>
+          <div class="input-box">
+            <span class="details" for="txtPhone">Phone Number</span>
+            <input type="text" name="phone" id="txtPhone" value="033-334-9999" required>
+          </div>
+        </div>
+        <div class="button-container">
+          <div class="button">
+            <button type="button">
+              <i class="bi bi-arrow-bar-left"></i>
+                Return
+            </button>
+          </div>
+          <div class="button">
+            <button type="submit">
+              <i class="bi bi-send"></i>
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

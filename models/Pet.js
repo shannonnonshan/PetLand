@@ -3,20 +3,19 @@ import { mongoose } from '../utils/db.js';
 
 const { Schema, model } = mongoose;
 
-const userSchema = new Schema({
-  googleId: String,
+const petSchema = new Schema({
   id: { type: String, default: () => randomUUID() },
   name: String,
-  username: String,
   createdAt: { type: Date, default: Date.now },
-  password: String,
+  specie: String,
+  breed: String,
+  vaccine: String,
   gender: String,
-  address: String,
-  phone: String,
-  email: String,
-  avatar: String
-}, { collection: 'User' });
+  images: [String],
+  description: String,
+  dod: String
+}, { collection: 'Pet' });
 
-const User = model('User', userSchema);
+const Pet = model('Pet', petSchema);
 
-export default User;
+export default Pet;
