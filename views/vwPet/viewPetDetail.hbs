@@ -33,39 +33,39 @@
 <hr style="color: #E2E1E1; border: 1px solid; width: 100%">
   <div class="see-more">
     <h3>See More</h3>
-    
     <div class="card-body">
         <div class="row">
-           <div class="col-12 col-sm-6 col-md-4 mb-3">
-                <div class="card" style="width: 100%;">
-                    <img src="{{imageSrc}}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">Alaska</h5>
-                        <p class="card-text" style="font-size: 10pt;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit voluptatibus excepturi, eos blanditiis dolorum dolores ipsum incidunt numquam nesciunt ad officiis maxime, quam repudiandae labore? Voluptas possimus animi tempora eveniet.</p>
-                        <a href="#" class="btn btn-dark" style="width: 100%">See Details</a>
+            {{#each suggest}}
+               <div class="col-12 col-sm-6 col-md-4 mb-3">
+                    <div class="card" style="width: 100%;">
+                        <img src="{{images.[0]}}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title mb-0 tw-font-bold">{{name}}</h5>
+                                <div class="d-flex">
+                                    <a class="btn btn-outline-primary tag"
+                                    href="/pet/byCat?specie={{specie}}"
+                                    style="font-size: 13px; padding: 4px 10px;">
+                                    {{specie}}
+                                    </a>
+                                    <a class="btn btn-outline-primary tag"
+                                    href="/pet/byCat?gender={{gender}}"
+                                    style="font-size: 13px; padding: 4px 10px; margin-left: 3px">
+                                    {{gender}}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <p class="card-text" style="font-size: 10pt;">{{truncate description 100}}</p>
+                            
+
+                            <a href="/pet/detail?id={{_id}}" class="btn btn-warning tw-w-full tw-text-white tw-text-[12pt]">See Details</a>
+                        </div>
+
                     </div>
+                
                 </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                <div class="card" style="width: 100%;">
-                    <img src="{{imageSrc}}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">Alaska</h5>
-                        <p class="card-text" style="font-size: 10pt;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit voluptatibus excepturi, eos blanditiis dolorum dolores ipsum incidunt numquam nesciunt ad officiis maxime, quam repudiandae labore? Voluptas possimus animi tempora eveniet.</p>
-                        <a href="#" class="btn btn-dark" style="width: 100%">See Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                <div class="card" style="width: 100%;">
-                    <img src="{{imageSrc}}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">Alaska</h5>
-                        <p class="card-text" style="font-size: 10pt;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit voluptatibus excepturi, eos blanditiis dolorum dolores ipsum incidunt numquam nesciunt ad officiis maxime, quam repudiandae labore? Voluptas possimus animi tempora eveniet.</p>
-                        <a href="#" class="btn btn-dark" style="width: 100%">See Details</a>
-                    </div>
-                </div>
-            </div>
+            {{/each}}
         </div>
     </div>
   </div>

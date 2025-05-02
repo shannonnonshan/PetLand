@@ -19,7 +19,7 @@ const petSchema = new Schema({
   dod: Date,
   status: {
     type: String,
-    enum: ['pending', 'approved', 'adopt_requested', 'adopt_approved', 'adopt_completed'],
+    enum: ['pending', 'approved', 'adopt_requested', 'adopt_approved', 'adopt_completed', 'rejected'],
     default: 'pending'
   },
   donator: {
@@ -38,21 +38,24 @@ const petSchema = new Schema({
   }
 }, { collection: 'Pet' });
 
-petSchema.methods.setState = function(state) {
-  this.petContext = state;
+// Chỗ này gán đúng thuộc tính
+petSchema.methods.setState = function (state) {
+  this._state = state;
 };
 
-petSchema.methods.approve = function() {
-  this.petContext.approve();
+// Gọi method state đúng context
+petSchema.methods.approve = function () {
+  this._state?.approve?.();
 };
 
-petSchema.methods.adopt = function() {
-  this.petContext.adopt();
+petSchema.methods.adopt = function () {
+  this._state?.adopt?.();
 };
 
-petSchema.methods.completeAdoption = function() {
-  this.petContext.completeAdoption();
+petSchema.methods.completeAdoption = function () {
+  this._state?.completeAdoption?.();
 };
+
 const Pet = model('Pet', petSchema);
 
 export default Pet;

@@ -1,0 +1,88 @@
+
+{{#section 'owner'}}
+    <script>
+        // Lắng nghe sự kiện click cho nút approve
+        document.getElementById('approve-btn-{{_id}}').addEventListener('click', function () {
+            fetch('/pet/approved', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: '{{_id}}' }) 
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Xử lý kết quả trả về nếu cần
+                console.log('Approved:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('reject-btn-{{_id}}').addEventListener('click', function () {
+            fetch('/pet/rejected', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: '{{_id}}' })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Rejected:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+{{/section}}
+<div class="card-body">
+    <div class="row">
+        {{#each list}}
+           <div class="col-12 col-sm-6 col-md-3 mb-3">
+                <div class="card" style="width: 100%;">
+                    <img src="{{images.[0]}}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">{{name}}</h5>
+                            <div class="d-flex">
+                                <a class="btn btn-outline-primary tag"
+                                href="/pet/byCat?specie={{specie}}"
+                                style="font-size: 13px; padding: 4px 10px;">
+                                {{specie}}
+                                </a>
+                                <a class="btn btn-outline-primary tag"
+                                href="/pet/byCat?gender={{gender}}"
+                                style="font-size: 13px; padding: 4px 10px; margin-left: 3px">
+                                {{gender}}
+                                </a>
+                            </div>
+                        </div>
+
+                        <p class="card-text" style="font-size: 10pt; margin-bottom: 5px">{{truncate description 100}}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="/pet/detail?id={{_id}}" class="btn btn-dark">See Details</a>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-success rounded-circle circle-btn" id="approve-btn-{{_id}}">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger rounded-circle circle-btn" id="reject-btn-{{_id}}">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+
+
+                        
+                       
+                    </div>
+                    
+                </div>
+                
+            </div>
+        {{/each}}
+    </div>
+</div>

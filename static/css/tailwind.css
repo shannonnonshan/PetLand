@@ -283,6 +283,10 @@
   width: 100vw !important
 }
 
+.tw-w-\[100\] {
+  width: 100 !important
+}
+
 .tw-max-w-\[100\%\] {
   max-width: 100% !important
 }
@@ -311,6 +315,10 @@
   align-items: center !important
 }
 
+.tw-justify-start {
+  justify-content: flex-start !important
+}
+
 .tw-justify-end {
   justify-content: flex-end !important
 }
@@ -329,6 +337,10 @@
 
 .tw-gap-\[20\%\] {
   gap: 20% !important
+}
+
+.tw-gap-5 {
+  gap: 1.25rem !important
 }
 
 .tw-self-center {
@@ -479,6 +491,10 @@
 .tw-text-xl {
   font-size: 1.25rem !important;
   line-height: 1.75rem !important
+}
+
+.tw-text-\[12pt\] {
+  font-size: 12pt !important
 }
 
 .tw-font-bold {
