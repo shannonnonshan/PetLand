@@ -17,7 +17,16 @@ export default function (app) {
           section: hbs_sections(),
           formatDate: function (date) {
               return moment(date).format('YYYY-MM-DD HH:mm:ss'); // Định dạng ngày theo YYYY-MM-DD
-          }      }
+          },
+          starRating: function (rate) {
+            const filled = '★'.repeat(rate);
+            const empty = '☆'.repeat(5 - rate);
+            return filled + empty;
+          },
+          eq: function (a, b) {
+            return a === b;
+          },     
+      }
   }));
   app.set('view engine', 'hbs');
   app.set('views', './views');

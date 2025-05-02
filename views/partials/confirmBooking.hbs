@@ -1,0 +1,23 @@
+<!-- Modal xác nhận -->
+<div id="confirmModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h4>Xác nhận</h4>
+    <p>{{message}}</p>
+    <div class="modal-footer">
+      <button id="confirmYes" class="btn btn-primary">Đồng ý</button>
+      <button id="confirmNo" class="btn btn-secondary">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.modal { /* Style đơn giản */
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4); display: flex;
+  align-items: center; justify-content: center;
+}
+.modal-content {
+  background: #fff; padding: 20px; border-radius: 8px;
+  min-width: 300px;
+}
+</style>
