@@ -5,7 +5,6 @@ const { Schema, model } = mongoose;
 
 const userSchema = new Schema({
   googleId: String,
-  id: { type: String, default: () => randomUUID() },
   name: String,
   username: String,
   createdAt: { type: Date, default: Date.now },

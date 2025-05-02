@@ -1,9 +1,9 @@
-{{#section "css"}}
+{{#section "signupcss"}}
     <link rel="stylesheet" href="/static/css/cssPet/pet.form.css">
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
 {{/section}}
-{{#section "js"}}
+{{#section "signupjs"}}
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
   </script>
@@ -22,6 +22,43 @@
       e.target.value = input;
     });
   </script>
+  <script>
+  document.getElementById('btnSubmit').addEventListener('click', async function () {
+    const form = document.getElementById('fmAdopt');
+    const formData = new FormData(form);
+    const payload = {
+      id: formData.get('id'),
+      petid: formData.get('petid'),
+      raw_dor: formData.get('raw_dor')
+    };
+
+    const res = await fetch('/pet/adopt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (data.successMessage) {
+      Swal.fire({
+        title: 'Success',
+        text: data.successMessage,
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = '/pet/byCat';
+      });
+    } else if (data.message) {
+      Swal.fire({
+        title: 'Error',
+        text: data.message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
+  });
+</script>
+
 {{/section}}
 <div class="container">
     <div class="tw-flex">
@@ -30,32 +67,31 @@
     </div>
     
     <div class="content">
-      <form id="fmAdopt" action="/pet/adopt" method="post">
+      <form id="fmAdopt">
         <div class="user-details">
           <div class="input-box">
-            <span class="details" for="txtIdCustomer">Your ID</span>
-            <input type="text" id="txtIdCustomer" value="22110093" name="id" readonly>
+            <span class="details" for="txtId">ID</span>
+            <input type="text" id="txtId" value="{{user.id}}" name="id" readonly>
           </div>
           <div class="input-box">
-            <span class="details" for="txtFullname">Your Name</span>
-            <input type="text" id="txtFullname" name="fullname" value="donnade" readonly>
+            <span class="details" for="txtFullname">Full Name</span>
+            <input type="text" id="txtFullname" name="fullname" value="{{user.name}}" readonly>
           </div>
           <div class="input-box">
             <span class="details" for="txtPetID">Pet ID</span>
-            <input type="text" id="txtPetID" name="petid" value="00112" readonly>
+            <input type="text" id="txtPetID" name="petid" value="{{pet._id}}" readonly>
           </div>
-          <!-- Input for Email -->
           <div class="input-box">
             <span class="details" for="txtPetName">Pet Name</span>
-            <input type="text" id="txtPetName" name="petname" value="Alaska" readonly>
+            <input type="text" id="txtPetName" name="petname" value="{{pet.name}}" readonly>
           </div>
           <div class="input-box">
             <span class="details" for="txtDOR">Receive Date</span>
-            <input type="date" id="txtDOR" name="dor" placeholder="Enter your number" required>
+            <input type="date" id="txtDOR" name="raw_dor" placeholder="Enter your number" required>
           </div>
           <div class="input-box">
             <span class="details" for="txtPhone">Phone Number</span>
-            <input type="text" name="phone" id="txtPhone" value="033-334-9999" required>
+            <input type="text" name="phone" id="txtPhone" value="{{user.phone}}" required>
           </div>
         </div>
         <div class="button-container">
@@ -66,7 +102,7 @@
             </button>
           </div>
           <div class="button">
-            <button type="submit">
+            <button type="button" id="btnSubmit">
               <i class="bi bi-send"></i>
               Submit
             </button>

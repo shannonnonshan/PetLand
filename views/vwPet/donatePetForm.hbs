@@ -1,8 +1,8 @@
-{{#section "css"}}
+{{#section "signupcss"}}
     <link rel="stylesheet" href="/static/css/cssPet/pet.form.css">
 {{/section}}
 
-{{#section "js"}}
+{{#section "signupjs"}}
   <script>
     document.getElementById('imageUpload').addEventListener('change', function(event) {
       const previewContainer = document.getElementById('imagePreview');
@@ -26,19 +26,28 @@
     });
 </script>
  <script>
-    document.getElementById('txtPhone').addEventListener('input', function (e) {
-      let input = e.target.value;
-      
-      input = input.replace(/\D/g, '');
+    document.addEventListener('DOMContentLoaded', function () {
+      // Lấy trường phone
+      const phoneInput = document.getElementById('txtPhone');
 
-      if (input.length > 3 && input.length <= 6) {
-        input = input.slice(0, 3) + '-' + input.slice(3);
-      } else if (input.length > 6) {
-        input = input.slice(0, 3) + '-' + input.slice(3, 6) + '-' + input.slice(6, 10);
+      function formatPhoneNumber(value) {
+        let phone = value.replace(/\D/g, '');
+        if (phone.length > 3 && phone.length <= 6) {
+          phone = phone.slice(0, 3) + '-' + phone.slice(3);
+        } else if (phone.length > 6) {
+          phone = phone.slice(0, 3) + '-' + phone.slice(3, 6) + '-' + phone.slice(6, 10);
+        }
+        return phone;
+      }
+      if (phoneInput.value) {
+        phoneInput.value = formatPhoneNumber(phoneInput.value);
       }
 
-      e.target.value = input;
+      phoneInput.addEventListener('input', function (e) {
+        e.target.value = formatPhoneNumber(e.target.value);
+      });
     });
+
   </script>
 {{/section}}
 <div class="container">
@@ -49,23 +58,23 @@
 
     
     <div class="content">
-      <form id="fmAdopt" action="/pet/adopt" method="post">
+      <form id="fmAdopt" action="/pet/donate" method="post" enctype="multipart/form-data">
         <div class="user-details">
           <div class="input-box">
             <span class="details" for="txtIdCustomer">Your ID</span>
-            <input type="text" id="txtIdCustomer" value="22110093" name="id" readonly>
+            <input type="text" id="txtIdCustomer" value="{{user.id}}" name="id" readonly>
           </div>
           <div class="input-box">
             <span class="details" for="txtFullname">Your Name</span>
-            <input type="text" id="txtFullname" name="fullname" value="donnade" readonly>
+            <input type="text" id="txtFullname" name="fullname" value="{{user.name}}" readonly>
           </div>
           <div class="input-box">
             <span class="details" for="txtPhone">Phone Number</span>
-            <input type="text" name="phone" id="txtPhone" value="033-334-9999" required>
+            <input type="text" name="phone" id="txtPhone" value="{{user.phone}}" required>
           </div>
           <div class="input-box">
             <span class="details" for="txtEmail">Email</span>
-            <input type="text" name="email" id="txtEmail" value="haha@gmail.com" readonly>
+            <input type="text" name="email" id="txtEmail" value="{{user.email}}" readonly>
           </div>
           <div class="input-box">
             <span class="details" for="txtPetName">Pet Name</span>
@@ -83,20 +92,17 @@
             <span class="details" for="txtBreed">Pet Breed</span>
             <input type="text" id="txtBreed" name="petbreed" placeholder="Alaskaka">
           </div>
-          <div class="input-box">
+          <div class="input-box weight-input-box">
             <span class="details" for="txtAge">Age</span>
-            <select id="txtAge" name="age" required>
-              <option value="" disabled selected>Select pet's age</option>
-              <option value="less_2_months">Less than 2 months</option>
-              <option value="2_6_months">2 - 6 months</option>
-              <option value="6_12_months">6 - 12 months</option>
-              <option value="others">Others</option>
-            </select>
+            <div class="input-with-unit">
+              <input type="text" id="txtAge" name="age" placeholder="18" required>
+              <span class="unit">months</span>
+            </div>
           </div>
           <div class="input-box weight-input-box">
             <span class="details" for="txtWeight">Weight</span>
             <div class="input-with-unit">
-              <input type="text" id="txtWeight" name="weight" placeholder="18">
+              <input type="text" id="txtWeight" name="weight" placeholder="18" required>
               <span class="unit">kg</span>
             </div>
           </div>
@@ -135,7 +141,7 @@
           </div>
           <div class="input-box">
             <span class="details" for="txtDOD">Donate Date</span>
-            <input type="date" id="txtDOD" name="dod" required>
+            <input type="date" id="txtDOD" name="raw_dod" required>
           </div>
         </div>
         <div class="image-box">
@@ -148,7 +154,7 @@
           <div class="image-box">
             <span class="details">Images</span>
             <div class="upload-container">
-              <input type="file" id="imageUpload" multiple accept="image/*">
+              <input type="file" id="imageUpload" name="images" multiple accept="image/*">
               <div id="imagePreview" class="image-preview-container"></div>
             </div>
           </div>

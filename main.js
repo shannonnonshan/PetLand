@@ -6,6 +6,7 @@ import activate_view_middleware from './middlewares/view.mdw.js';
 import activate_route_middleware from './middlewares/route.mdw.js';
 import activate_session_middleware from './middlewares/session.mdw.js';
 import passport from 'passport';
+import handlebars from 'handlebars';
 
 const app = express();
 
@@ -13,6 +14,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(express.urlencoded({
     extended: true
 }));
+app.use('/uploads', express.static('public/uploads'));
+
 
 app.use('/static', express.static('static'));
 app.use('/css', express.static(path.join(__dirname, 'static', 'css')));
