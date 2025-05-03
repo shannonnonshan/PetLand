@@ -1,6 +1,6 @@
 <div
     id="loginModal"
-    class="tw-fixed tw-inset-0 tw-bg-black/50 tw-items-center tw-flex tw-justify-center 
+    class="popupModel tw-fixed tw-inset-0 tw-bg-black/50 tw-items-center tw-flex tw-justify-center 
     {{#if showLoginModal}}tw-block{{else}}
     tw-hidden
     {{/if}} tw-z-[500]"
@@ -14,7 +14,7 @@
         <div class="tw-flex tw-justify-end tw-gap-2">
         <button
             class="tw-stroke-1 tw-px-4 tw-py-2 hover:tw-bg-gray-400"
-            onclick="closeModal()"
+            onclick="closeModal(true)"
         >
             Cancel
         </button>

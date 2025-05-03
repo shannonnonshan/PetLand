@@ -33,7 +33,12 @@
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
                         {{#if (eq status "pending")}}
-                            <a href="/#" class="btn btn-primary tw-bg-[#F3EC1C] tw-text-black">Schedule service</a>
+                           <div class="tw-flex tw-flex-row">
+                            <button class=" tw-rounded-md tw-text-center tw-border-0 tw-p-2 tw-mr-[6px] tw-bg-[#F3EC1C] hover:tw-bg-yellow-400">
+                                Schedule Now
+                            </button>
+                            {{> cancelBooking bookedServiceIds=_id}}
+                        </div>
                         {{else}}
                             <span>Status: {{status}}</span>
                         {{/if}}
@@ -53,7 +58,12 @@
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
                         {{#if (eq status "pending")}}
-                            <a href="/#" class="btn btn-primary tw-bg-[#F3EC1C] tw-text-black">Schedule service</a>
+                        <div class="tw-flex tw-flex-row">
+                            <button class=" tw-rounded-md tw-text-center tw-border-0 tw-p-2 tw-mr-[6px] tw-bg-[#F3EC1C] hover:tw-bg-yellow-400">
+                                Schedule Now
+                            </button>
+                            {{> cancelBooking bookedServiceIds=_id}}
+                        </div>
                         {{else}}
                             <span>Status: {{status}}</span>
                         {{/if}}

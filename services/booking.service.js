@@ -12,7 +12,7 @@ export default {
     },
     findExistBooking(customerId)
     {
-        return Booking.find({
+        return Booking.findOne({
             customer:customerId,
             paymentStatus: 'PENDING'
         });
@@ -26,7 +26,7 @@ export default {
         const newBookedService = new BookedService(bookedService);
         return newBookedService.save();
     },
-    saveNewBookedService( booking,bookedServiceId) {
+    saveNewBookedService(booking,bookedServiceId) {
         booking.bookedServices.push(bookedServiceId);
         return booking.save();
     },
@@ -78,5 +78,20 @@ export default {
           .lean()
           .exec();
     },
+    deleteBookedService(id)
+    {
+        return BookedService.findByIdAndDelete(id)
+    },
+    updateAfterDeleteBookedService(bookingId,bookedServiceIds)
+    {
+        return Booking.findByIdAndUpdate(
+            bookingId,
+            { $pull: { bookedServices: bookedServiceIds } }, // xóa phần tử khỏi mảng
+        );
+    },
+    deleteBookingById(id)
+    {
+        return Booking.findByIdAndDelete(id)
+    }
 
 }

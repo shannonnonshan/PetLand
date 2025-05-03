@@ -14,9 +14,9 @@ export default function (app) {
         const dogCategories = await serviceService.findByPetType(1);
         const catCategories = await serviceService.findByPetType(2);
         const generalCategories = await serviceService.findByPetType(3);
-        const dogLimitCate = dogCategories.slice(0, 4);
-        const catLimitCate = catCategories.slice(0, 4);
-        const generalLimitCate = generalCategories.slice(0, 4);
+        const dogLimitCate = dogCategories.slice(0, 5);
+        const catLimitCate = catCategories.slice(0, 5);
+        const generalLimitCate = generalCategories.slice(0, 5);
 
         res.locals.dogCategories = dogCategories;
         res.locals.catCategories = catCategories;

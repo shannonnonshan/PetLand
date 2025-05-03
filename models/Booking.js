@@ -35,7 +35,7 @@ const bookingSchema = new mongoose.Schema({
       required: true,
     },
     accountant: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'User',
     },
     bookedServices: [{

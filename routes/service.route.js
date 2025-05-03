@@ -23,13 +23,12 @@ route.get('/detail', async function(req,res){
 })
 route.get('/booking', async function(req,res){
     if (req.session.authUser) {
-    const id = req.session.authUser._id;
+    const id = req.session.authUser.id;
     let booking = await bookingService.findBookedServiceById(id)
     let bookingPending = await bookingService.findPendingBookedService(id)
     let bookingCompleted = await bookingService.findCompletedBookedService(id)
     let bookingConfirmed = await bookingService.findScheduledBookedService(id)
     let bookingPaid = await bookingService.findPaidBookedService(id)
-    console.log(booking)
     res.render('vwBooking/bookingOfCustomer',{
         booking:booking,
         bookingPending: bookingPending,
@@ -46,42 +45,51 @@ route.post('/create-booking',async function(req,res){
     if (req.session.authUser) {
     const { bookedServiceIds } = req.body;
     const customerId = req.session.authUser.id;
-    console.log(customerId)
-    console.log(req.session.authUser)
-    console.log(bookedServiceIds)
+    const entity = {
+        service: bookedServiceIds,
+        status: 'pending',
+        customer: customerId
+    }
+    await bookingService.insertBookedService(entity);
+    const bookedServiceFinal = await bookingService.findBookedService(customerId, bookedServiceIds, 'pending');
+    let booking = await bookingService.findExistBooking(customerId)
     try {
-        let booking = await bookingService.findExistBooking(customerId)
-        console.log(booking)
-        const entity = {
-                service: bookedServiceIds,
-                status: 'pending',
-                customer: customerId
-            }
-        await bookingService.insertBookedService(entity);
-        const bookedServiceFinal = await bookingService.findBookedService(customerId, bookedServiceIds, 'pending');
-        if (booking  && booking._id) {
-            console.log(bookedServiceFinal._id)
+        if (booking && booking._id) {
             await bookingService.saveNewBookedService(booking, bookedServiceFinal._id);
         } else {
         booking = new Booking({
             customer: customerId,
-            bookedServices: bookedServiceFinal._id,
+            bookedServices: [bookedServiceFinal._id],
             accountant: null, // có thể gán sau
             paymentStatus: 'PENDING'
         });
         await bookingService.save(booking);
         }
-      
-          res.redirect('back');
+        res.render('partials/bookingSuccess',{ showSuccessModal: true })
         } catch (error) {
-            try {
-               await bookingService.deleteBookedServiceById(bookedServiceFinal._id);
-                
-              } catch (cleanupError) {
-                console.error('Error during cleanup:', cleanupError);
-              }
           console.error(error);
+          await bookingService.deleteBookedServiceById(bookedServiceFinal._id);
           res.status(500).send('Error creating or updating booking');
+        }
+    }
+});
+route.post('/cancel-booking',async function(req,res){
+    if (req.session.authUser) {
+    const { bookedServiceIds } = req.body;
+    const customerId = req.session.authUser.id;
+    try {
+        let booking = await bookingService.findExistBooking(customerId)
+        await bookingService.updateAfterDeleteBookedService(booking._id,bookedServiceIds)
+        await bookingService.deleteBookedService(bookedServiceIds);
+        const reloadedBooking = await Booking.findById(booking._id);
+
+if (!reloadedBooking.bookedServices || reloadedBooking.bookedServices.length === 0) {
+    await bookingService.deleteBookingById(reloadedBooking._id);
+}
+        res.redirect(req.get('referer'));
+        } catch (error) {
+          console.error(error);
+          res.status(500).send('Error updating booking');
         }
     }
 });
