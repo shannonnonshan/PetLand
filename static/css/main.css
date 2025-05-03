@@ -360,3 +360,7 @@ hr {
     max-width: 100%; 
     box-sizing: border-box;
 }
+.nav-link .active
+{
+    font-weight: bold;
+}

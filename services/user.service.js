@@ -54,4 +54,8 @@ export default {
     {
         return OtpUser.deleteOne({otp: otp})
     },
+    findByRequired(customer)
+    {
+        return User.findOne(customer)
+    }
 };

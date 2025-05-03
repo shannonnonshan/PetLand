@@ -23,8 +23,17 @@ export default function (app) {
                 return text.substring(0, length) + '...'; // Thêm dấu ba chấm sau khi cắt
             }
             return text;
-         }   
-        }
+         },  
+        
+          starRating: function (rate) {
+            const filled = '★'.repeat(rate);
+            const empty = '☆'.repeat(5 - rate);
+            return filled + empty;
+          },
+          eq: function (a, b) {
+            return a === b;
+          },     
+      }
   }));
   app.set('view engine', 'hbs');
   app.set('views', './views');
