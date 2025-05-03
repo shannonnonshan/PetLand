@@ -178,7 +178,8 @@
     </div>
 
     {{{body}}}
-    
+    {{> loginRequired}}
+    {{> logoutRequired}}
     <div id="footnote" class="tw-fixed tw-bottom-6 tw-left-0 tw-z-10 tw-right-0 tw-flex tw-justify-center tw-gap-[20%]">
         <!-- Home Button -->
         <button onclick="window.location.href='/';" class="tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center " style="box-shadow:rgb(1, 0, 0)">
@@ -191,10 +192,16 @@
         </button>
         
         <!-- Profile Button -->
+        {{#if authUser}}
+        <button onclick="handleLogoutClick()" class="tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center" style="box-shadow:rgb(1, 0, 0)">
+          <i class="bi bi-person tw-text-2xl"></i>
+        </button>
+        {{else}}
         <button onclick="handleClick()" class="tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center" style="box-shadow:rgb(1, 0, 0)">
           <i class="bi bi-person tw-text-2xl"></i>
         </button>
-        {{> loginRequired}}
+        {{/if}}
+        
     </div>  
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
@@ -209,25 +216,28 @@
   <script>
       const authUser = {{#if authUser}}true{{else}}false{{/if}};
       function handleClick() {
-        event.preventDefault();
+        
           if (!authUser) {
-            const modal = document.getElementById('loginModal');
-              const main = document.getElementById('mainContent');
-              modal.classList.remove('tw-hidden');
-              modal.setAttribute('aria-hidden', 'false');
-              main.setAttribute('aria-hidden', 'true');
-          } else {
-             const target = event.currentTarget;
-
-              if (target.tagName === 'A') {
-                window.location.href = target.href;
-              } else {
-                window.history.back();
-              }
+            event.preventDefault();
+            const modal = document.getElementById('loginModal') ;
+            const main = document.querySelector('.mainContent');
+            modal.classList.remove('tw-hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            main.setAttribute('aria-hidden', 'true');
+          }
+      }
+      function handleLogoutClick() {
+        event.preventDefault();
+          if (authUser) {
+            const modal =  document.getElementById('logoutModal');
+            const main = document.getElementById('mainContent');
+            modal.classList.remove('tw-hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            main.setAttribute('aria-hidden', 'true');
           }
       }
       function closeModal() {
-        const modal = document.getElementById('loginModal');
+        const modal = document.getElementById('loginModal') || document.getElementById('logoutModal');
         const main = document.getElementById('mainContent');
         modal.classList.add('tw-hidden');
         modal.setAttribute('aria-hidden', 'true');

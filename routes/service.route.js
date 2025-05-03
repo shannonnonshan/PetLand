@@ -23,7 +23,7 @@ route.get('/detail', async function(req,res){
 })
 route.get('/booking', async function(req,res){
     if (req.session.authUser) {
-    const id = req.session.authUser.userid;
+    const id = req.session.authUser._id;
     let booking = await bookingService.findBookedServiceById(id)
     let bookingPending = await bookingService.findPendingBookedService(id)
     let bookingCompleted = await bookingService.findCompletedBookedService(id)
@@ -45,7 +45,10 @@ route.get('/booking', async function(req,res){
 route.post('/create-booking',async function(req,res){
     if (req.session.authUser) {
     const { bookedServiceIds } = req.body;
-    const customerId = req.session.authUser.userid;
+    const customerId = req.session.authUser.id;
+    console.log(customerId)
+    console.log(req.session.authUser)
+    console.log(bookedServiceIds)
     try {
         let booking = await bookingService.findExistBooking(customerId)
         console.log(booking)

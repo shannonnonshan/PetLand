@@ -150,6 +150,10 @@
   z-index: 50 !important
 }
 
+.tw-z-\[500\] {
+  z-index: 500 !important
+}
+
 .tw-m-\[20\%\] {
   margin: 20% !important
 }
@@ -295,10 +299,6 @@
   width: 100vw !important
 }
 
-.tw-w-\[100\] {
-  width: 100 !important
-}
-
 .tw-max-w-\[100\%\] {
   max-width: 100% !important
 }
@@ -327,10 +327,6 @@
   align-items: center !important
 }
 
-.tw-justify-start {
-  justify-content: flex-start !important
-}
-
 .tw-justify-end {
   justify-content: flex-end !important
 }
@@ -349,10 +345,6 @@
 
 .tw-gap-\[20\%\] {
   gap: 20% !important
-}
-
-.tw-gap-5 {
-  gap: 1.25rem !important
 }
 
 .tw-self-center {
@@ -500,6 +492,10 @@
   line-height: 2.25rem !important
 }
 
+.tw-text-\[12pt\] {
+  font-size: 12pt !important
+}
+
 .tw-text-\[14pt\] {
   font-size: 14pt !important
 }
@@ -520,10 +516,6 @@
 .tw-text-xl {
   font-size: 1.25rem !important;
   line-height: 1.75rem !important
-}
-
-.tw-text-\[12pt\] {
-  font-size: 12pt !important
 }
 
 .tw-font-bold {
@@ -563,6 +555,11 @@
 .tw-drop-shadow-2xl {
   --tw-drop-shadow: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15)) !important;
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow) !important
+}
+
+.hover\:tw-bg-\[\#F3EC1C\]:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(243 236 28 / var(--tw-bg-opacity, 1)) !important
 }
 
 .hover\:tw-bg-\[\#FF94BD\]:hover {

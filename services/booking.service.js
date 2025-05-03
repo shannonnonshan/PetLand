@@ -12,8 +12,8 @@ export default {
     },
     findExistBooking(customerId)
     {
-        return Booking.findOne({
-            customer: customerId,
+        return Booking.find({
+            customer:customerId,
             paymentStatus: 'PENDING'
         });
     },
@@ -32,11 +32,11 @@ export default {
     },
     findBookedService(customerId, bookedServiceIds, status)
     {
-        return BookedService.findOne({service: bookedServiceIds, customer: customerId, status: status}).lean()
+        return BookedService.findOne({customer:customerId,service: bookedServiceIds, status: status}).lean()
     },
     findBookedServiceById(customerId)
     {
-        return BookedService.find({customer: customerId})
+        return BookedService.find({customer:customerId})
         .populate('service').lean().exec()
     },
     deleteBookedServiceById(temp)

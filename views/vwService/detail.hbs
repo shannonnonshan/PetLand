@@ -1,4 +1,4 @@
-<div class="tw-pt-[70px] tw-flex tw-h-screen">
+<div class="maincontent tw-pt-[70px] tw-flex tw-h-screen">
     <!-- Phần bên trái (Main content) -->
     <div class="tw-px-5 tw-overflow-y-scroll tw-bg-white tw-w-[55%] tw-max-w-[100%]" id="mainContent" style="overflow: scroll; scrollbar-width: none;">
         <img class=" tw-mx-[20%] tw-w-[450px] tw-h-[450px] tw-mb-[25px]" src="{{service.imageUrl}}" alt="{{service.imageUrl}}">
@@ -37,7 +37,6 @@
             <span>Duration: <b class="tw-text-[16pt]">{{service.duration}}</b> minutes</span>
             <span class="tw-text-[#FF94BD] tw-font-bold tw-text-[20pt]">{{price_number service.price}} VND</span>
             {{> bookingButton bookedServiceIds=service._id}}
-            {{> loginRequired}}
         </div>
     </div>
 </div>

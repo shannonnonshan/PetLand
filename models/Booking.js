@@ -23,14 +23,14 @@ const bookedServiceSchema = new mongoose.Schema({
       ref: 'User',
     },
     customer: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     }
   }, { collection: "BookedService" });
 const bookingSchema = new mongoose.Schema({
     customer: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },

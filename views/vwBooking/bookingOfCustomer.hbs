@@ -72,11 +72,8 @@
                         <p class="card-text">{{status.description}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
-                        {{#if (eq status "pending")}}
-                            <a href="/#" class="btn btn-primary tw-bg-[#F3EC1C] tw-text-black">Schedule service</a>
-                        {{else}}
-                            <span>Status: {{status}}</span>
-                        {{/if}}
+                        <span>Status: {{status}}</span>
+                        
                     </div>
                     </div>
                 {{/each}}
