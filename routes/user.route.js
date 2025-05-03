@@ -33,17 +33,55 @@ route.post('/login', async function (req, res) {
     }
     req.session.auth = true;
 
-
     req.session.authUser = {
         username: user.username,
         userid: user.id,
         email: user.email,
+        role: user.role
     };
 
-    const retUrl = req.session.retUrl || '/';
-    res.redirect(retUrl);
+    // Redirect based on the user's role
+    switch (user.role) {
+        case 'Customer':
+            return res.redirect('customer');
+        case 'Staff':
+            return res.redirect('staff');
+        case 'Owner':
+            return res.redirect('owner');
+        default:
+            return res.redirect('/');
+    }
 });
 
+function requireRole(role) {
+    return (req, res, next) => {
+        if (!req.session.auth || req.session.authUser.role !== role) {
+            return res.status(403).send('Access Denied');
+        }
+        next();
+    };
+}
+
+route.get('/customer', requireRole('Customer'), (req, res) => {
+    res.render('mainpage', {
+        layout: 'account-layout',
+        user: req.session.authUser
+    });
+});
+
+route.get('/staff', requireRole('Staff'), (req, res) => {
+    res.render('mainpage', {
+        layout: 'account-layout',
+        user: req.session.authUser
+    });
+});
+
+route.get('/owner', requireRole('Owner'), (req, res) => {
+    res.render('mainpage', {
+        layout: 'account-layout',
+        user: req.session.authUser
+    });
+});
 
 route.get('/register', function (req, res) {
     res.render('vwUser/register', {
