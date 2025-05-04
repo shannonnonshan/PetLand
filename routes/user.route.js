@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs'; 
 import dotenv from 'dotenv';
 import auth from '../middlewares/auth.mdw.js';
+import requireRole from '../middlewares/role.mdw.js'
 import userService from '../services/user.service.js';
 import configurePassportGoogle from '../controllers/passportGoogle.config.js';
 import passport from 'passport';
@@ -32,16 +33,44 @@ route.post('/login', async function (req, res) {
         });
     }
     req.session.auth = true;
+
     req.session.authUser = {
         name: user.name || user.username || null,
         id: user._id,
         email: user.email,
+        role: user.role
     };
-
-    const retUrl = req.session.retUrl || '/';
-    res.redirect(retUrl);
+    console.log(user);
+    switch (user.role) {
+        case 'Customer':
+            return res.redirect('/user/customer');
+        case 'Staff':
+            return res.redirect('staff');
+        case 'Owner':
+            return res.redirect('/user/owner');
+        default:
+            return res.redirect('/');
+    }
 });
 
+
+route.get('/customer', requireRole('Customer'), (req, res) => {
+    res.render('homepage', {
+        user: req.session.authUser
+    });
+});
+route.get('/staff', requireRole('Staff'), (req, res) => {
+    res.render('/', {
+        user: req.session.authUser
+    });
+});
+
+route.get('/owner', requireRole('Owner'), (req, res) => {
+    res.render('vwOwner/home', {
+        layout: 'owner-layout',
+        user: req.session.authUser
+    });
+});
 
 route.get('/register', function (req, res) {
     res.render('vwUser/register', {
@@ -97,8 +126,18 @@ route.get('/login/googleAuth/callback',
         name: user.name || user.username || null,
         id: user._id,
         email: user.email,
+        role: user.role
     };
-    res.redirect('/');
+    switch (user.role) {
+        case 'Customer':
+            return res.redirect('/user/customer');
+        case 'Staff':
+            return res.redirect('staff');
+        case 'Owner':
+            return res.redirect('/user/owner');
+        default:
+            return res.redirect('/');
+    }
 })
 
 route.get('/forgot-password', function (req, res) {

@@ -25,7 +25,7 @@
               </a>
           </header>
           <nav class="dashboard-nav-list">
-              <a href="#" class="dashboard-nav-item">
+              <a href="/owner/home" class="dashboard-nav-item">
             `   <i class="bi bi-house"></i>
                 Home 
               </a>
@@ -48,7 +48,8 @@
                   
                 </div>
               </div>
-            <a href="#" class="dashboard-nav-item"><i class="fas fa-sign-out-alt"></i> Logout </a>
+              <form id="frmLogout" action="/user/logout" method="post"></form>
+            <a id="btn-logout" href="javascript:void(0);" class="dashboard-nav-item"><i class="fas fa-sign-out-alt"></i> Logout </a>
           </nav>
       </div>
       <div class="dashboard-content">
@@ -74,6 +75,33 @@
     });
   });
 </script>
+<script>
+        document.getElementById('btn-logout').addEventListener('click', function () {
+            // Hiển thị SweetAlert2 để xác nhận logout
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to log out?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, log me out!',
+                cancelButtonText: 'No, keep me logged in',
+                reverseButtons: true // Đảo vị trí các nút
+            }).then((result) => {
+                // Nếu người dùng chọn "Yes"
+                if (result.isConfirmed) {
+                    // Tự động gửi form logout
+                    document.getElementById('frmLogout').submit();
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Nếu người dùng chọn "Cancel"
+                    Swal.fire(
+                        'Cancelled',
+                        'You are still logged in.',
+                        'info'
+                    );
+                }
+            });
+        });
+    </script>
 <script>
   document.querySelectorAll('.dashboard-nav-dropdown-toggle').forEach(toggle => {
     toggle.addEventListener('click', function (e) {
