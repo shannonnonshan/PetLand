@@ -46,6 +46,10 @@ const bookingSchema = new mongoose.Schema({
     createAt: {
       type: Date,
     },
+    paymentAt:{
+      type: Date,
+    },
+
     paymentStatus: {
       type: String,
       enum: ['COMPLETED', 'PENDING'],
