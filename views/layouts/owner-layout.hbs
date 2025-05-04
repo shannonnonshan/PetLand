@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="/static/css/cssOwner/owner.layout.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Add this in your HTML file inside the <head> tag -->
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
 
 </head>
@@ -30,7 +29,7 @@
             `   <i class="bi bi-house"></i>
                 Home 
               </a>
-              <a href="#" class="dashboard-nav-item active">
+              <a href="#" class="dashboard-nav-item">
                 <i class="bi bi-speedometer2 "></i> View Statis
               </a>
               <a href="#" class="dashboard-nav-item"><i class="bi bi-kanban"></i> Manage Service </a>
@@ -41,10 +40,11 @@
                 <div class='dashboard-nav-dropdown-menu'>
                   <a href="/owner/managePet/all" class="dashboard-nav-dropdown-item">All</a>
                   <a href="/owner/managePet/pending" class="dashboard-nav-dropdown-item">Pending Donation</a>
-                  <a href="/owner/managePet/approved" class="dashboard-nav-dropdown-item">Pending Adoption</a>
+                  <a href="/owner/managePet/approved" class="dashboard-nav-dropdown-item">Approved Donation</a>
                   <a href="/owner/managePet/adopt_requested" class="dashboard-nav-dropdown-item">Adoption Request</a>
                   <a href="/owner/managePet/adopt_approved" class="dashboard-nav-dropdown-item">Adopting</a>
                   <a href="/owner/managePet/adopt_completed" class="dashboard-nav-dropdown-item">Completed</a>
+                  <a href="/owner/managePet/rejected" class="dashboard-nav-dropdown-item">Rejected</a>
                   
                 </div>
               </div>
@@ -55,36 +55,41 @@
         {{{body}}}
     </div>
   </div>
-  <script>
-    document.querySelectorAll('.dashboard-nav-dropdown-toggle').forEach(toggle => {
-      toggle.addEventListener('click', function () {
-        const menu = this.nextElementSibling;
-        menu.classList.toggle('active'); // CSS phải có class `active` để hiện
-      });
-    });
+ <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.dashboard-nav-item, .dashboard-nav-dropdown-item').forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && currentPath === href) {
+        link.classList.add('active');
 
-  </script>
-  <script>
-    const mobileScreen = window.matchMedia("(max-width: 990px )");
-$(document).ready(function () {
-    $(".dashboard-nav-dropdown-toggle").click(function () {
-        $(this).closest(".dashboard-nav-dropdown")
-            .toggleClass("show")
-            .find(".dashboard-nav-dropdown")
-            .removeClass("show");
-        $(this).parent()
-            .siblings()
-            .removeClass("show");
-    });
-    $(".menu-toggle").click(function () {
-        if (mobileScreen.matches) {
-            $(".dashboard-nav").toggleClass("mobile-show");
-        } else {
-            $(".dashboard").toggleClass("dashboard-compact");
+        // Nếu là item con trong dropdown
+        const dropdownMenu = link.closest('.dashboard-nav-dropdown-menu');
+        if (dropdownMenu) {
+          dropdownMenu.classList.add('active'); // Hiện menu
+          const parentDropdown = dropdownMenu.closest('.dashboard-nav-dropdown');
+          parentDropdown.classList.add('show'); // Mở dropdown
         }
+      }
     });
-});
-  </script>
+  });
+</script>
+<script>
+  document.querySelectorAll('.dashboard-nav-dropdown-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault(); // Ngăn nhảy trang nếu có #
+      const parent = this.parentElement;
+      const menu = this.nextElementSibling;
+
+      // Toggle trạng thái
+      parent.classList.toggle('show');
+      menu.classList.toggle('active');
+    });
+  });
+</script>
+
+
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   {{{_sections.owner}}}
 </body>

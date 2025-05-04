@@ -95,7 +95,7 @@ route.get('/login/googleAuth/callback',
     req.session.auth = true;
     req.session.authUser = {
         name: user.name || user.username || null,
-        id: user.id,
+        id: user._id,
         email: user.email,
     };
     res.redirect('/');

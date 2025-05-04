@@ -24,7 +24,6 @@ export default function (app) {
         res.locals.dogLimitCate = dogLimitCate;
         res.locals.catLimitCate = catLimitCate;
         res.locals.generalLimitCate = generalLimitCate;
-
         // Tiếp tục xử lý request
         next();
     });

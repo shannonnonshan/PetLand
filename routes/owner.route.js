@@ -25,13 +25,20 @@ route.get('/managePet/approved', async function(req, res){
 })
 route.get('/managePet/adopt_requested', async function(req, res){
     const list = await petService.findAllBy("adopt_requested").lean();
-    res.render('vwOwner/pending', {
+    res.render('vwOwner/pending-adopt', {
         layout: 'owner-layout',
         list: list
     })
 })
 route.get('/managePet/adopt_approved', async function(req, res){
     const list = await petService.findAllBy("adopt_approved").lean();
+    res.render('vwOwner/approved', {
+        layout: 'owner-layout',
+        list: list
+    })
+})
+route.get('/managePet/rejected', async function(req, res){
+    const list = await petService.findAllBy("rejected").lean();
     res.render('vwOwner/approved', {
         layout: 'owner-layout',
         list: list
@@ -48,7 +55,6 @@ route.get('/managePet/adopt_completed', async function(req, res){
 route.get('/home', function(req, res){
     res.render('vwOwner/home', {
         layout: 'owner-layout',
-        
     })
 })
 

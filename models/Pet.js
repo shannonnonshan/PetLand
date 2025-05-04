@@ -1,6 +1,6 @@
 
 import { mongoose } from '../utils/db.js'; 
-import PetContext from './petContext.js';
+import PetContext from '../state/petState/petContext.js';
 const { Schema, model } = mongoose;
 
 

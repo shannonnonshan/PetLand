@@ -473,3 +473,17 @@ h1, .h1 {
     justify-content: center;
     align-items: center;
   }
+
+  .dashboard-nav-dropdown-menu {
+    display: none;
+    flex-direction: column;
+  }
+  
+  .dashboard-nav-dropdown-menu.active {
+    display: flex;
+  }
+  
+  .dashboard-nav-dropdown.show > .dashboard-nav-dropdown-toggle {
+    font-weight: bold;
+  }
+  
