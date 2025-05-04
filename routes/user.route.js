@@ -6,8 +6,7 @@ import requireRole from '../middlewares/role.mdw.js'
 import userService from '../services/user.service.js';
 import configurePassportGoogle from '../controllers/passportGoogle.config.js';
 import passport from 'passport';
-import nodemailer from 'nodemailer';
-
+import { sendEmail } from '../utils/mailer.js';
 const route = express.Router();
 dotenv.config();
 
@@ -40,7 +39,6 @@ route.post('/login', async function (req, res) {
         email: user.email,
         role: user.role
     };
-    console.log(user);
     switch (user.role) {
         case 'Customer':
             return res.redirect('/user/customer');
@@ -80,7 +78,6 @@ route.get('/register', function (req, res) {
 
 route.post('/register', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
-    console.log(req.body.raw_dob);
     const entity = {
         name: req.body.fullname,
         username: req.body.username,
@@ -174,55 +171,25 @@ route.post('/forgot-password', async function(req, res) {
         }   
         
         const ret = await userService.addOTP(newOTP);
-        // Cấu hình gửi email qua Nodemailer
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465, 
-            secure: true,
-            auth: {
-                user: process.env.MY_EMAIL,
-                pass: process.env.MY_EMAIL_PW,
-            },
-        });
-        // Nội dung email
-        const mailOptions = {
-            from: process.env.MY_EMAIL,
-            to: email,
-            subject: '[RESET PASSWORD] - PETLAND SUPPORT',
-            text: `
-          Hello,
-          
-          We received a request to reset the password for your Petland account.
-          
-          Your One-Time Password (OTP) is: ${otp}
-          
-          Please enter this code to reset your password. This OTP is valid for 10 minutes.
-          
-          If you did not request a password reset, please ignore this message or contact our support team.
-          
-          Thank you,
-          The Petland Team
-            `,
-            html: `
-            <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; background-color: #f9f9f9;">
-              <h2 style="color: #2c3e50;">🔐 Password Reset Request</h2>
-              <p>Hello,</p>
-              <p>We received a request to reset the password for your <strong>Petland</strong> account.</p>
-              <p style="font-size: 18px;">
-                <strong>Your OTP Code:</strong> 
-                <span style="color: #e74c3c; font-size: 24px; letter-spacing: 2px;">${otp}</span>
-              </p>
-              <p>This code is valid for <strong>10 minutes</strong>. Please do not share it with anyone.</p>
-              <p>If you did not make this request, please ignore this email or contact our support team immediately.</p>
-              <br/>
-              <p>Thank you,<br/>
-              <strong>The Petland Team</strong></p>
-            </div>
-            `
-          };
-
-        // Gửi email
-        await transporter.sendMail(mailOptions);
+    
+        const subject = '[RESET PASSWORD] - PETLAND SUPPORT';
+        const html = `
+        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; background-color: #f9f9f9;">
+            <h2 style="color: #2c3e50;">🔐 Password Reset Request</h2>
+            <p>Hello,</p>
+            <p>We received a request to reset the password for your <strong>Petland</strong> account.</p>
+            <p style="font-size: 18px;">
+            <strong>Your OTP Code:</strong> 
+            <span style="color: #e74c3c; font-size: 24px; letter-spacing: 2px;">${otp}</span>
+            </p>
+            <p>This code is valid for <strong>10 minutes</strong>. Please do not share it with anyone.</p>
+            <p>If you did not make this request, please ignore this email or contact our support team immediately.</p>
+            <br/>
+            <p>Thank you,<br/>
+            <strong>The Petland Team</strong></p>
+        </div>
+        `;
+        await sendEmail(email, subject, html);
 
         // Chuyển đến trang nhập OTP
         res.redirect(`/user/otp?email=${email}&&username=${username}`);
@@ -249,7 +216,6 @@ route.post('/otp', async function (req, res) {
 
     try {
         const otpRecord = await userService.findOTPByEmail(email);
-        console.log(otpRecord);
         if (!otpRecord) {
             return res.render('vwUser/otp', {
                 layout: 'account-layout',
