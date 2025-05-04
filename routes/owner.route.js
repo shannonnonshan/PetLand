@@ -32,7 +32,7 @@ route.get('/managePet/adopt_requested', async function(req, res){
 })
 route.get('/managePet/adopt_approved', async function(req, res){
     const list = await petService.findAllBy("adopt_approved").lean();
-    res.render('vwOwner/approved', {
+    res.render('vwOwner/completed-adopt', {
         layout: 'owner-layout',
         list: list
     })
