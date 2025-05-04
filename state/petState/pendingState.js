@@ -12,14 +12,11 @@ class PendingState extends PetState {
   async approve() {
     console.log("Approving pet...");
     this.petContext.pet.status = 'approved';
-    await this.petContext.pet.save();
     this.petContext.setState(new ApprovedState(this.petContext));
   }
-
-  async reject() {
+  async rejectDonation() {
     console.log("Rejecting pet...");
     this.petContext.pet.status = 'rejected';
-    await this.petContext.pet.save();
     this.petContext.setState(new RejectedState(this.petContext));
   }
 }

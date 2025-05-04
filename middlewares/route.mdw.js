@@ -19,5 +19,6 @@ export default function (app) {
     app.use('/user', userRoute);
     app.use('/service', serviceRoute);
     app.use('/pet', petRoute);
+    app.use('/owner', ownerRoute);
 }
 

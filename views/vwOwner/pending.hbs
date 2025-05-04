@@ -1,48 +1,109 @@
 
 {{#section 'owner'}}
-    <script>
-        // Lắng nghe sự kiện click cho nút approve
-        document.getElementById('approve-btn-{{_id}}').addEventListener('click', function () {
-            fetch('/pet/approved', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: '{{_id}}' }) 
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Xử lý kết quả trả về nếu cần
-                console.log('Approved:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.querySelectorAll('.approve-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const petId = this.getAttribute('data-id');
+            Swal.fire({
+                title: 'Bạn có chắc muốn phê duyệt?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Phê duyệt',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/pet/approved', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ petid: petId })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Phê duyệt thành công!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                window.location.href = '/owner/managePet/approved';
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Phê duyệt thất bại!',
+                                text: 'Vui lòng thử lại.'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi kết nối!',
+                            text: 'Không thể gửi yêu cầu.'
+                        });
+                    });
+                }
             });
         });
+    });
 
-        document.getElementById('reject-btn-{{_id}}').addEventListener('click', function () {
-            fetch('/pet/rejected', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: '{{_id}}' })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Rejected:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
+    document.querySelectorAll('.reject-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const petId = this.getAttribute('data-id');
+            Swal.fire({
+                title: 'Bạn có chắc muốn từ chối?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Từ chối',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/pet/rejected-donate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ petid: petId })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Từ chối thành công!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                window.location.href = '/owner/managePet/rejected';
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Từ chối thất bại!',
+                                text: 'Vui lòng thử lại.'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi kết nối!',
+                            text: 'Không thể gửi yêu cầu.'
+                        });
+                    });
+                }
             });
         });
-    </script>
+    });
+</script>
 {{/section}}
+
 <div class="card-body">
     <div class="row">
         {{#each list}}
            <div class="col-12 col-sm-6 col-md-3 mb-3">
                 <div class="card" style="width: 100%;">
+                    <input type="hidden" name="petid" value="{{_id}}">
                     <img src="{{images.[0]}}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-2">
@@ -66,12 +127,13 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <a href="/pet/detail?id={{_id}}" class="btn btn-dark">See Details</a>
                             <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-outline-success rounded-circle circle-btn" id="approve-btn-{{_id}}">
+                                <button type="button" class="btn btn-outline-success rounded-circle circle-btn approve-btn" data-id="{{_id}}">
                                     <i class="bi bi-check-circle-fill"></i>
                                 </button>
-                                <button type="button" class="btn btn-outline-danger rounded-circle circle-btn" id="reject-btn-{{_id}}">
+                                <button type="button" class="btn btn-outline-danger rounded-circle circle-btn reject-btn" data-id="{{_id}}">
                                     <i class="bi bi-x-circle-fill"></i>
                                 </button>
+
                             </div>
                         </div>
 

@@ -1,9 +1,9 @@
-import PendingState from '../state/pendingState.js';
-import ApprovedState from '../state/approvedState.js';
-import RejectedState from '../state/rejectedState.js';
-import AdoptApprovedState from '../state/adoptApprovedState.js';
-import AdoptRequestedState from '../state/adoptRequestedState.js';
-import AdoptCompletedState from '../state/adoptCompletedState.js';
+import PendingState from './pendingState.js';
+import ApprovedState from './approvedState.js';
+import RejectedState from './rejectedState.js';
+import AdoptApprovedState from './adoptApprovedState.js';
+import AdoptRequestedState from './adoptRequestedState.js';
+import AdoptCompletedState from './adoptCompletedState.js';
 
 class PetContext {
   constructor(pet) {

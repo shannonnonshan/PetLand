@@ -2,8 +2,9 @@ import express from 'express';
 import petService from '../services/pet.service.js';
 import multer from 'multer';
 import moment from 'moment';
-import { approvePet, adoptPet, completeAdoption, rejectPet} from '../controllers/pet.controller.js';
+import { approvePet, adoptPet, completeAdoption, rejectPetAdoption, rejectPetDonation} from '../controllers/pet.controller.js';
 import Pet from '../models/Pet.js';
+import auth from '../middlewares/auth.mdw.js';
 const route = express.Router();
 
 route.get('/byCat', async function(req, res){
@@ -23,7 +24,7 @@ route.get('/byCat', async function(req, res){
 route.get('/detail', async function(req, res){
     const id = (req.query.id).toString() || '0';
     const pet = await petService.findPetById(id).lean();
-    const suggest = await petService.findBySpecie(pet.specie, pet._id, 3).lean();
+    let suggest = await petService.findBySpecie(pet.specie, pet._id, 3, 'approved').lean();
     res.render('vwPet/viewPetDetail', {
         layout: 'pet-layout',
         pet: pet,
@@ -31,7 +32,24 @@ route.get('/detail', async function(req, res){
     });
 })
 
-route.get('/donate', function(req, res){
+route.get('/viewAdopted', auth, async function(req, res) {
+  const adopter = req.session.authUser || null;
+  const status = req.query.status;
+  
+  let list = [];
+  if (status) {
+    list = await petService.findAllByAdoptIdAndStatus(adopter.id, status).lean();
+  } else {
+    list = await petService.findAllByAdoptId(adopter.id).lean();
+  }
+
+  res.render('vwPet/viewAdoptList', {
+    layout: 'pet-layout',
+    list: list
+  });
+});
+
+route.get('/donate', auth, function(req, res){
     const user = req.session.authUser || null;
     console.log(user);
     res.render('vwPet/donatePetForm', {
@@ -55,12 +73,12 @@ const storage = multer.diskStorage({
   route.post('/donate', upload.array('images', 3), async function (req, res) {
     const {
       petname, specie, petbreed, age, weight,
-      gender, vaccine, dod, description, id
+      gender, vaccine, description, id
     } = req.body;
   
     // Danh sách file ảnh đã upload
     const imagePaths = req.files.map(file => '/uploads/' + file.filename); // đường dẫn để client dùng
-    const ymd_dod= moment(req.body.raw_dod, 'DD-MM-YYYY').format('YYYY-MM-DD');
+    const ymd_dod= moment(req.body.raw_dod).toDate();
     const newPet = {
       name: petname,
       specie,
@@ -78,10 +96,10 @@ const storage = multer.diskStorage({
   
     await petService.add(newPet);
   
-    res.redirect('/pet/byCat');
+    res.redirect('/pet/viewAdopted');
 });
 
-route.get('/adopt', async function(req, res){
+route.get('/adopt', auth, async function(req, res){
     const id = (req.query.id).toString() || '0';
     const pet = await petService.findPetById(id).lean();
     const user = req.session.authUser || null;
@@ -93,8 +111,8 @@ route.get('/adopt', async function(req, res){
 })
 
 route.post('/adopt', async function(req, res) {
-  const { id, petid, raw_dor } = req.body || {};
-  const ymd_dor = moment(raw_dor, 'YYYY-MM-DD').format('YYYY-MM-DD'); // đúng format date
+  const { id, petid } = req.body || {};
+  const ymd_dor =  moment(req.body.raw_dor).toDate();
 
   if (!id || !petid) {
     return res.status(400).json({ message: 'Pet ID and User ID are required' });
@@ -121,11 +139,25 @@ route.post('/adopt', async function(req, res) {
   }
 });
 
+route.post('/cancel-adopt', async function(req, res){
+  const { petid } = req.body;
+  try {
+    await Pet.findByIdAndUpdate(petid, {
+      status: 'approved', 
+      adopter: null,
+      adoptDate: null
+    });
+    return res.status(200).json({ message: 'You have successfully canceled the pet adoption.' }); // Custom message here
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Đã xảy ra lỗi! Không thể hủy phê duyệt.' });
+  }
+});
 
-
-route.post('/approve-donation', approvePet);
+route.post('/approved', approvePet);
+route.post('/rejected-adopt', rejectPetAdoption);
+route.post('/rejected-donate', rejectPetDonation);
 route.post('/adopt-pet', adoptPet);
 route.post('/complete-adoption', completeAdoption);
-route.post('/reject-donation', rejectPet);
 
 export default route;

@@ -1,76 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Pet</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="/css/tailwind.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="../../static/css/cssPet/pet.layout.css">
+
+    <!-- CSS & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link href="/css/tailwind.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/cssPet/pet.layout.css" />
     {{{_sections.css}}}
+    <style>
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            border-radius: 0.25rem;
+            min-width: 200px;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
-    
-    <nav class="nav tw-flex-row tw-items-center tw-justify-center">
-        <img id="brand-logo" class=" tw-w-[45px] tw-h-[45px]" src="/static/imgs/logo.jpg"  alt="logo">
-        <a
-            role="tab"
-            id="tab-services"
-            aria-controls="tabpanel"
-            aria-selected="true"
-            href="#"
-            class="tw-text-white tw-font-bold nav-link"
-            style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"
-            onmouseenter="switchTab('services')"
-        >
-            SERVICES
-        </a>
-        <a
-            role="tab"
-            id="tab-pet"
-            aria-controls="tabpanel"
-            aria-selected="false"
-            href="/pet/byCat"
-            class="tw-text-white tw-font-bold nav-link"
-            style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"
-            onmouseenter="switchTab('pet')"
-        >
-            PET
-        </a>
-        <a
-            role="tab"
-            id="tab-about"
-            aria-controls="tabpanel"
-            aria-selected="false"
-            href="#aboutUs"
-            style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"
-            class="tw-text-white tw-font-bold nav-link"
-        >
-            ABOUT US
-        </a>
-        <div class="nav-link">
+    <div class="d-flex tw-justify-between tw-items-center tw-mx-5 tw-mt-3 position-relative">
+        <a href="/"><img id="brand-logo" class="tw-w-[45px] tw-h-[45px]" src="/static/imgs/logo.jpg" alt="logo"/></a>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav tw-flex-row tw-items-center tw-justify-center">
+            <a id="tab-services" href="#" class="tw-text-white tw-font-bold nav-link" onmouseenter="switchTab('services')" style="text-shadow: 2px 2px 4px rgb(1, 0, 0);">SERVICES</a>
+            <a id="tab-pet" href="/pet/byCat" class="tw-text-white tw-font-bold nav-link" style="text-shadow: 2px 2px 4px rgb(1, 0, 0);">PET</a>
+            <a id="tab-about" href="#aboutUs" class="tw-text-white tw-font-bold nav-link" style="text-shadow: 2px 2px 4px rgb(1, 0, 0);">ABOUT US</a>
+        </nav>
+
+        <!-- Right Icons -->
+        <div class="nav-link d-flex align-items-center gap-3 position-relative">
             <div class="search-container">
                 <input type="text" name="search" placeholder="Search..." class="search-input">
-                <i class="bi bi-search"></i>      
+                <i class="bi bi-search"></i>
+            </div>
+            {{#if auth}}
+                <a class="nav-link dropdown-toggle tw-mx-4" href="#" id="navbarAccount" role="button">
+                    <i class="bi bi-person-circle icon-font" style="color:rgb(0, 0, 0);text-shadow: 2px 2px 4px rgb(1, 0, 0);"></i>
+                </a>
+            {{else}}
+                <a href="/user/login" class="btn btn-warning tw-text-white  tw-mx-4">
+                    <i ></i> Login
+                </a>
+            {{/if}}
+
+            <!-- Dropdown -->
+            <div id="info-dropdown" class="dropdown-menu" aria-labelledby="navbarAccount">
+                <div class="p-3 text-center">
+                    <i class="bi bi-person-circle icon-font" style="color:rgb(0, 0, 0);"></i>
+                    <h5 class="text-uppercase mt-3">{{authUser.name}}</h5>
+                </div>
+                <a class="dropdown-item" href="/service/booking">
+                    <i class="bi bi-calendar"></i> Your Booking
+                </a>
+                <a class="dropdown-item" href="/pet/viewAdopted">
+                    <i class="bi bi-outlet "></i> Your Rescue Pet
+                </a>
+                <a class="dropdown-item" href="javascript:void(0)">
+                    <i class="bi bi-bell-fill "></i> Notifications
+                </a>
+                <form id="frmLogout" action="/user/logout" method="post"></form>
+                <a id="btn-logout" class="dropdown-item" href="javascript:void(0);">
+                    <i class="bi bi-box-arrow-in-left"></i> Log out
+                </a>
             </div>
         </div>
-        <div class="nav-link icon-font">
-             <i class="bi bi-calendar-week icon-font"></i>
-        </div>
-        <div class="nav-link icon-font">
-             <i class="bi bi-person-circle icon-font"></i>
-        </div>
-    </nav>
+    </div>
 
+    <!-- SERVICES TAB CONTENT -->
+    <div id="panel-services" class="tab-content tw-grid tw-px-[20%] tw-py-5 tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4 tw-hidden">
+        <div>
+            <p class="tw-font-semibold tw-mb-1">For Dogs</p>
+            {{#each dogLimitCate}}
+            <a href="/service/detail?id={{id}}" class="tw-flex tw-items-center tw-text-black hover:tw-text-pink-500 tw-py-2">
+                <img src="{{imageUrl}}" class="tw-w-[30px] tw-h-[30px] tw-pr-1" alt=""> {{serviceName}}
+            </a>
+            {{/each}}
+        </div>
+        <div>
+            <p class="tw-font-semibold tw-mb-1">For Cats</p>
+            {{#each catLimitCate}}
+            <a href="/service/detail?id={{id}}" class="tw-flex tw-items-center tw-text-black hover:tw-text-pink-500 tw-py-2">
+                <img src="{{imageUrl}}" class="tw-w-[30px] tw-h-[30px] tw-pr-1" alt=""> {{serviceName}}
+            </a>
+            {{/each}}
+        </div>
+        <div>
+            <p class="tw-font-semibold tw-mb-2">General Services</p>
+            {{#each generalLimitCate}}
+            <a href="/service/detail?id={{id}}" class="tw-flex tw-items-center tw-text-black hover:tw-text-pink-500 tw-py-2">
+                <img src="{{imageUrl}}" class="tw-w-[30px] tw-h-[30px] tw-pr-1" alt=""> {{serviceName}}
+            </a>
+            {{/each}}
+        </div>
+        <div>
+            <p class="tw-font-semibold tw-mb-2">Highlights</p>
+            <a href="#" class="tw-flex tw-items-center tw-text-black hover:tw-text-pink-500 tw-mb-1"><i class="bi bi-star-fill tw-mr-2 tw-text-[#F3EC1C]"></i> Top Rated</a>
+            <a href="#" class="tw-flex tw-items-center tw-text-black hover:tw-text-pink-500 tw-mb-1"><i class="bi bi-fire tw-mr-2 tw-text-[#F3EC1C]"></i> Most Popular</a>
+            <a href="#" class="tw-flex tw-items-center tw-text-black hover:tw-text-pink-500 tw-mb-1"><i class="bi bi-gift tw-mr-2 tw-text-[#F3EC1C]"></i> Combo</a>
+        </div>
+    </div>
+
+    <!-- Main Body -->
     <div style="padding-left: 15%; padding-right: 15%">
         {{{body}}}
     </div>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tab logic
+            function switchTab(tab) {
+                document.querySelectorAll('[role="tab"]').forEach(el => el.setAttribute('aria-selected', 'false'));
+                document.getElementById('tab-' + tab).setAttribute('aria-selected', 'true');
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.add('tw-hidden'));
+                document.getElementById('panel-' + tab).classList.remove('tw-hidden');
+            }
+
+            let hideTimeout;
+            function hidePanel() {
+                hideTimeout = setTimeout(() => {
+                    document.getElementById('panel-services').classList.add('tw-hidden');
+                }, 200);
+            }
+            function cancelHidePanel() {
+                clearTimeout(hideTimeout);
+            }
+
+            const tabServices = document.getElementById('tab-services');
+            const panelServices = document.getElementById('panel-services');
+            tabServices.addEventListener('mouseenter', () => switchTab('services'));
+            tabServices.addEventListener('mouseleave', hidePanel);
+            panelServices.addEventListener('mouseenter', cancelHidePanel);
+            panelServices.addEventListener('mouseleave', hidePanel);
+
+            // Dropdown avatar toggle
+            const avatarBtn = document.getElementById('navbarAccount');
+            const dropdown = document.getElementById('info-dropdown');
+            if (avatarBtn && dropdown) {
+                avatarBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    dropdown.classList.toggle('show');
+                });
+                document.addEventListener('click', function (e) {
+                    if (!dropdown.contains(e.target) && !avatarBtn.contains(e.target)) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        document.getElementById('btn-logout').addEventListener('click', function () {
+            // Hiển thị SweetAlert2 để xác nhận logout
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to log out?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, log me out!',
+                cancelButtonText: 'No, keep me logged in',
+                reverseButtons: true // Đảo vị trí các nút
+            }).then((result) => {
+                // Nếu người dùng chọn "Yes"
+                if (result.isConfirmed) {
+                    // Tự động gửi form logout
+                    document.getElementById('frmLogout').submit();
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Nếu người dùng chọn "Cancel"
+                    Swal.fire(
+                        'Cancelled',
+                        'You are still logged in.',
+                        'info'
+                    );
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{{_sections.pet}}}
 </body>
 </html>

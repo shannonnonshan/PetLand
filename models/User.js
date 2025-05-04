@@ -6,14 +6,15 @@ const { Schema, model } = mongoose;
 const userSchema = new Schema({
   googleId: String,
   name: String,
-  username: String,
+  username: { type: String, unique: true },
   createdAt: { type: Date, default: Date.now },
   password: String,
   gender: String,
   address: String,
   phone: String,
   email: String,
-  avatar: String
+  avatar: String,
+  role: { type: String, required: true, enum: ['Customer', 'Staff', 'Owner'], default: 'Customer' }
 }, { collection: 'User' });
 
 userSchema.pre('findOneAndDelete', async function (next) {

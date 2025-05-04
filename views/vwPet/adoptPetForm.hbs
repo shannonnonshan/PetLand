@@ -23,40 +23,55 @@
     });
   </script>
   <script>
-  document.getElementById('btnSubmit').addEventListener('click', async function () {
-    const form = document.getElementById('fmAdopt');
-    const formData = new FormData(form);
-    const payload = {
-      id: formData.get('id'),
-      petid: formData.get('petid'),
-      raw_dor: formData.get('raw_dor')
-    };
+      document.getElementById('btnSubmit').addEventListener('click', async function () {
+        const form = document.getElementById('fmAdopt');
+        const formData = new FormData(form);
 
-    const res = await fetch('/pet/adopt', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+        const dor = new Date(formData.get('raw_dor'));
+        const dod = new Date(document.getElementById('txtDOD').value);
 
-    const data = await res.json();
-    if (data.successMessage) {
-      Swal.fire({
-        title: 'Success',
-        text: data.successMessage,
-        icon: 'success',
-        confirmButtonText: 'OK'
-      }).then(() => {
-        window.location.href = '/pet/byCat';
+        if (dor <= dod) {
+          Swal.fire({
+            title: 'Invalid Date',
+            text: 'Receive date must be after the donation date.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+          });
+          return;
+        }
+
+        const payload = {
+          id: formData.get('id'),
+          petid: formData.get('petid'),
+          raw_dor: formData.get('raw_dor')
+        };
+
+        const res = await fetch('/pet/adopt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.successMessage) {
+          Swal.fire({
+            title: 'Success',
+            text: data.successMessage,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            window.location.href = '/pet/byCat';
+          });
+        } else if (data.message) {
+          Swal.fire({
+            title: 'Error',
+            text: data.message,
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
       });
-    } else if (data.message) {
-      Swal.fire({
-        title: 'Error',
-        text: data.message,
-        icon: 'error',
-        confirmButtonText: 'OK'
-      });
-    }
-  });
+
 </script>
 
 {{/section}}
@@ -85,6 +100,8 @@
             <span class="details" for="txtPetName">Pet Name</span>
             <input type="text" id="txtPetName" name="petname" value="{{pet.name}}" readonly>
           </div>
+          <input type="hidden" id="txtDOD" value="{{pet.dod}}">
+
           <div class="input-box">
             <span class="details" for="txtDOR">Receive Date</span>
             <input type="date" id="txtDOR" name="raw_dor" placeholder="Enter your number" required>
