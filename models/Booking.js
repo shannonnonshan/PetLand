@@ -67,6 +67,18 @@ const shiftSchema = new mongoose.Schema({
       required: true,
     },
   }, { collection: 'Shift' });
+  bookedServiceSchema.methods.setState = function(state) {
+    this._state = state;  // Cập nhật trạng thái hiện tại của đối tượng
+    this.status = state.status;  // Cập nhật trạng thái trong cơ sở dữ liệu nếu cần thiết
+};
+  
+  bookedServiceSchema.methods.confirm = function () {
+    this._state.confirm(); // Gọi phương thức confirm() của trạng thái hiện tại
+  };
+  
+  bookedServiceSchema.methods.complete = function () {
+    this._state.complete(); // Gọi phương thức complete() của trạng thái hiện tại
+  };
   
 const Booking = mongoose.model('Booking', bookingSchema);
 const BookedService = mongoose.model('BookedService',bookedServiceSchema);

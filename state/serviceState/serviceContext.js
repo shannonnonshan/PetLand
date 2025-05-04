@@ -1,0 +1,41 @@
+import PendingState from "./pendingState.js";
+import CompletedState from "./completedState.js";
+import ConfirmedState from "./confirmedState.js";
+
+class ServiceContext {
+  constructor(bookedService) {
+    this.bookedService = bookedService;
+    console.log(this.bookedService.status);
+    switch (bookedService.status) {
+      case 'pending':
+        this._state = new PendingState(this.bookedService);
+        break;
+      case 'completed':
+        this._state = new CompletedState(this.bookedService);
+        break;
+      case 'confirmed':
+        this._state = new ConfirmedState(this.bookedService);
+        break;
+      default:
+        throw new Error('Unknown status');
+    }
+  }
+
+  setState(state) {
+    this._state = state;
+  }
+
+  confirm(shiftId) {
+    this._state.confirm(shiftId);  // Confirm trạng thái nếu thuộc PendingState hoặc ConfirmedState
+  }
+
+  complete() {
+    this._state.complete();  // Hoàn thành nếu thuộc trạng thái Pending hoặc Confirmed
+  }
+
+  async save() {
+    return this.bookedService.save();  // Mongoose save()
+  }
+}
+
+export default ServiceContext;

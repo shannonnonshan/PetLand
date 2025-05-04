@@ -45,7 +45,7 @@ route.post('/login', async function (req, res) {
         case 'Customer':
             return res.redirect('/user/customer');
         case 'Staff':
-            return res.redirect('/staff');
+            return res.redirect('/user/staff');
         case 'Owner':
             return res.redirect('/user/owner');
         default:
@@ -60,16 +60,24 @@ route.get('/customer', requireRole('Customer'), (req, res) => {
     });
 });
 route.get('/staff', requireRole('Staff'), (req, res) => {
-    res.render('/', {
+    if (req.session.authUser){
+    res.render('vwStaff/service', {
+        layout: 'staff-layout' ,
         user: req.session.authUser
-    });
+    })}else{
+        res.render('partials/loginRequired',{ showLoginModal: true })
+    };
 });
 
 route.get('/owner', requireRole('Owner'), (req, res) => {
-    res.render('vwOwner/home', {
-        layout: 'owner-layout',
-        user: req.session.authUser
-    });
+    if (req.session.authUser){
+        res.render('vwOwner/home', {
+            layout: 'owner-layout',
+            user: req.session.authUser
+        })
+    }else{
+        res.render('partials/loginRequired',{ showLoginModal: true })
+    }  
 });
 
 route.get('/register', function (req, res) {

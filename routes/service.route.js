@@ -9,6 +9,7 @@ import serviceService from '../services/service.service.js';
 import bookingService from '../services/booking.service.js';
 import { Booking } from '../models/Booking.js';
 import shiftService from '../services/shift.service.js';
+import ServiceContext from '../state/serviceState/serviceContext.js';
 
 const route = express.Router();
 dotenv.config();
@@ -26,7 +27,7 @@ route.get('/detail', async function(req,res){
 route.get('/booking', async function(req,res){
     if (req.session.authUser) {
     const id = req.session.authUser.id;
-    let booking = await bookingService.findBookedServiceById(id)
+    let booking = await bookingService.findBookedServiceByCustomerId(id)
     let bookingPending = await bookingService.findPendingBookedService(id)
     let bookingCompleted = await bookingService.findCompletedBookedService(id)
     let bookingConfirmed = await bookingService.findScheduledBookedService(id)
@@ -156,14 +157,12 @@ route.post('/schedule', async function(req,res)
         const phone = req.body.phone
         const email = req.body.email
         const bookedServiceId = req.body.bookedServiceId
-        const updateBookedServie = await bookingService.findBookedServiceById(bookedServiceId)
-        if(updateBookedServie){
+        const updateBookedService = await bookingService.findBookedServiceById(bookedServiceId)
+        if(updateBookedService){
             await userService.updateUserforShift(customer._id, name, phone, email)
             const startTime = moment(req.body.startTime, "DD/MM/YYYY HH:mm").toDate()
             const endTime = moment(req.body.endTime, "DD/MM/YYYY HH:mm").toDate()
             const formattedDate = moment(req.body.startTime, "DD/MM/YYYY HH:mm").startOf('day').toDate();
-            console.log(startTime)
-            console.log(endTime)
             const entity = {
                     bookedService: bookedServiceId,
                     startTime: startTime,
@@ -171,26 +170,41 @@ route.post('/schedule', async function(req,res)
                 }
             await shiftService.add(entity);
             const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceId)
-            await bookingService.updateStatusBookedService(bookedServiceId,'confirmed',shiftAdded._id)
-            await bookingService.findBookedAndDeleteAfterSchedule(bookedServiceId)
-            let booking = await bookingService.findExistBookingByTime(formattedDate)
-            if (booking && booking._id) {
-                await bookingService.saveNewBookedService(booking, bookedServiceId);
-            } else {
-            booking = new Booking({
-                customer: customer._id,
-                bookedServices: [bookedServiceId],
-                accountant: null, 
-                paymentStatus: 'PENDING',
-                createAt:formattedDate,
-            });
-            await bookingService.save(booking);
-            }
-            const url = req.session.retUrl || '/';
-            res.redirect(url);
+            try{
+                    const bookedStatus = await bookingService.findBookedById(bookedServiceId)
+                    const statusContext = new ServiceContext(bookedStatus);
+                    statusContext.confirm(shiftAdded._id);
+                    await statusContext.save();  
+                    await bookingService.findBookedAndDeleteAfterSchedule(bookedServiceId)
+                    
+                }
+                catch(error)
+                {
+                    console.error(error); // in ra lỗi để debug
+                    const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceId);
+                    if (shiftAdded) {
+                      await shiftService.deleteShiftById(shiftAdded._id);
+                    }
+                    return res.status(500).send("error, try again");
+                }
+                let booking = await bookingService.findExistBookingByTime(formattedDate)
+                if (booking && booking._id) {
+                    await bookingService.saveNewBookedService(booking, bookedServiceId);
+                } else {
+                booking = new Booking({
+                    customer: customer._id,
+                    bookedServices: [bookedServiceId],
+                    accountant: null, 
+                    paymentStatus: 'PENDING',
+                    createAt:formattedDate,
+                });
+                await bookingService.save(booking);
+                }
+                const url = req.session.retUrl || '/';
+                res.redirect(url);
         }else{
             console.error(error);
-            const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceId)
+            const shiftAdded= await shiftService.findShiftByBookedService(bookedServiceId)
             await shiftService.deleteShiftById(shiftAdded._id);
             res.status(500).send('Error updating booking');
         }

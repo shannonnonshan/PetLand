@@ -10,9 +10,17 @@ export default {
         const newbooking = new Booking(booking)
         return newbooking.save()
     },
+    async saveBookedService(booking)
+    {
+        return BookedService.findByIdAndUpdate(booking._id).lean()
+    },
     findBookingById(id)
     {
         return Booking.findById(id).lean()
+    },
+    findBookedById(id)
+    {
+        return BookedService.findById(id)
     },
     findExistBooking(customerId)
     {
@@ -59,13 +67,16 @@ export default {
     {
         return BookedService.findOne({customer:customerId,service: bookedServiceIds, status: status}).lean()
     },
-    findBookedServiceById(customerId)
+    findBookedServiceById(id)
     {
-        return BookedService.find({customer:customerId})
+        return BookedService.findById(id)
         .populate('service').populate('shift').lean().exec()
     },
-    findBookedServiceByBookedId(id){
-        return BookedService.findById(id)
+    
+    findBookedServiceByCustomerId(id)
+    {
+        return BookedService.find({customer:id})
+        .populate('service').populate('shift').lean().exec()
     },
     deleteBookedServiceById(temp)
     {
