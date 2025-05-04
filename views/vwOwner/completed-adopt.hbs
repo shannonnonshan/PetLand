@@ -1,0 +1,124 @@
+
+{{#section 'owner'}}
+    <script>
+        document.querySelectorAll('.approve-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const petId = this.getAttribute('data-id');
+                fetch('/pet/complete-adoption', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ petid: petId })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Phê duyệt thành công!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.href = '/owner/managePet/adopt_completed';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Phê duyệt thất bại!',
+                            text: 'Vui lòng thử lại sau.'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Đã xảy ra lỗi!',
+                        text: 'Không thể kết nối tới máy chủ.'
+                    });
+                });
+            });
+        });
+
+        document.querySelectorAll('.reject-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const petId = this.getAttribute('data-id');
+                fetch('/pet/cancel-adopt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ petid: petId })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Từ chối thành công!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.href = '/owner/managePet/rejected';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Từ chối thất bại!',
+                            text: 'Vui lòng thử lại sau.'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Đã xảy ra lỗi!',
+                        text: 'Không thể kết nối tới máy chủ.'
+                    });
+                });
+            });
+        });
+    </script>
+{{/section}}
+<div class="card-body">
+    <div class="row">
+        {{#each list}}
+           <div class="col-12 col-sm-6 col-md-3 mb-3">
+                <div class="card" style="width: 100%;">
+                    <img src="{{images.[0]}}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
+                    <input type="hidden" name="petid" value="{{_id}}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">{{name}}</h5>
+                            <div class="d-flex">
+                                <a class="btn btn-outline-primary tag"
+                                href="/pet/byCat?specie={{specie}}"
+                                style="font-size: 13px; padding: 4px 10px;">
+                                {{specie}}
+                                </a>
+                                <a class="btn btn-outline-primary tag"
+                                href="/pet/byCat?gender={{gender}}"
+                                style="font-size: 13px; padding: 4px 10px; margin-left: 3px">
+                                {{gender}}
+                                </a>
+                            </div>
+                        </div>
+
+                        <p class="card-text" style="font-size: 10pt; margin-bottom: 5px">{{truncate description 100}}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="/pet/detail?id={{_id}}" class="btn btn-dark">See Details</a>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-success rounded-circle circle-btn approve-btn" data-id="{{_id}}">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger rounded-circle circle-btn reject-btn" data-id="{{_id}}">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        {{/each}}
+    </div>
+</div>

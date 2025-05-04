@@ -91,14 +91,14 @@
           <a class="nav-link active" href="/pet/viewAdopted">All</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="/pet/viewAdopted?status=adopt_approved">Approved</a>
+          <a class="nav-link " href="/pet/viewAdopted?status=adopt_approved">Adopting</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/pet/viewAdopted?status=adopt_requested">Request</a>
         </li>
         
         <li class="nav-item">
-          <a class="nav-link" href="/pet/viewAdopted?status=completed">Completed</a>
+          <a class="nav-link" href="/pet/viewAdopted?status=adopt_completed">Completed</a>
         </li>
       </ul>
     </div>
@@ -118,8 +118,13 @@
                     <p class="tw-font-medium tw-text-lg">Pet Name: <span class="tw-font-semibold tw-text-gray-800">{{name}}</span></p>
                     <p class="tw-text-sm">Specie: <span class="tw-font-semibold tw-text-green-600">{{specie}}</span></p>
                 </div>
-
-                <!-- Buttons -->
+                {{#if (eq status 'adopt_completed')}}
+                <div class="button-container button flex justify-end space-x-4 mt-6">
+                    <a href="/pet/detail/{{_id}}" class="btn-view tw-cursor-pointer">
+                        <i class="cart-icon ion-bag tw-mr-2"></i>VIEW DETAIL
+                    </a>
+                </div>
+                {{else}}
                 <div class="button-container button flex justify-end space-x-4 mt-6">
                     <a href="#" class="btn-cancel tw-cursor-pointer" data-id="{{_id}}">
                         CANCEL
@@ -128,6 +133,7 @@
                         <i class="cart-icon ion-bag tw-mr-2"></i>VIEW DETAIL
                     </a>
                 </div>
+                {{/if}}
             </div>
         {{/each}}
         {{else}}
