@@ -38,8 +38,8 @@ route.post('/login', async function (req, res) {
         email: user.email,
     };
 
-    const retUrl = req.session.retUrl || '/';
-    res.redirect(retUrl);
+    const url = req.session.retUrl || '/';
+    res.redirect(url);
 });
 
 

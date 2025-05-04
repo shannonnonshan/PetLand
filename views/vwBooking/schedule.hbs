@@ -1,0 +1,161 @@
+{{#section 'css'}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20
+/jquery.datetimepicker.min.css">
+
+<style>
+    .input-box{
+        margin-bottom: 15px;
+        height: auto;
+        width: 100%;
+    }
+    input{
+        width: 100%;
+        margin-top: 5px;
+    }
+    .input-box span{
+        font-weight: bold;
+    }
+    .scrollbar-none {
+      -ms-overflow-style: none; /* IE/Edge */
+      scrollbar-width: none;    /* Firefox */
+    }
+  
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;            /* Chrome, Safari, Opera */
+    }
+</style>
+{{/section}}
+
+<form id="frmSchedule" action="/service/schedule?id={{id}}" class="tw-bg-white tw-pt-[50px] tw-h-screen tw-max-w-lg tw-mx-auto" method="POST" >
+    <div class="tw-px-3 tw-pb-[20%] tw-w-auto tw-h-[100%] tw-max-h-max tw-border-2 tw-overflow-y-scroll tw-border-black" style="overflow: scroll; scrollbar-width: none;">
+        <h2>Schedule your service</h2>
+        <input id="bookedServiceId" name="bookedServiceId" value="{{bookedService._id}}" hidden>
+    <div class="input-box">
+        <span class="details" for="txtName">Name</span>
+        {{#if (eq user.name null)}}
+        <input id="txtUsername" name="name" placeholder="Fill your name" required>
+        {{else}}
+        <input name="name" value="{{user.name}}" placeholder="{{user.name}}" readonly>
+        {{/if}}
+    </div>
+    <div class="input-box">
+        <span class="details" for="txtPhone">Phone number</span>
+        {{#if (eq user.phone null)}}
+        <input name="phone" placeholder="Fill your number" required>
+        {{else}}
+        <input name="phone" value="{{user.phone}}" placeholder="{{user.phone}}" readonly>
+        {{/if}}
+    </div>
+    <div class="input-box">
+        <span class="details" for="txtEmail">Email</span>
+        {{#if (eq user.email null)}}
+        <input id="txtEmail" name="email" placeholder="Fill your number" required>
+        {{else}}
+        <input id="txtEmail"  name="email" value="{{user.email}}" placeholder="{{user.email}}" readonly>
+        {{/if}}
+    </div>
+    <p class="tw-italic">
+    Tip: Want to change your default info? Head over to your account page.
+    </p>    
+    <div class="input-box">
+    <span>Duration: <b class="tw-text-[#FF94BD]">{{service.duration}}</b> minutes</span>
+    </div>
+    <div class="input-box">
+        <div class="flex items-center space-x-1 mb-4">
+        <span for="txtStartTime" class="tw-bg-white tw-text-black ">Start Time</span>
+        <input type="text" name="startTime" id="txtStartTime" class="form-control" placeholder="Select a date" aria-describedby="helpId">
+        <input type="text" name="endTime" id="txtEndTime"  hidden>
+        <span class="">Estimate Completed Time: <p id="lblEndTime" class="tw-mt-5 tw-text-[#FF94BD]"></p></span>
+    </div>
+    </div>
+    <span id="alert" class="tw-text-red-500"></span>
+    <button type="submit" class="tw-bg-[#F3EC1C] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-w-full tw-p-2 transition-colors duration-200"
+    >
+    Confirm Schedule
+    </button>
+    </div>
+</form>
+{{#section 'js'}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+<script>
+    const serviceDuration = {{service.duration}};
+    $('#txtStartTime').datetimepicker({
+      timepicker: true,
+      format: 'd/m/Y H:i',
+      mask: true,
+      minDate:new Date(),
+      defaultTime:'09:00',
+      minTime: '09:00',   // bắt đầu từ 9 giờ sáng
+      maxTime: '20:00', 
+      step: 30,  
+      onChangeDateTime: function(dp, $input) {
+        if (!$input.val()) return;
+
+        const parts = $input.val().split(/[/ :]/); // d/m/Y H:i
+        const date = new Date(`${parts[2]}-${parts[1]}-${parts[0]}T${parts[3]}:${parts[4]}`);
+
+        date.setMinutes(date.getMinutes() + serviceDuration);
+
+        const pad = (n) => n < 10 ? '0' + n : n;
+        const formatted = `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+
+        $('#txtEndTime').val(formatted);
+        $('#lblEndTime').text(formatted); // Hiển thị ra label
+      }
+    });
+
+</script>
+<script>
+    function convertToISOString(input) {
+    if (!input || typeof input !== 'string') return null;
+
+    const parts = input.trim().split(/[/ :]/);
+    if (parts.length < 5) return null; // Không đủ phần
+
+    const [day, month, year, hour, minute] = parts.map(Number);
+
+    const date = new Date(year, month - 1, day, hour, minute);
+    if (isNaN(date.getTime())) {
+        console.error('Invalid Date from:', input);
+        return null;
+    }
+
+    return date.toISOString();
+    }
+    function checkValidEmail() {
+        const email = document.querySelector('#txtEmail').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Định dạng cơ bản cho email
+        if (email.length === 0 || !emailRegex.test(email)) {
+            document.querySelector('#txtEmail').select();
+            return false; 
+        }
+        return true; 
+    }
+    $('#frmSchedule').on('submit', function (e) {
+      e.preventDefault();
+
+      if(!checkValidEmail())
+      {
+        $('#alert').text('Invalid Email')
+        return;
+      }
+    const start = document.querySelector('#txtStartTime').value;
+    const end = document.querySelector('#txtEndTime').value;
+    const startTime = convertToISOString(start);
+    const endTime = convertToISOString(end);
+
+    $.getJSON(`/service/is-available?start=${startTime}&end=${endTime}`, function (data) {
+    console.log(data); 
+    if (data === false) {
+        $('#alert').text('Your slot booking is not available. Please try again.');
+    } else {
+        // If available, submit the form
+        $('#frmSchedule').off('submit').submit();
+    }
+    }).fail(function () {
+        $('#alert').text('Error checking availability. Please try again later.');
+    });
+    });
+ 
+</script>
+{{/section}}

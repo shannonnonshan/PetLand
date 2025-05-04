@@ -4,9 +4,11 @@ import dotenv from 'dotenv';
 import auth from '../middlewares/auth.mdw.js';
 import userService from '../services/user.service.js';
 import nodemailer from 'nodemailer';
+import moment from 'moment';
 import serviceService from '../services/service.service.js';
 import bookingService from '../services/booking.service.js';
 import { Booking } from '../models/Booking.js';
+import shiftService from '../services/shift.service.js';
 
 const route = express.Router();
 dotenv.config();
@@ -60,7 +62,7 @@ route.post('/create-booking',async function(req,res){
         booking = new Booking({
             customer: customerId,
             bookedServices: [bookedServiceFinal._id],
-            accountant: null, // có thể gán sau
+            createAt: null, // có thể gán sau
             paymentStatus: 'PENDING'
         });
         await bookingService.save(booking);
@@ -79,19 +81,123 @@ route.post('/cancel-booking',async function(req,res){
     const customerId = req.session.authUser.id;
     try {
         let booking = await bookingService.findExistBooking(customerId)
+        const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceIds)
+        if(shiftAdded)
+        {
+            await shiftService.deleteShiftById(shiftAdded._id);
+        }
         await bookingService.updateAfterDeleteBookedService(booking._id,bookedServiceIds)
+        const reloadedBooking = await bookingService.findBookingById(booking._id)
         await bookingService.deleteBookedService(bookedServiceIds);
-        const reloadedBooking = await Booking.findById(booking._id);
-
-if (!reloadedBooking.bookedServices || reloadedBooking.bookedServices.length === 0) {
-    await bookingService.deleteBookingById(reloadedBooking._id);
-}
+        console.log(reloadedBooking)
+        if (!reloadedBooking.bookedServices || reloadedBooking.bookedServices.length === 0) {
+            await bookingService.deleteBookingById(reloadedBooking._id);
+        }
         res.redirect(req.get('referer'));
         } catch (error) {
-          console.error(error);
-          res.status(500).send('Error updating booking');
+        console.error(error);
+        res.status(500).send('Error updating booking');
         }
     }
+        
+    else{
+        res.render('partials/loginRequired',{ showLoginModal: true })
+    }
 });
+route.get('/schedule', async function(req,res)
+{
+    const id = String(req.query.id) || 0;
+    const bookedService = await bookingService.findBookedServiceUserServiceByBookedId(id)
+    if (req.session.authUser){
+        res.render('vwBooking/schedule',{
+            bookedService: bookedService,
+            id:id,
+            user: bookedService.customer,
+            service: bookedService.service,
+        })
+    }
+    else{
+        res.render('partials/loginRequired',{ showLoginModal: true })
+    }
+    
+}),
+
+route.get('/is-available', async function (req, res) {
+    const start= Date.parse(req.query.start);
+    const end = Date.parse(req.query.end);
+    const startTime = new Date(start)
+    const endTime = new Date(end)
+    const isAvailable = true
+    try {
+        const overlappingShifts = await shiftService.findCollapseShift(startTime, endTime)
+        if (overlappingShifts.length >= 5) {
+            isAvailable = false
+        }
+        const existingShifts = await shiftService.findSameShift(startTime, endTime)
+        if (existingShifts.length >= 5) {
+            isAvailable = false
+        }
+        if (isAvailable) {
+            return res.json(true); // Slot is available
+        } else {
+            return res.json(false); // Slot is not available
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error creating or updating booking');
+    }
+});
+
+route.post('/schedule', async function(req,res)
+{
+    if (req.session.authUser){
+        const customer = await userService.findById(req.session.authUser.id)
+        const name = req.body.name
+        const phone = req.body.phone
+        const email = req.body.email
+        const bookedServiceId = req.body.bookedServiceId
+        const updateBookedServie = await bookingService.findBookedServiceById(bookedServiceId)
+        if(updateBookedServie){
+            await userService.updateUserforShift(customer._id, name, phone, email)
+            const startTime = moment(req.body.startTime, "DD/MM/YYYY HH:mm").toDate()
+            const endTime = moment(req.body.endTime, "DD/MM/YYYY HH:mm").toDate()
+            const formattedDate = moment(req.body.startTime, "DD/MM/YYYY HH:mm").startOf('day').toDate();
+            console.log(startTime)
+            console.log(endTime)
+            const entity = {
+                    bookedService: bookedServiceId,
+                    startTime: startTime,
+                    endTime: endTime,
+                }
+            await shiftService.add(entity);
+            const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceId)
+            await bookingService.updateStatusBookedService(bookedServiceId,'confirmed',shiftAdded._id)
+            await bookingService.findBookedAndDeleteAfterSchedule(bookedServiceId)
+            let booking = await bookingService.findExistBookingByTime(formattedDate)
+            if (booking && booking._id) {
+                await bookingService.saveNewBookedService(booking, bookedServiceId);
+            } else {
+            booking = new Booking({
+                customer: customer._id,
+                bookedServices: [bookedServiceId],
+                accountant: null, 
+                paymentStatus: 'PENDING',
+                createAt:formattedDate,
+            });
+            await bookingService.save(booking);
+            }
+            const url = req.session.retUrl || '/';
+            res.redirect(url);
+        }else{
+            console.error(error);
+            const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceId)
+            await shiftService.deleteShiftById(shiftAdded._id);
+            res.status(500).send('Error updating booking');
+        }
+    }
+    else{
+        res.render('partials/loginRequired',{ showLoginModal: true })
+    }   
+})
 
 export default route;

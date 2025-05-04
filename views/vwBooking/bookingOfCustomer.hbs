@@ -4,6 +4,10 @@
         font-weight: bold;
         background-color: #F3EC1C !important;
     }
+    .tab-content{
+        max-height: max-content;
+        padding-bottom:10% ;
+    }
 </style>
 {{/section}}
 <div class="tw-pt-[70px] tw-flex tw-h-screen">
@@ -27,21 +31,31 @@
                     <div class="card-header">
                         {{status}}
                     </div>
-                    <div class="card-body">
+                    <div class="card-body tw-flex tw-flex-row tw-gap-2">
+                        <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
+                        <div>
                         <h5 class="card-title">{{service.serviceName}}</h5>
                         <p class="card-text">{{status.description}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
                         {{#if (eq status "pending")}}
                            <div class="tw-flex tw-flex-row">
+                            <a href="/service/schedule?id={{_id}}">
                             <button class=" tw-rounded-md tw-text-center tw-border-0 tw-p-2 tw-mr-[6px] tw-bg-[#F3EC1C] hover:tw-bg-yellow-400">
                                 Schedule Now
                             </button>
+                            </a>
                             {{> cancelBooking bookedServiceIds=_id}}
                         </div>
+                        {{else if (eq status "confirmed")}}
+                            <span>Status: {{status}}</span>
+                            <p>Your appointment: <b class="tw-text-yellow-400">{{formatDate shift.startTime}}</b></p>
+                            <p class="tw-text-red-400 tw-text-[11pt] tw-italic">* Please arrive 15 minutes early to ensure service quality.</p>
+                             {{> cancelBooking bookedServiceIds=_id}}
                         {{else}}
                             <span>Status: {{status}}</span>
                         {{/if}}
+                    </div>
                     </div>
                     </div>
                 {{/each}}
@@ -52,21 +66,23 @@
                     <div class="card-header">
                         {{status}}
                     </div>
-                    <div class="card-body">
+                    <div class="card-body tw-flex tw-flex-row tw-gap-2">
+                        <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
+                        <div>
                         <h5 class="card-title">{{service.serviceName}}</h5>
                         <p class="card-text">{{status.description}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
-                        {{#if (eq status "pending")}}
+                      
                         <div class="tw-flex tw-flex-row">
-                            <button class=" tw-rounded-md tw-text-center tw-border-0 tw-p-2 tw-mr-[6px] tw-bg-[#F3EC1C] hover:tw-bg-yellow-400">
-                                Schedule Now
-                            </button>
-                            {{> cancelBooking bookedServiceIds=_id}}
-                        </div>
-                        {{else}}
-                            <span>Status: {{status}}</span>
-                        {{/if}}
+                        <a href="/service/schedule?id={{_id}}">
+                        <button class=" tw-rounded-md tw-text-center tw-border-0 tw-p-2 tw-mr-[6px] tw-bg-[#F3EC1C] hover:tw-bg-yellow-400">
+                            Schedule Now
+                        </button>
+                        </a>
+                        {{> cancelBooking bookedServiceIds=_id}}
+                        </div>  
+                    </div>
                     </div>
                     </div>
                 {{/each}}
@@ -77,13 +93,20 @@
                     <div class="card-header">
                         {{status}}
                     </div>
-                    <div class="card-body">
+                    <div class="card-body tw-flex tw-flex-row tw-gap-2">
+                        <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
+                        <div>
                         <h5 class="card-title">{{service.serviceName}}</h5>
                         <p class="card-text">{{status.description}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
-                        <span>Status: {{status}}</span>
                         
+                        <span>Status: {{status}}</span>
+                        <p>Your appointment: <b class="tw-text-yellow-400">{{formatDate shift.startTime}}</b></p>
+                        <p class="tw-text-red-400 tw-text-[11pt] tw-italic">* Please arrive 15 minutes early to ensure service quality.</p>
+                        {{> cancelBooking bookedServiceIds=_id}}
+                       
+                    </div>
                     </div>
                     </div>
                 {{/each}}
@@ -94,16 +117,15 @@
                     <div class="card-header">
                         {{status}}
                     </div>
-                    <div class="card-body">
+                    <div class="card-body tw-flex tw-flex-row tw-gap-2">
+                        <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
+                        <div>
                         <h5 class="card-title">{{service.serviceName}}</h5>
                         <p class="card-text">{{status.description}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
-                        {{#if (eq status "pending")}}
-                            <a href="/#" class="btn btn-primary tw-bg-[#F3EC1C] tw-text-black">Schedule service</a>
-                        {{else}}
-                            <span>Status: {{status}}</span>
-                        {{/if}}
+                        <span>Status: {{status}}</span>
+                    </div>
                     </div>
                     </div>
                 {{/each}}

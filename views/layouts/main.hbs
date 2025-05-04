@@ -26,8 +26,8 @@
                   <div role="tablist" aria-label="Main Tabs" class="tw-text-[14pt] tw-flex tw-gap-10">
                     <a
                       role="tab"
-                      id="tab-services"
-                      aria-controls="tabpanel"
+                      id="nav-tab-services"
+                      aria-controls="tabpanelNav"
                       aria-selected="true"
                       href="#"
                       class="tw-text-white tw-font-bold"
@@ -38,8 +38,8 @@
                     </a>
                     <a
                       role="tab"
-                      id="tab-pet"
-                      aria-controls="tabpanel"
+                      id="nav-tab-pet"
+                      aria-controls="tabpanelNav"
                       aria-selected="false"
                       href="#"
                       class="tw-text-white tw-font-bold"
@@ -50,8 +50,8 @@
                     </a>
                     <a
                       role="tab"
-                      id="tab-about"
-                      aria-controls="tabpanel"
+                      id="nav-tab-about"
+                      aria-controls="tabpanelNav"
                       aria-selected="false"
                       href="#aboutUs"
                       style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"
@@ -61,17 +61,17 @@
                     </a>
                   </div>
 
-                  <!-- Shared TabPanel -->
+                  <!-- Shared tabpanelNav -->
                   <div
-                    role="tabpanel"
-                    id="tabpanel"
-                    aria-labelledby="tab-services"
+                    role="tabpanelNav"
+                    id="tabpanelNav"
+                    aria-labelledby="nav-tab-services"
                     class="tw-absolute tw-mt-[10px] tw-w-screen tw-top-full tw-left-0 tw-bg-white tw-hidden tw-z-50"
                     onmouseenter="cancelHidePanel()"
                     onmouseleave="hidePanel()"
                   >
                     <!-- Inner contents for each tab -->
-                    <div id="panel-services" class="tab-content tw-grid tw-px-[20%] tw-py-5 tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4">
+                    <div id="nav-panelservices" class="nav-tab-content tw-grid tw-px-[20%] tw-py-5 tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4">
                       <!-- For Dogs -->
                       <div>
                         <p class="tw-font-semibold tw-mb-1">For Dogs</p>
@@ -114,7 +114,7 @@
                         </a>
                       </div>
                     </div>
-                    <div id="panel-pet" class="tab-content tw-p-4 tw-hidden">
+                    <div id="nav-panelpet" class="nav-tab-content tw-p-4 tw-hidden">
               <div class="tw-grid tw-px-[20%] tw-py-5 tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-2 lg:tw-grid-cols-2">
                 <!-- Column 1: Donate -->
 
@@ -133,15 +133,6 @@
                  </a>
                 </div>
 
-                <!-- Column 3: Dog Attributes -->
-                <div>
-                  
-                </div>
-
-                    <!-- Column 4: Cat Attributes -->
-                <div>
-                  
-                </div>
                   </div>
                 </div>
                 </div>
@@ -236,18 +227,18 @@
 
     function switchTab(tab) {
       document.querySelectorAll('[role="tab"]').forEach(el => el.setAttribute('aria-selected', 'false'));
-      document.getElementById('tab-' + tab).setAttribute('aria-selected', 'true');
+      document.getElementById('nav-tab-' + tab).setAttribute('aria-selected', 'true');
 
-      document.getElementById('tabpanel').classList.remove('tw-hidden');
-      document.getElementById('tabpanel').setAttribute('aria-labelledby', 'tab-' + tab);
+      document.getElementById('tabpanelNav').classList.remove('tw-hidden');
+      document.getElementById('tabpanelNav').setAttribute('aria-labelledby', 'nav-tab-' + tab);
 
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('tw-hidden'));
-      document.getElementById('panel-' + tab).classList.remove('tw-hidden');
+      document.querySelectorAll('.nav-tab-content').forEach(el => el.classList.add('tw-hidden'));
+      document.getElementById('nav-panel' + tab).classList.remove('tw-hidden');
     }
 
     function hidePanel() {
       hideTimeout = setTimeout(() => {
-        document.getElementById('tabpanel').classList.add('tw-hidden');
+        document.getElementById('tabpanelNav').classList.add('tw-hidden');
       }, 200); 
     }
 

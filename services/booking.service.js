@@ -10,12 +10,37 @@ export default {
         const newbooking = new Booking(booking)
         return newbooking.save()
     },
+    findBookingById(id)
+    {
+        return Booking.findById(id).lean()
+    },
     findExistBooking(customerId)
     {
         return Booking.findOne({
             customer:customerId,
             paymentStatus: 'PENDING'
         });
+    },
+    findExistBookingByTime(formattedDate){
+        return Booking.findOne({
+            createAt: formattedDate,
+            paymentStatus: 'PENDING'
+        });
+    },
+    async findBookedAndDeleteAfterSchedule(bookedServiceId)
+    {
+        const result = await Booking.updateOne(
+            { bookedServices: bookedServiceId, createAt: null },
+            { $pull: { bookedServices: bookedServiceId } }
+        );
+    
+        const booking = await Booking.findOne({ bookedServices: { $size: 0 }, createAt: null });
+    
+        if (booking) {
+            await Booking.deleteOne({ _id: booking._id });
+        }
+    
+        return result;
     },
     findService(bookedServiceIds)
     {
@@ -37,7 +62,10 @@ export default {
     findBookedServiceById(customerId)
     {
         return BookedService.find({customer:customerId})
-        .populate('service').lean().exec()
+        .populate('service').populate('shift').lean().exec()
+    },
+    findBookedServiceByBookedId(id){
+        return BookedService.findById(id)
     },
     deleteBookedServiceById(temp)
     {
@@ -59,12 +87,19 @@ export default {
     findCompletedBookedService(customerId)
     {
         return BookedService.find({customer: customerId, status: 'completed'})
-        .populate('service').lean().exec()
+        .populate('service').populate('shift').lean().exec()
     },
-    findScheduledBookedService(customerId)
+    async findScheduledBookedService(customerId)
     {
-        return BookedService.find({customer: customerId, status: 'confirmed'})
-        .populate('service').lean().exec()
+        const bookedComplete= await BookedService.find({ customer: customerId, status:'confirmed'})
+        if (!bookedComplete || bookedComplete.length === 0) {
+            return [];
+        }
+        return BookedService.find({ customer: customerId, status:'confirmed'})
+        .populate('shift')
+        .populate('service')  
+        .lean() 
+        .exec();
     },
     findPaidBookedService(customerId)
     {
@@ -77,6 +112,14 @@ export default {
           })
           .lean()
           .exec();
+    },
+    findBookedServiceUserServiceByBookedId(id)
+    {
+        return BookedService.findById(id)
+        .populate('customer')  // Populate customer (thông tin người dùng)
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .lean()
+        .exec()
     },
     deleteBookedService(id)
     {
@@ -92,6 +135,10 @@ export default {
     deleteBookingById(id)
     {
         return Booking.findByIdAndDelete(id)
+    },
+    updateStatusBookedService(bookedServiceId,status, shift)
+    {
+        return BookedService.findByIdAndUpdate(bookedServiceId,{status: status,shift:shift})
     }
 
 }

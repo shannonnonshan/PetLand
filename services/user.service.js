@@ -28,7 +28,9 @@ export default {
     updateUser(username, user) {
         return User.findByIdAndUpdate(username, user, { new: true });
     }, 
-
+    updateUserforShift(id,name, phone, email) {
+        return User.findByIdAndUpdate(id,{name: name,phone:phone,email:email});
+    }, 
     addOTP(entity) {
         const otp = new OtpUser(entity)
         return otp.save();

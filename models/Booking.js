@@ -45,7 +45,6 @@ const bookingSchema = new mongoose.Schema({
     }],
     createAt: {
       type: Date,
-      default: Date.now,
     },
     paymentStatus: {
       type: String,
@@ -54,17 +53,13 @@ const bookingSchema = new mongoose.Schema({
     }
   }, { collection: "Booking" });
 const shiftSchema = new mongoose.Schema({
-    service: {
+    bookedService: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Service',
+      ref: 'BookedService',
       required: true,
     },
     startTime: {
       type: Date, // 'HH:mm'
-      required: true,
-    },
-    date: { // ngày cụ thể mà khách đặt
-      type: Date,
       required: true,
     },
     endTime: {
