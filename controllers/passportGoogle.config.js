@@ -12,7 +12,7 @@ export default function configurePassport() {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:3000/user/login/googleAuth/callback",
+        callbackURL: "https://petland-0wmu.onrender.com/user/login/googleAuth/callback",
         scope: ['profile', 'email']
       },
       async function (accessToken, refreshToken, profile, done) {
