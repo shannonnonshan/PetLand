@@ -102,15 +102,13 @@
                 });
 
             } else {
-                // Hiển thị thông báo đăng ký thành công
                 Swal.fire({
                     title: 'Success!',
-                    text: "You have successfully signed up. Welcome to Newsland!",
+                    text: "Check your EMAIL!",
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Gửi form nếu người dùng xác nhận
                         $('#fmSignup').off('submit').submit();
                     }
                 });
@@ -163,7 +161,7 @@
         <div class="gender-details">
           <!-- Radio buttons for gender selection -->
           <input type="radio" name="gender" id="dot-1" value="Male">
-          <input type="radio" name="gender" id="dot-2" value="Femail">
+          <input type="radio" name="gender" id="dot-2" value="Female">
           <input type="radio" name="gender" id="dot-3" value="none">
           <span class="gender-title">Gender</span>
           <div class="category">

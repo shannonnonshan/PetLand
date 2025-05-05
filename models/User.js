@@ -9,7 +9,10 @@ const userSchema = new Schema({
   username: { type: String, unique: true },
   createdAt: { type: Date, default: Date.now },
   password: String,
-  gender: String,
+  gender: {
+    type: String,
+    enum: ['Male', 'Female', 'none']
+  },
   address: String,
   phone: String,
   email: String,

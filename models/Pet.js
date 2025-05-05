@@ -1,6 +1,5 @@
 
 import { mongoose } from '../utils/db.js'; 
-import PetContext from '../state/petState/petContext.js';
 const { Schema, model } = mongoose;
 
 
@@ -8,12 +7,21 @@ const { Schema, model } = mongoose;
 const petSchema = new Schema({
   name: String,
   createdAt: { type: Date, default: Date.now },
-  specie: String,
+  specie: {
+    type: String,
+    enum: ['Dog', 'Cat'],
+  },
   age: Number,
   weight: Number,
   breed: String,
-  vaccine: String,
-  gender: String,
+  vaccine: {
+    type: String,
+    enum: ['None', 'Fully'],
+  },
+  gender: {
+    type: String,
+    enum: ['Male', 'Female'],
+  },
   images: [String],
   description: String,
   dod: Date,
@@ -38,12 +46,10 @@ const petSchema = new Schema({
   }
 }, { collection: 'Pet' });
 
-// Chỗ này gán đúng thuộc tính
 petSchema.methods.setState = function (state) {
   this._state = state;
 };
 
-// Gọi method state đúng context
 petSchema.methods.approve = function () {
   this._state?.approve?.();
 };
@@ -55,6 +61,10 @@ petSchema.methods.adopt = function () {
 petSchema.methods.completeAdoption = function () {
   this._state?.completeAdoption?.();
 };
+petSchema.methods.reject = function () {
+  this._state?.reject?.();
+};
+
 
 const Pet = model('Pet', petSchema);
 

@@ -87,7 +87,7 @@ async function handlePetTransition({ pet, contextMethod }) {
   await pet.save();
 }
 
-// ===== CONTROLLERS =====
+
 
 export const approvePet = async (req, res) => {
   try {

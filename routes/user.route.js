@@ -78,7 +78,7 @@ route.get('/register', function (req, res) {
 
 route.post('/register', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
-    const entity = {
+    const tempUser = {
         name: req.body.fullname,
         username: req.body.username,
         password: hash_password,
@@ -86,11 +86,35 @@ route.post('/register', async function (req, res) {
         gender: req.body.gender,
         email: req.body.email,
         createAt: Date.now()
-    }
-    const ret = await userService.add(entity);
-    const retUrl = '/user/login'
-    res.redirect(retUrl);
+    };
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const expireAt = new Date(Date.now() + 5 * 60 * 1000);
+
+    await userService.addOTP({
+        otp: otp,
+        expire_time: expireAt,
+        email: tempUser.email
+    });
+
+    const subject = '[VERIFY EMAIL] - PETLAND REGISTRATION';
+    const html = `
+        <h3 Email Verification</h3>
+        <p>Thank you for registering at Petland.</p>
+        <p>Your verification code is:</p>
+        <h2>${otp}</h2>
+        <p>This code is valid for 5 minutes.</p>
+    `;
+
+    setTimeout(() => {
+        sendEmail(tempUser.email, subject, html)
+            .then(() => console.log('Verification email sent.'))
+            .catch(err => console.error('Failed to send email:', err));
+    }, 500);
+    req.session.tempUser = tempUser;
+    res.redirect(`/user/verify-email?email=${tempUser.email}&username=${tempUser.username}`);
 });
+
 
 route.get('/is-available', async function (req, res) {
     const username = req.query.username;
@@ -136,6 +160,57 @@ route.get('/login/googleAuth/callback',
             return res.redirect('/');
     }
 })
+route.get('/verify-email', function (req, res) {
+    const email = req.query.email || '';
+    const username = req.query.username || '';
+    res.render('vwUser/verifyEmail', {
+        layout: 'account-layout',
+        email,
+        username
+    });
+});
+
+route.post('/verify-email', async function (req, res) {
+    const email = req.body.email;
+    const username = req.body.username;
+    const otp = req.body.otp;
+
+    try {
+        const otpRecord = await userService.findOTPByEmail(email);
+        if (!otpRecord) {
+            return res.render('vwUser/verifyEmail', {
+                layout: 'account-layout',
+                email,
+                username,
+                errorMessage: 'OTP expired. Please register again.'
+            });
+        }
+        if (parseInt(otp) !== otpRecord.otp) {
+            return res.render('vwUser/verifyEmail', {
+                layout: 'account-layout',
+                email,
+                username,
+                errorMessage: 'Incorrect OTP. Please try again.'
+            });
+        }
+        const tempUser = req.session.tempUser;
+        if (!tempUser) {
+            return res.redirect('/user/register');
+        }
+
+        await userService.add(tempUser);
+        await userService.delOTP(otp);
+        req.session.tempUser = null;
+
+        res.render('vwUser/login', {
+            layout: 'account-layout',
+            successMessage: 'Email verified. Account created successfully!'
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error. Please try again later.');
+    }
+});
 
 route.get('/forgot-password', function (req, res) {
     res.render('vwUser/forgot-password', {
@@ -182,7 +257,7 @@ route.post('/forgot-password', async function(req, res) {
             <strong>Your OTP Code:</strong> 
             <span style="color: #e74c3c; font-size: 24px; letter-spacing: 2px;">${otp}</span>
             </p>
-            <p>This code is valid for <strong>10 minutes</strong>. Please do not share it with anyone.</p>
+            <p>This code is valid for <strong>5 minutes</strong>. Please do not share it with anyone.</p>
             <p>If you did not make this request, please ignore this email or contact our support team immediately.</p>
             <br/>
             <p>Thank you,<br/>
