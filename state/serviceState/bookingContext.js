@@ -1,16 +1,16 @@
 import PaidState from "./paidState.js";
 import PendingBookingState from "./pendingBookingState.js";
 class BookingContext {
-  constructor(pet) {
+  constructor(booking) {
     this.booking = booking;
-    console.log(this.bookedService.status);
+    console.log(this.booking.paymentStatus);
 
-    switch (pet.status) {
+    switch (booking.paymentStatus) {
       case 'PAID':
-        this._state = new PaidState(this);
+        this._state = new PaidState(this.booking);
         break;
       case 'PENDING':
-        this._state = new PendingBookingState(this);
+        this._state = new PendingBookingState(this.booking);
         break;
       default:
         throw new Error('Unknown  status');
@@ -20,12 +20,12 @@ class BookingContext {
     this._state = state;
   }
 
-  paid() {
-    this._state.confirm();  
+  paid(accountant) {
+    this._state.paid(accountant);  
   }
 
   async save() {
-    return this.bookedService.save();  // Mongoose save()
+    return this.booking.save();  // Mongoose save()
   }
 }
 

@@ -88,10 +88,10 @@ route.get('/home',auth, function(req, res){
      
 })
 route.get('/manageService/shift',auth, async function(req, res){
-    const staff = await userService.findStaff()
+    const booking = await bookingService.findShiftedOwner()
     res.render('vwOwner/service/shift', {
         layout: 'owner-layout',
-        staff: staff,
+        booking:booking
     })
 })
 
@@ -130,14 +130,16 @@ route.post('/manageService/reject-booking',auth,async function(req,res){
         }
 });
 
-route.get('/mangeService/shift-staff', auth, async function(req,res)
+route.get('/manageService/shift-staff', auth, async function(req,res)
 {
     const id = req.query.id || 0;
     const bookedService = await bookingService.findOneWaitShiftingOwner(id)
     try{
         const shift = bookedService.shift
+        const startTime = shift.startTime
+        const endTime = shift.endTime
         if(shift){
-            const staff = await userService.findStaffAvailableDuring(shift.startTime, shift.endTime)
+            const staff = await userService.findStaffAvailableDuring(startTime, endTime)
             res.render('vwOwner/service/shiftStaff',{
                 layout: 'owner-layout',
                 bookedService: bookedService,
@@ -175,7 +177,7 @@ route.post('/manageService/shift-staff',  auth, async function(req,res)
         const updateBookedService = await bookingService.findBookedServiceById(bookedServiceId)
         if(updateBookedService){
             await bookingService.updateInCharge(bookedServiceId, inCharge)
-            const url = req.session.retUrl || '/';
+            const url= '/owner/manageService/shift';
             res.redirect(url);
         }else{
             console.error(error);

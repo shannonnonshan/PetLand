@@ -208,6 +208,7 @@
       }
 
       function closeModal(gohome = false) {
+        console.log("gohome:", gohome);
         const modal = document.querySelector('.popupModel');
         const main = document.getElementById('mainContent');
         modal.classList.add('tw-hidden');
@@ -217,7 +218,7 @@
         if (gohome) {
           window.location.href = '/';
         } else {
-          window.history.back();
+          window.location.reload();
         }
           
       }

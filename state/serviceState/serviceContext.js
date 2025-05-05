@@ -1,6 +1,7 @@
 import PendingState from "./pendingState.js";
 import CompletedState from "./completedState.js";
 import ConfirmedState from "./confirmedState.js";
+import CancelledState from "./cancelledState.js";
 
 class ServiceContext {
   constructor(bookedService) {

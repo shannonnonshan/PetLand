@@ -1,4 +1,4 @@
-import BookingState from "./bookingStat.js";
+import BookingState from "./bookingState.js";
 
 class PaidState extends BookingState {
 

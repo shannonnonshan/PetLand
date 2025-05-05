@@ -62,30 +62,3 @@
     </button>
     </div>
 </form>
-{{!-- {{#section 'js'}}
-<script>
-
-    $('#frmShift').on('submit', function (e) {
-      e.preventDefault();
-
-    const start = document.querySelector('#txtStartTime').value;
-    const end = document.querySelector('#txtEndTime').value;
-    const startTime = convertToISOString(start);
-    const endTime = convertToISOString(end);
-    const id = document.querySelector('#txtinCharge').value;
-
-    $.getJSON(`/owner/manageService/is-available?id=${id}start=${startTime}&end=${endTime}`, function (data) {
-    console.log(data); 
-    if (data === false) {
-        $('#alert').text('Your staff is so busy');
-    } else {
-        // If available, submit the form
-        $('#frmShift').off('submit').submit();
-    }
-    }).fail(function () {
-        $('#alert').text('Error checking availability. Please try again later.');
-    });
-    });
- 
-</script>
-{{/section}} --}}

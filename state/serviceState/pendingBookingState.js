@@ -5,8 +5,9 @@ class PendingBookingState extends BookingState {
     super(booking);
     this.context = booking;
   }
-  paid() {
-    this.context.status = 'PAID'; // <- rất quan trọng
+  paid(accountant) {
+    this.context.paymentStatus = 'PAID'; // <- rất quan trọng
+    this.context.accountant = accountant;      // Gán shift nếu cần
   }
 }
 

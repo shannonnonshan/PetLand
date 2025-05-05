@@ -3,6 +3,7 @@ import userRoute from '../routes/user.route.js';
 import serviceRoute from '../routes/service.route.js';
 import petRoute from '../routes/pet.route.js';
 import ownerRoute from '../routes/owner.route.js';
+import staffRoute from'../routes/staff.route.js';
 export default function (app) {
     
     app.get('/', function (req, res) {
@@ -20,5 +21,6 @@ export default function (app) {
     app.use('/service', serviceRoute);
     app.use('/pet', petRoute);
     app.use('/owner', ownerRoute);
+    app.use('/staff', staffRoute);
 }
 

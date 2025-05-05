@@ -243,6 +243,10 @@
   margin-top: 10px !important
 }
 
+.tw-mt-\[50px\] {
+  margin-top: 50px !important
+}
+
 .tw-block {
   display: block !important
 }
@@ -301,6 +305,10 @@
 
 .tw-h-\[4rem\] {
   height: 4rem !important
+}
+
+.tw-h-\[50px\] {
+  height: 50px !important
 }
 
 .tw-h-full {
@@ -366,6 +374,10 @@
 
 .tw-w-\[4rem\] {
   width: 4rem !important
+}
+
+.tw-w-\[50px\] {
+  width: 50px !important
 }
 
 .tw-w-\[55\%\] {

@@ -45,7 +45,7 @@ route.post('/login', async function (req, res) {
         case 'Customer':
             return res.redirect('/user/customer');
         case 'Staff':
-            return res.redirect('/user/staff');
+            return res.redirect('/staff/manageService/all');
         case 'Owner':
             return res.redirect('/user/owner');
         default:

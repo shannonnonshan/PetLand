@@ -1,0 +1,19 @@
+<div class="grids">
+    <div class="row">
+        {{#each booking}}
+    <div class="col-sm-4">
+        <div class="card" style="width: 18rem; height:25rem">
+        <img src="{{service.imageUrl}}" class="card-img-top tw-h-[150px]" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{service.serviceName}}</h5>
+            <p class="card-text">Staff: {{inCharge.name}}</p>
+            <p class="card-text">Start Time: {{formatDate shift.startTime}}</p>
+            <p class="card-text">End Time: {{formatDate shift.endTime}}</p>
+            <a href="/owner/manageService/shift-staff?id={{_id}}" class="btn btn-primary">Schedule</a>
+        </div>
+        </div>
+        
+    </div>
+    {{/each}}
+    </div>
+</div>
