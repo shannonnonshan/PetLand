@@ -51,7 +51,6 @@ route.get('/viewAdopted', auth, async function(req, res) {
 
 route.get('/donate', auth, function(req, res){
     const user = req.session.authUser || null;
-    console.log(user);
     res.render('vwPet/donatePetForm', {
         layout: 'account-layout',
         user: user
