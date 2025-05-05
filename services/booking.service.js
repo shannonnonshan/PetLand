@@ -147,9 +147,62 @@ export default {
     {
         return Booking.findByIdAndDelete(id)
     },
-    updateStatusBookedService(bookedServiceId,status, shift)
+    findBookingOwner()
     {
-        return BookedService.findByIdAndUpdate(bookedServiceId,{status: status,shift:shift})
+        return BookedService.find({ status: { $ne: "pending" } })
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift') 
+        .lean()
+        .exec();
+    },
+    findRejectedOwner()
+    {
+        return BookedService.find({ status: "cancelled" })
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift') 
+        .lean()
+        .exec();;
+    },
+    findWaitShiftingOwner()
+    {
+        return BookedService.find({ inCharge: null })
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift') 
+        .lean()
+        .exec();
+    },
+    findPaidBookedOwner() {
+        return Booking.find({ paymentStatus: 'COMPLETED' }) // nếu bạn dùng 'PAID' thì đảm bảo enum đúng
+          .populate({
+            path: 'bookedServices',
+            populate: [
+              { path: 'service' },
+              { path: 'customer' },
+              { path: 'shift' },
+              { path: 'inCharge' }
+            ]
+          })
+          .lean()
+          .exec();
+      },
+    findOneWaitShiftingOwner(id)
+    {
+        return BookedService.findOne({ _id: id, inCharge: null })
+        .populate('customer') 
+        .populate('service')   
+        .populate('shift') 
+        .lean()
+        .exec();
+    },
+    updateInCharge(id, inCharge)
+    {
+        return BookedService.findByIdAndUpdate(id,{ inCharge: inCharge })
     }
 
 }

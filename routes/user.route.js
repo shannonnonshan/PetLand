@@ -49,7 +49,7 @@ route.post('/login', async function (req, res) {
         case 'Owner':
             return res.redirect('/user/owner');
         default:
-            return res.redirect('/');
+            return res.redirect(retUrl);
     }
 });
 

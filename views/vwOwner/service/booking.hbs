@@ -10,15 +10,13 @@
     }
 </style>
 {{/section}}
-<div class="tw-pt-[70px] tw-flex tw-h-screen">
-    {{!-- Left side --}}
-    <div class="tw-px-[5%] tw-overflow-y-scroll tw-bg-white tw-w-[55%] tw-max-w-[100%]" id="mainContent" style="overflow: scroll; scrollbar-width: none;">
-        <h3>Your booking</h3>
+    <div class=" tw-overflow-y-scroll tw-max-w-[100%]" id="mainContent" style="overflow: scroll; scrollbar-width: none;">
+        <h1>All booking</h1>
       <nav>
             <div class="nav nav-tabs" id="booking-tab" role="tablist">
                 <button class="nav-link active" id="tab-all" data-bs-toggle="tab" data-bs-target="#content-all" type="button" role="tab" aria-controls="content-all" aria-selected="true">All</button>
-                <button class="nav-link" id="tab-pending" data-bs-toggle="tab" data-bs-target="#content-pending" type="button" role="tab" aria-controls="content-pending" aria-selected="false">Pending</button>
-                <button class="nav-link" id="tab-confirmed" data-bs-toggle="tab" data-bs-target="#content-confirmed" type="button" role="tab" aria-controls="content-confirmed" aria-selected="false">Confirmed</button>
+                <button class="nav-link" id="tab-waitshifting" data-bs-toggle="tab" data-bs-target="#content-waitshifting" type="button" role="tab" aria-controls="content-waitshifting" aria-selected="false">Wait Shifting</button>
+                <button class="nav-link" id="tab-rejected" data-bs-toggle="tab" data-bs-target="#content-rejected" type="button" role="tab" aria-controls="content-rejected" aria-selected="false">Rejected</button>
                 <button class="nav-link" id="tab-completed" data-bs-toggle="tab" data-bs-target="#content-completed" type="button" role="tab" aria-controls="content-completed" aria-selected="false">Completed</button>
                 <button class="nav-link" id="tab-paid" data-bs-toggle="tab" data-bs-target="#content-paid" type="button" role="tab" aria-controls="content-paid" aria-selected="false">Paid</button>
             </div>
@@ -38,30 +36,31 @@
                         <p class="card-text">{{service.shortDescription}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
-                        {{#if (eq status "pending")}}
-                           <div class="tw-flex tw-flex-row">
-                            <a href="/service/schedule?id={{_id}}">
-                            <button class=" tw-rounded-md tw-text-center tw-border-0 tw-p-2 tw-mr-[6px] tw-bg-[#F3EC1C] hover:tw-bg-yellow-400">
-                                Schedule Now
-                            </button>
-                            </a>
-                            {{> cancelBooking bookedServiceIds=_id}}
-                        </div>
-                        {{else if (eq status "confirmed")}}
-                            <span>Status: {{status}}</span>
-                            <p>Your appointment: <b class="tw-text-yellow-400">{{formatDate shift.startTime}}</b></p>
-                            <p class="tw-text-red-400 tw-text-[11pt] tw-italic">* Please arrive 15 minutes early to ensure service quality.</p>
-                             {{> cancelBooking bookedServiceIds=_id}}
+                        {{#if (eq status "cancelled")}}
+                        <span>Status: {{status}}</span>
                         {{else}}
-                            <span>Status: {{status}}</span>
+                        {{#unless inCharge}}
+                            <div class="tw-flex tw-flex-row">
+                            <a href="/owner/mangeService/shift-staff?id={{_id}}">
+                                <button class="tw-rounded-md tw-text-center tw-border-0 tw-p-2 tw-mr-[6px] tw-bg-[#F3EC1C] hover:tw-bg-yellow-400">
+                                Shift now
+                                </button>
+                            </a>
+                            {{> rejectBooking bookedServiceIds=_id}}
+                            </div>
+                        {{else}}
+                            <h4 class="tw-text-yellow-500">Staff: {{inCharge.name}}</h4>
+                            {{> rejectBooking bookedServiceIds=_id}}
+                        {{/unless}}
                         {{/if}}
+
                     </div>
                     </div>
                     </div>
                 {{/each}}
             </div>
-            <div class="tab-pane fade" id="content-pending" role="tabpanel" aria-labelledby="tab-pending" tabindex="0">
-               {{#each bookingPending}}
+            <div class="tab-pane fade" id="content-waitshifting" role="tabpanel" aria-labelledby="tab-waitshifting" tabindex="0">
+               {{#each bookingWaitShifting}}
                 <div class="card">
                     <div class="card-header">
                         {{status}}
@@ -75,20 +74,20 @@
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
                       
                         <div class="tw-flex tw-flex-row">
-                        <a href="/service/schedule?id={{_id}}">
+                        <a href="/owner/mangeService/shift-staff?id={{_id}}">
                         <button class=" tw-rounded-md tw-text-center tw-border-0 tw-p-2 tw-mr-[6px] tw-bg-[#F3EC1C] hover:tw-bg-yellow-400">
-                            Schedule Now
+                            Shift Now
                         </button>
                         </a>
-                        {{> cancelBooking bookedServiceIds=_id}}
+                        {{> rejectBooking bookedServiceIds=_id}}
                         </div>  
                     </div>
                     </div>
                     </div>
                 {{/each}}
             </div>
-            <div class="tab-pane fade" id="content-confirmed" role="tabpanel" aria-labelledby="tab-confirmed" tabindex="0">
-               {{#each bookingConfirmed}}
+            <div class="tab-pane fade" id="content-rejected" role="tabpanel" aria-labelledby="tab-rejected" tabindex="0">
+               {{#each bookingRejected}}
                 <div class="card">
                     <div class="card-header">
                         {{status}}
@@ -100,12 +99,7 @@
                         <p class="card-text">{{service.shortDescription}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
-                        
-                        <span>Status: {{status}}</span>
-                        <p>Your appointment: <b class="tw-text-yellow-400">{{formatDate shift.startTime}}</b></p>
-                        <p class="tw-text-red-400 tw-text-[11pt] tw-italic">* Please arrive 15 minutes early to ensure service quality.</p>
-                        {{> cancelBooking bookedServiceIds=_id}}
-                       
+                        <span>Status: {{status}}</span>                       
                     </div>
                     </div>
                     </div>
@@ -123,6 +117,7 @@
                         <h5 class="card-title">{{service.serviceName}}</h5>
                         <p class="card-text">{{service.shortDescription}}</p>
                         <p>Duration: {{service.duration}} minute</p>
+                        <h4 class="tw-text-[#FF94BD]">Staff: {{inCharge}}</h4>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
                         <span>Status: {{status}}</span>
                     </div>
@@ -149,18 +144,5 @@
             </div>
             </div>
 
-        </div>
-    </div>
-    {{!-- Right side --}}
-    <div class="tw-w-[45%] tw-fixed tw-h-screen tw-right-0 tw-top-0 tw-p-[10%] tw-overflow-y-auto" id="fixedScreen">
-        <div class="tw-flex tw-flex-col tw-border-4 tw-rounded-[10px] tw-border-black tw-py-[5%] tw-bg-yellow-200">
-            <h4 class="tw-text-black tw-text-center">Your pending booking</h4>
-            <span class="tw-text-[#FF94BD] tw-text-center tw-font-bold tw-text-[16pt]">{{countStatusIf booking "pending"}}</span>
-             <h4 class="tw-text-black tw-text-center">Your scheduled booking</h4>
-            <span class="tw-text-[#FF94BD] tw-text-center tw-font-bold tw-text-[16pt]">{{countStatusIf booking "confirmed"}}</span>
-            <h4 class="tw-text-black tw-text-center">Your completed service</h4>
-            <span class="tw-text-[#FF94BD] tw-text-center tw-font-bold tw-text-[16pt]">{{countStatusIf booking "completed"}}</span>
-        
-        </div>
-    </div>
+      
 </div>

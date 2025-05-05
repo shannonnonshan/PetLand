@@ -24,7 +24,7 @@ route.get('/detail', async function(req,res){
         authUser: req.session.authUser
     })
 })
-route.get('/booking', async function(req,res){
+route.get('/booking', auth, async function(req,res){
     if (req.session.authUser) {
     const id = req.session.authUser.id;
     let booking = await bookingService.findBookedServiceByCustomerId(id)

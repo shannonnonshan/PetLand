@@ -2,7 +2,8 @@ import PaidState from "./paidState.js";
 import PendingBookingState from "./pendingBookingState.js";
 class BookingContext {
   constructor(pet) {
-    this.pet = pet;
+    this.booking = booking;
+    console.log(this.bookedService.status);
 
     switch (pet.status) {
       case 'PAID':
@@ -15,7 +16,17 @@ class BookingContext {
         throw new Error('Unknown  status');
     }
   }
+  setState(state) {
+    this._state = state;
+  }
 
+  paid() {
+    this._state.confirm();  
+  }
+
+  async save() {
+    return this.bookedService.save();  // Mongoose save()
+  }
 }
 
 export default BookingContext;

@@ -16,6 +16,9 @@ class ServiceContext {
       case 'confirmed':
         this._state = new ConfirmedState(this.bookedService);
         break;
+      case 'cancelled':
+        this._state = new CancelledState(bookedService);
+        break;
       default:
         throw new Error('Unknown status');
     }
@@ -32,7 +35,9 @@ class ServiceContext {
   complete() {
     this._state.complete();  // Hoàn thành nếu thuộc trạng thái Pending hoặc Confirmed
   }
-
+  cancel() {
+    this._state.cancel?.();
+  }
   async save() {
     return this.bookedService.save();  // Mongoose save()
   }

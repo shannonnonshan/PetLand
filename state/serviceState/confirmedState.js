@@ -13,6 +13,9 @@ class ConfirmedState extends ServiceState {
       complete() {
         this.context.status = 'completed'; // <- rất quan trọng
       }
+      cancel() {
+        this.bookedService.status = 'cancelled';
+      }
 }
 
 export default ConfirmedState;
