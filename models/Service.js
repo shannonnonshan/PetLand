@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 mongoose.connect('mongodb+srv://donnade:thanhvyneh@petland.lruap6s.mongodb.net/petland?retryWrites=true&w=majority&appName=Petland')
   .then(() => console.log('Service Connected!'));
-
+const Schema = mongoose.Schema; 
 const serviceSchema = new mongoose.Schema({
   id: { type: String, required: true },
   serviceName: { type: String, required: true },
