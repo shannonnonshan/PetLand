@@ -12,6 +12,7 @@ const serviceSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   duration: { type: Number, required: true },
   imageUrl: { type: String },
+  hidden: { type: Boolean },
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 }, { collection: 'Service' });
 
