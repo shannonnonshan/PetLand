@@ -10,6 +10,16 @@
     }
 </style>
 {{/section}}
+{{#section 'js'}}
+<script>
+  function handleCancelClick() {
+        event.preventDefault();
+        const modal = document.getElementById('cancelSuccessModal');
+        modal.classList.remove('tw-hidden');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+</script>
+{{/section}}
 <div class="tw-pt-[70px] tw-flex tw-h-screen">
     {{!-- Left side --}}
     <div class="tw-px-[5%] tw-overflow-y-scroll tw-bg-white tw-w-[55%] tw-max-w-[100%]" id="mainContent" style="overflow: scroll; scrollbar-width: none;">
