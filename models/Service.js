@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 mongoose.connect('mongodb+srv://donnade:thanhvyneh@petland.lruap6s.mongodb.net/petland?retryWrites=true&w=majority&appName=Petland')
-  .then(() => console.log('Connected!'));
+  .then(() => console.log('Service Connected!'));
 
 const serviceSchema = new mongoose.Schema({
   id: { type: String, required: true },
@@ -11,7 +11,8 @@ const serviceSchema = new mongoose.Schema({
   shortDescription: { type: String },
   price: { type: Number, required: true },
   duration: { type: Number, required: true },
-  imageUrl: { type: String }
+  imageUrl: { type: String },
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 }, { collection: 'Service' });
 
 

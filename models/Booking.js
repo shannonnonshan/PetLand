@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 mongoose.connect('mongodb+srv://donnade:thanhvyneh@petland.lruap6s.mongodb.net/petland?retryWrites=true&w=majority&appName=Petland')
-  .then(() => console.log('Connected!'));
+  .then(() => console.log('Booking Connected!'));
 const Schema = mongoose.Schema; 
 const bookedServiceSchema = new mongoose.Schema({
     service: {
