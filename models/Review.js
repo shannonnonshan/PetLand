@@ -8,19 +8,21 @@ const reviewSchema = new mongoose.Schema({
       ref: 'BookedService',
       required: true,
     },
+    review:{
+        type: String, required:true
+    },
     reponse:{
-        type: String, require:true
+        type: String, required:true
     },
     rating:
     {
-        type: Number, require:true
+        type: Number, required:true
     },
     status: {
-        type: String,
-        enum: ['show', 'hide'], //confirmed là khách hàng đã confirm giờ đặt
-        default: 'show',
-      },
+        type: Boolean,
+        required:true
+    },
   }, { collection: 'Review', timestamps: true });
   
-const Shift = mongoose.model('Review',shiftSchema);
-export {reviewSchema};
+const Review = mongoose.model('Review',reviewSchema);
+export {Review};
