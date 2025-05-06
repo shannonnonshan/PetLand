@@ -76,6 +76,7 @@
                 <div class="card">
                     <div class="card-header">
                         {{paymentStatus}}
+                        <p>{{formatDate createAt}}</p>
                     </div>
                     <div class="card-body tw-flex tw-flex-row tw-gap-2">
                         <div>
@@ -99,6 +100,7 @@
                <div class="card">
                     <div class="card-header">
                         {{paymentStatus}}
+                         <p>{{formatDate createAt}}</p>
                     </div>
                     <div class="card-body tw-flex tw-flex-row tw-gap-2">
                         <div>
@@ -112,6 +114,7 @@
                         <h4 class="tw-text-yellow-500">Staff: {{inCharge.name}}</h4>
                         {{/each}}
                         <h4 class="tw-text-red-500">Accountant: {{accountant.name}}</h4>
+                        </div>
                     </div>
                 {{/each}}
                 </div>

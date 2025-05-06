@@ -131,12 +131,39 @@
         }
         return true; 
     }
+    function checkValidStartTime() {
+        const startTimeInput = document.querySelector('#txtStartTime');
+        const selectedDate = moment(startTimeInput.value, 'DD/MM/YYYY HH:mm', true); // phải có giờ
+
+        if (!selectedDate.isValid()) {
+            alert('Invalid date & time format.');
+            startTimeInput.select();
+            return false;
+        }
+
+        const now = moment();
+        const tomorrowStart = moment().add(1, 'day').startOf('day');
+
+        if (selectedDate.isBefore(tomorrowStart)) {
+            alert('Please select a time from tomorrow onwards.');
+            startTimeInput.select();
+            return false;
+        }
+
+        return true;
+    }
+
     $('#frmSchedule').on('submit', function (e) {
       e.preventDefault();
 
       if(!checkValidEmail())
       {
         $('#alert').text('Invalid Email')
+        return;
+      }
+      if(!checkValidStartTime())
+      {
+        $('#alert').text('Invalid Date Please Choose Again')
         return;
       }
     const start = document.querySelector('#txtStartTime').value;

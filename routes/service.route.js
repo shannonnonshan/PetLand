@@ -10,6 +10,7 @@ import bookingService from '../services/booking.service.js';
 import { Booking } from '../models/Booking.js';
 import shiftService from '../services/shift.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
+import {notifyEmailLater} from '../controllers/service.controller.js';
 
 const route = express.Router();
 dotenv.config();
@@ -32,6 +33,7 @@ route.get('/booking', auth, async function(req,res){
     let bookingCompleted = await bookingService.findCompletedBookedService(id)
     let bookingConfirmed = await bookingService.findScheduledBookedService(id)
     let bookingPaid = await bookingService.findPaidBookedService(id)
+    console.log(bookingPaid)
     res.render('vwBooking/bookingOfCustomer',{
         booking:booking,
         bookingPending: bookingPending,
@@ -81,7 +83,7 @@ route.post('/cancel-booking',async function(req,res){
     const { bookedServiceIds } = req.body;
     const customerId = req.session.authUser.id;
     try {
-        let booking = await bookingService.findExistBooking(customerId)
+        let booking = await bookingService.findExistBookingWhioutTime(customerId)
         const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceIds)
         if(shiftAdded)
         {
@@ -185,9 +187,12 @@ route.post('/schedule', async function(req,res)
             }
             try{
                     const bookedStatus = await bookingService.findBookedById(bookedServiceId)
+                    console.log(bookedStatus)
                     const statusContext = new ServiceContext(bookedStatus);
                     statusContext.confirm(shiftAdded._id);
                     await statusContext.save();  
+                    const bookedShiftAdded = await bookingService.findBookedAfterAddShiftById(bookedServiceId)
+                    await notifyEmailLater(customer._id,"confirmScheduledBooking",bookedShiftAdded)
                     await bookingService.findBookedAndDeleteAfterSchedule(bookedServiceId)  
                 }
                 catch(error)
@@ -199,7 +204,6 @@ route.post('/schedule', async function(req,res)
                     }
                     return res.status(500).send("error, try again");
                 }
-            
             const url = '/service/booking';
             res.redirect(url);
         }else{
@@ -213,5 +217,14 @@ route.post('/schedule', async function(req,res)
         res.render('partials/loginRequired',{ showLoginModal: true })
     }   
 })
-
+route.post('/review',async function(req,res){
+    if (req.session.authUser) {
+        const url = '/service/booking';
+        res.redirect(url);
+    }
+        
+    else{
+        res.render('partials/loginRequired',{ showLoginModal: true })
+    }
+});
 export default route;

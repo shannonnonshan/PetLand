@@ -53,7 +53,10 @@ export default function (app) {
           },
           eq: function (a, b) {
             return a === b;
-          },     
+          }, 
+          or: function (a, b) {
+            return a || b;
+          },    
       }
   }));
   app.set('view engine', 'hbs');

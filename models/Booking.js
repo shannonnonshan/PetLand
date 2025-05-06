@@ -27,7 +27,7 @@ const bookedServiceSchema = new mongoose.Schema({
       ref: 'User',
       required: true,
     }
-  }, { collection: "BookedService" });
+  }, { collection: "BookedService",timestamps: true });
 const bookingSchema = new mongoose.Schema({
     customer: {
       type: Schema.Types.ObjectId,
@@ -51,7 +51,7 @@ const bookingSchema = new mongoose.Schema({
       enum: ['PAID', 'PENDING'],
       default: 'PENDING',
     }
-  }, { collection: "Booking" });
+  }, { collection: "Booking", timestamps: true });
 const shiftSchema = new mongoose.Schema({
     bookedService: {
       type: mongoose.Schema.Types.ObjectId,
@@ -66,7 +66,7 @@ const shiftSchema = new mongoose.Schema({
       type: Date, // 'HH:mm'
       required: true,
     },
-  }, { collection: 'Shift' });
+  }, { collection: 'Shift', timestamps: true });
   bookedServiceSchema.methods.setState = function(state) {
     this._state = state;  // Cập nhật trạng thái hiện tại của đối tượng
     this.status = state.status;  // Cập nhật trạng thái trong cơ sở dữ liệu nếu cần thiết

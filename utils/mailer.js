@@ -12,11 +12,18 @@ const transporter = nodemailer.createTransport({
 
 export const sendEmail = async (to, subject, html) => {
   const mailOptions = {
-    from: '"Pet Donation"',
+    from: "Pet Donation",
+    to,
+    subject,
+    html
+  }};
+export const sendServiceEmail = async (to, subject, html) => {
+  const mailOptions = {
+    from: "Pet Service",
     to,
     subject,
     html
   };
-
+  
   await transporter.sendMail(mailOptions);
 };

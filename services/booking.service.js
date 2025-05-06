@@ -20,11 +20,35 @@ export default {
     },
     findBookingByIdStatus(id)
     {
-        return Booking.findById(id)
+        return Booking.findById(id).populate({
+            path: 'bookedServices',
+            populate: [
+                { path: 'inCharge' },
+                { path: 'service' },
+                { path: 'shift' },
+                { path: 'customer'},
+            ]
+          })
+    },
+    findBookingByIdEmail(id)
+    {
+        return Booking.findById(id).populate({
+            path: 'bookedServices',
+            populate: [
+                { path: 'inCharge' },
+                { path: 'service' },
+                { path: 'shift' },
+                { path: 'customer'},
+            ]
+          }).lean()
     },
     findBookedById(id)
     {
-        return BookedService.findById(id)
+        return BookedService.findById(id).populate('customer').populate('service')
+    },
+    findBookedAfterAddShiftById(id)
+    {
+        return BookedService.findById(id).populate('service').populate('shift')
     },
     findExistBooking(customerId)
     {
@@ -32,6 +56,13 @@ export default {
             customer:customerId,
             paymentStatus: 'PENDING', 
             createAt: null
+        });
+    },
+    findExistBookingWhioutTime(customerId)
+    {
+        return Booking.findOne({
+            customer:customerId,
+            paymentStatus: 'PENDING', 
         });
     },
     findExistBookingByTime(formattedDate){
@@ -81,7 +112,7 @@ export default {
     findBookedServiceByCustomerId(id)
     {
         return BookedService.find({customer:id})
-        .populate('service').populate('shift').lean().exec()
+        .populate('service').populate('shift').sort({ updatedAt: -1 }).lean().exec()
     },
     deleteBookedServiceById(temp)
     {
@@ -93,17 +124,17 @@ export default {
     },
     findByStatus(id, paymentStatus)
     {
-        return Booking.find({customer:id, paymentStatus})
+        return Booking.find({customer:id, paymentStatus}).sort({ updatedAt: -1 }) 
     },
     findPendingBookedService(customerId)
     {
         return BookedService.find({customer: customerId, status: 'pending'})
-        .populate('service').lean().exec()
+        .populate('service').sort({ updatedAt: -1 }) .lean().exec()
     },
     findCompletedBookedService(customerId)
     {
         return BookedService.find({customer: customerId, status: 'completed'})
-        .populate('service').populate('shift').lean().exec()
+        .populate('service').populate('shift').sort({ updatedAt: -1 }) .lean().exec()
     },
     async findScheduledBookedService(customerId)
     {
@@ -113,19 +144,23 @@ export default {
         }
         return BookedService.find({ customer: customerId, status:'confirmed'})
         .populate('shift')
-        .populate('service')  
+        .populate('service')
+        .sort({ updatedAt: -1 })   
         .lean() 
         .exec();
     },
     findPaidBookedService(customerId)
     {
-        return Booking.find({customer: customerId, status: 'PAID'})
+        return Booking.find({customer: customerId, paymentStatus: 'PAID'})
         .populate({
             path: 'bookedServices',
-            populate: {
-              path: 'service', 
-            }
+            populate: [
+                { path: 'inCharge' },
+                { path: 'service' },
+                { path: 'shift' }
+            ]
           })
+          .sort({ updatedAt: -1 }) 
           .lean()
           .exec();
     },
@@ -140,6 +175,7 @@ export default {
                 { path: 'shift' }
             ]
         })
+        .sort({ updatedAt: -1 }) 
         .populate('accountant')
         .lean()
         .exec();
@@ -173,7 +209,8 @@ export default {
         .populate('customer') 
         .populate('inCharge')  
         .populate('service')   // Populate service (thông tin dịch vụ)
-        .populate('shift') 
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
         .lean()
         .exec();
     },
@@ -184,9 +221,10 @@ export default {
         .populate('customer') 
         .populate('inCharge')  
         .populate('service')   // Populate service (thông tin dịch vụ)
-        .populate('shift') 
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
         .lean()
-        .exec();;
+        .exec();
     },
     findWaitShiftingOwner()
     {
@@ -194,7 +232,8 @@ export default {
         .populate('customer') 
         .populate('inCharge')  
         .populate('service')   // Populate service (thông tin dịch vụ)
-        .populate('shift') 
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
         .lean()
         .exec();
     },
@@ -204,7 +243,8 @@ export default {
         .populate('customer') 
         .populate('inCharge')  
         .populate('service')   // Populate service (thông tin dịch vụ)
-        .populate('shift') 
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
         .lean()
         .exec();
     },
@@ -214,7 +254,8 @@ export default {
         .populate('customer') 
         .populate('inCharge')  
         .populate('service')   // Populate service (thông tin dịch vụ)
-        .populate('shift') 
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
         .lean()
         .exec();
     },
@@ -226,7 +267,7 @@ export default {
                 { path: 'service' },
                 { path: 'shift' }
             ]
-        }).lean();
+        }).sort({ updatedAt: -1 }) .lean();
         console.log(bookings)
         const filteredBookings = bookings.filter(booking =>
             booking.bookedServices.length > 0 &&
@@ -248,7 +289,7 @@ export default {
               { path: 'shift' },
               { path: 'inCharge' }
             ]
-          })
+          }).sort({ updatedAt: -1 }) 
           .lean()
           .exec();
       },

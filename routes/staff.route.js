@@ -10,6 +10,7 @@ import moment from 'moment';
 import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import BookingContext from '../state/serviceState/bookingContext.js';
+import {notifyEmailLater} from '../controllers/service.controller.js';
 
 const route = express.Router();
 
@@ -56,6 +57,7 @@ route.post('/manageService/checkout',auth,async function(req,res){
         const statusContext = new BookingContext(bookingStatus);
         statusContext.paid(req.session.authUser.id);
         await statusContext.save(); 
+        await notifyEmailLater(bookingStatus.customer._id,"confirmPaid",bookingStatus)
         res.redirect(req.get('referer'));
         } catch (error) {
         console.error(error);

@@ -10,17 +10,17 @@
             <div class="user-details">
                 {{#if showErrors}}
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong>Login Failed!</strong> Bạn nên kiểm tra lại thông tin.
+                    <strong>Login Failed!</strong> Check your information.
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 {{/if}}
                 <button type="button" class="btn btn-light btn-connect"
                     onclick="window.location.href='/account/login/githubAuth'">
-                    <i class="bi bi-github"></i> Tiếp tục với GitHub
+                    <i class="bi bi-github"></i> Login with GitHub
                 </button>
                 <button type="button" class="btn btn-light btn-connect"
                     onclick="window.location.href='/user/login/googleAuth'">
-                    <i class="bi bi-google"></i> Tiếp tục với Google
+                    <i class="bi bi-google"></i> Login with Google
                 </button>
                 <hr id="line">
                 <div class="input-box">

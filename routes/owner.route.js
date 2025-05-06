@@ -9,6 +9,8 @@ import nodemailer from 'nodemailer';
 import moment from 'moment';
 import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
+import {notifyEmailLater} from '../controllers/service.controller.js';
+
 const route = express.Router();
 
 route.get('/managePet/all',auth, async function(req, res){
@@ -100,7 +102,7 @@ route.get('/manageService/booking', auth, async function(req, res){
     const bookingRejected = await bookingService.findRejectedOwner()
     const bookingWaitShifting = await bookingService.findWaitShiftingOwner()
     const bookingCompleted = await bookingService.findCompletedBookedService()
-    const bookingPaid = await bookingService.findPaidBookedOwner()
+    const bookingPaid = await bookingService.findAllPaid()
     res.render('vwOwner/service/booking', {
         layout: 'owner-layout',
         booking: booking,
@@ -123,6 +125,7 @@ route.post('/manageService/reject-booking',auth,async function(req,res){
         const statusContext = new ServiceContext(bookedStatus);
         statusContext.cancel();
         await statusContext.save(); 
+        await notifyEmailLater(bookedStatus.customer._id,"rejectService",bookedStatus)
         res.redirect(req.get('referer'));
         } catch (error) {
         console.error(error);
