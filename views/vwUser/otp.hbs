@@ -3,45 +3,88 @@
     <link rel="stylesheet" href="/static/css/cssUser/otp.css">
 {{/section}}
 {{#section "signupjs"}}
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const errorMessage = "{{this.errorMessage}}";
-            if (errorMessage.length > 0) {
-               Swal.fire({
-                    title: 'Error',
-                    text: errorMessage,
-                    icon: 'error',
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const errorMessage = "{{this.errorMessage}}";
+        if (errorMessage.length > 0) {
+            Swal.fire({
+                title: 'Error',
+                text: errorMessage,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        const successMessage = "{{this.successMessage}}";
+        if (successMessage.length > 0) {
+            Swal.fire({
+                title: 'Success!',
+                text: successMessage,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/user/login';
+                }
+            });
+            return;
+        }
+
+        const resendMessage = "{{this.resendSuccessMessage}}";
+        if (resendMessage.length > 0) {
+            Swal.fire({
+                title: 'OTP Resent',
+                text: resendMessage,
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const otpInputs = document.querySelectorAll(".otp-inputbar");
+        const otpHiddenInput = document.getElementById("txtOTP");
+        const form = document.querySelector("form.form-otp");
+
+        // Auto move to next input
+        otpInputs.forEach((input, index) => {
+            input.addEventListener("input", function () {
+                if (input.value.length === 1 && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+            });
+        });
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent default submit
+            let otpCode = "";
+            let hasEmpty = false;
+
+            otpInputs.forEach(input => {
+                if (input.value.trim() === "") {
+                    hasEmpty = true;
+                }
+                otpCode += input.value.trim();
+            });
+
+            if (hasEmpty || otpCode.length < 6) {
+                Swal.fire({
+                    title: 'Incomplete OTP',
+                    text: 'Please enter all 6 digits of the OTP.',
+                    icon: 'warning',
                     confirmButtonText: 'OK'
                 });
                 return;
             }
+
+            otpHiddenInput.value = otpCode;
+            form.submit(); // Submit if valid
         });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const otpInputs = document.querySelectorAll(".otp-inputbar");
-            const otpHiddenInput = document.getElementById("txtOTP");
-            const form = document.querySelector("form.form-otp");
-
-            // Auto move to next input
-            otpInputs.forEach((input, index) => {
-                input.addEventListener("input", function () {
-                    if (input.value.length === 1 && index < otpInputs.length - 1) {
-                        otpInputs[index + 1].focus();
-                    }
-                });
-            });
-
-            form.addEventListener("submit", function () {
-                let otpCode = "";
-                otpInputs.forEach(input => {
-                    otpCode += input.value;
-                });
-                otpHiddenInput.value = otpCode;
-            });
-        });
-    </script>
-
+    });
+</script>
 {{/section}}
 
 <div id="card-contain">
