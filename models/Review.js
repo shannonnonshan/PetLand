@@ -1,10 +1,9 @@
-import mongoose from 'mongoose';
+import { mongoose } from '../utils/db.js'; 
 
-mongoose.connect('mongodb+srv://donnade:thanhvyneh@petland.lruap6s.mongodb.net/petland?retryWrites=true&w=majority&appName=Petland')
-  .then(() => console.log('Review Connected!'));
-const reviewSchema = new mongoose.Schema({
+const { Schema, model } = mongoose;
+const reviewSchema = new Schema({
     bookedService: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'BookedService',
       required: true,
     },
@@ -24,5 +23,5 @@ const reviewSchema = new mongoose.Schema({
     },
   }, { collection: 'Review', timestamps: true });
   
-const Review = mongoose.model('Review',reviewSchema);
+const Review = model('Review',reviewSchema);
 export {Review};

@@ -25,9 +25,9 @@
     }
 </style>
 {{/section}}
-
-<form id="frmSchedule" action="/service/schedule?id={{id}}" class="tw-bg-white tw-pt-[50px] tw-h-screen tw-max-w-lg tw-mx-auto" method="POST" >
-    <div class="tw-px-3 tw-pb-[20%] tw-w-auto tw-h-[100%] tw-max-h-max tw-border-2 tw-overflow-y-scroll tw-border-black" style="overflow: scroll; scrollbar-width: none;">
+<div class=" tw-border-black tw-bg-white tw-pt-[50px] tw-max-w-lg tw-mx-auto">
+<form id="frmSchedule" action="/service/schedule?id={{id}}" class="tw-bg-yellow-200"  method="POST" >
+    <div class="tw-px-3 tw-pb-[20%] tw-w-auto tw-h-[100%] tw-max-h-max tw-border-2 tw-overflow-y-scroll " style="overflow: scroll; scrollbar-width: none;">
         <h2>Schedule your service</h2>
         <input id="bookedServiceId" name="bookedServiceId" value="{{bookedService._id}}" hidden>
     <div class="input-box">
@@ -63,7 +63,7 @@
     <div class="input-box">
         <div class="flex items-center space-x-1 mb-4">
         <span for="txtStartTime" class="tw-bg-white tw-text-black ">Start Time</span>
-        <input type="text" name="startTime" id="txtStartTime" class="form-control" placeholder="Select a date" aria-describedby="helpId">
+        <input type="text" name="startTime" id="txtStartTime" class="form-control" placeholder="Select a date" aria-describedby="helpId" readonly>
         <input type="text" name="endTime" id="txtEndTime"  hidden>
         <span class="">Estimate Completed Time: <p id="lblEndTime" class="tw-mt-5 tw-text-[#FF94BD]"></p></span>
     </div>
@@ -75,6 +75,7 @@
     </button>
     </div>
 </form>
+</div>
 {{#section 'js'}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 <script>
@@ -83,7 +84,7 @@
       timepicker: true,
       format: 'd/m/Y H:i',
       mask: true,
-      minDate:new Date(),
+      minDate: new Date(new Date().getTime() + 7 * 60 * 60 * 1000 + 24 * 60 * 60 * 1000),
       defaultTime:'09:00',
       minTime: '09:00',   // bắt đầu từ 9 giờ sáng
       maxTime: '20:00', 
@@ -131,39 +132,13 @@
         }
         return true; 
     }
-    function checkValidStartTime() {
-        const startTimeInput = document.querySelector('#txtStartTime');
-        const selectedDate = moment(startTimeInput.value, 'DD/MM/YYYY HH:mm', true); // phải có giờ
-
-        if (!selectedDate.isValid()) {
-            alert('Invalid date & time format.');
-            startTimeInput.select();
-            return false;
-        }
-
-        const now = moment();
-        const tomorrowStart = moment().add(1, 'day').startOf('day');
-
-        if (selectedDate.isBefore(tomorrowStart)) {
-            alert('Please select a time from tomorrow onwards.');
-            startTimeInput.select();
-            return false;
-        }
-
-        return true;
-    }
 
     $('#frmSchedule').on('submit', function (e) {
       e.preventDefault();
 
       if(!checkValidEmail())
       {
-        $('#alert').text('Invalid Email')
-        return;
-      }
-      if(!checkValidStartTime())
-      {
-        $('#alert').text('Invalid Date Please Choose Again')
+        alert.text('Invalid Email')
         return;
       }
     const start = document.querySelector('#txtStartTime').value;

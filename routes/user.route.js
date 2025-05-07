@@ -56,7 +56,8 @@ route.post('/login', async function (req, res) {
 
 route.get('/customer', requireRole('Customer'), (req, res) => {
     res.render('homepage', {
-        user: req.session.authUser
+        user: req.session.authUser,
+        isHome:true
     });
 });
 route.get('/staff', requireRole('Staff'), (req, res) => {

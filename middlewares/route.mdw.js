@@ -8,11 +8,12 @@ export default function (app) {
     
     app.get('/', function (req, res) {
      if (!req.session.auth || !req.session.authUser) {
-        return res.render('homepage',);
+        return res.render('homepage',{isHome:true});
       }
       
     return res.render('homepage', {
-        authUser: req.session.authUser
+        authUser: req.session.authUser,
+        isHome:true
     });
 
   });

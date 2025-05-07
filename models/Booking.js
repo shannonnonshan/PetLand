@@ -1,9 +1,7 @@
-import mongoose from 'mongoose';
+import { mongoose } from '../utils/db.js'; 
 
-mongoose.connect('mongodb+srv://donnade:thanhvyneh@petland.lruap6s.mongodb.net/petland?retryWrites=true&w=majority&appName=Petland')
-  .then(() => console.log('Booking Connected!'));
-const Schema = mongoose.Schema; 
-const bookedServiceSchema = new mongoose.Schema({
+const { Schema, model } = mongoose;
+const bookedServiceSchema = new Schema({
     service: {
       type: Schema.Types.ObjectId,
       ref: 'Service',
@@ -28,7 +26,7 @@ const bookedServiceSchema = new mongoose.Schema({
       required: true,
     }
   }, { collection: "BookedService",timestamps: true });
-const bookingSchema = new mongoose.Schema({
+const bookingSchema = new Schema({
     customer: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -52,9 +50,9 @@ const bookingSchema = new mongoose.Schema({
       default: 'PENDING',
     }
   }, { collection: "Booking", timestamps: true });
-const shiftSchema = new mongoose.Schema({
+const shiftSchema = new Schema({
     bookedService: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'BookedService',
       required: true,
     },
@@ -89,7 +87,7 @@ const shiftSchema = new mongoose.Schema({
     this._state.paid(); // Gọi phương thức confirm() của trạng thái hiện tại
   };
   
-const Booking = mongoose.model('Booking', bookingSchema);
-const BookedService = mongoose.model('BookedService',bookedServiceSchema);
-const Shift = mongoose.model('Shift',shiftSchema);
+const Booking = model('Booking', bookingSchema);
+const BookedService = model('BookedService',bookedServiceSchema);
+const Shift = model('Shift',shiftSchema);
 export {Booking, BookedService, Shift};

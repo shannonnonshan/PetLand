@@ -33,7 +33,6 @@ route.get('/booking', auth, async function(req,res){
     let bookingCompleted = await bookingService.findCompletedBookedService(id)
     let bookingConfirmed = await bookingService.findScheduledBookedService(id)
     let bookingPaid = await bookingService.findPaidBookedService(id)
-    console.log(bookingPaid)
     res.render('vwBooking/bookingOfCustomer',{
         booking:booking,
         bookingPending: bookingPending,
@@ -92,7 +91,6 @@ route.post('/cancel-booking',async function(req,res){
         await bookingService.updateAfterDeleteBookedService(booking._id,bookedServiceIds)
         const reloadedBooking = await bookingService.findBookingById(booking._id)
         await bookingService.deleteBookedService(bookedServiceIds);
-        console.log(reloadedBooking)
         if (!reloadedBooking.bookedServices || reloadedBooking.bookedServices.length === 0) {
             await bookingService.deleteBookingById(reloadedBooking._id);
         }
@@ -187,13 +185,14 @@ route.post('/schedule', async function(req,res)
             }
             try{
                     const bookedStatus = await bookingService.findBookedById(bookedServiceId)
-                    console.log(bookedStatus)
                     const statusContext = new ServiceContext(bookedStatus);
                     statusContext.confirm(shiftAdded._id);
                     await statusContext.save();  
                     const bookedShiftAdded = await bookingService.findBookedAfterAddShiftById(bookedServiceId)
                     await notifyEmailLater(customer._id,"confirmScheduledBooking",bookedShiftAdded)
                     await bookingService.findBookedAndDeleteAfterSchedule(bookedServiceId)  
+                    const url = '/service/booking';
+                    res.redirect(url);
                 }
                 catch(error)
                 {
@@ -204,8 +203,7 @@ route.post('/schedule', async function(req,res)
                     }
                     return res.status(500).send("error, try again");
                 }
-            const url = '/service/booking';
-            res.redirect(url);
+            
         }else{
             console.error(error);
             const shiftAdded= await shiftService.findShiftByBookedService(bookedServiceId)
