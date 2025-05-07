@@ -34,27 +34,36 @@ route.get('/detail', async function(req, res){
 
 route.get('/viewAdopted', auth, async function(req, res) {
   const adopter = req.session.authUser || null;
-  const status = req.query.status;
+  if(adopter){
+    const status = req.query.status;
   
-  let list = [];
-  if (status) {
-    list = await petService.findAllByAdoptIdAndStatus(adopter.id, status).lean();
-  } else {
-    list = await petService.findAllByAdoptId(adopter.id).lean();
-  }
+    let list = [];
+    if (status) {
+      list = await petService.findAllByAdoptIdAndStatus(adopter.id, status).lean();
+    } else {
+      list = await petService.findAllByAdoptId(adopter.id).lean();
+    }
 
-  res.render('vwPet/viewAdoptList', {
-    layout: 'pet-layout',
-    list: list
-  });
+    res.render('vwPet/viewAdoptList', {
+      layout: 'pet-layout',
+      list: list
+    });
+  }else{
+    res.render('partials/loginRequired',{ showLoginModal: true })
+  }
+  
 });
 
 route.get('/donate', auth, function(req, res){
     const user = req.session.authUser || null;
-    res.render('vwPet/donatePetForm', {
+    if(user){
+      res.render('vwPet/donatePetForm', {
         layout: 'account-layout',
         user: user
     });
+    }else{
+      res.render('partials/loginRequired',{ showLoginModal: true })
+  }
 })
 
 const storage = multer.diskStorage({
@@ -99,14 +108,19 @@ const storage = multer.diskStorage({
 });
 
 route.get('/adopt', auth, async function(req, res){
-    const id = (req.query.id).toString() || '0';
-    const pet = await petService.findPetById(id).lean();
     const user = req.session.authUser || null;
-    res.render('vwPet/adoptPetForm', {
-      layout: 'account-layout',
-        pet: pet,
-        user: user
-    });
+    if (user){
+      const id = (req.query.id).toString() || '0';
+      const pet = await petService.findPetById(id).lean();
+      res.render('vwPet/adoptPetForm', {
+        layout: 'account-layout',
+          pet: pet,
+          user: user
+      });
+    }
+    else{
+      res.render('partials/loginRequired',{ showLoginModal: true })
+  }
 })
 
 route.post('/adopt', async function(req, res) {
