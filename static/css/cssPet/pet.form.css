@@ -11,9 +11,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-
   background: linear-gradient(135deg, #FF94BD, #F3EC1C);
-  height: 100vh;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .container {
   max-width: 800px;
