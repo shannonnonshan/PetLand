@@ -1,13 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet");
 
 *{
-  font-family: Raleway;
   font-size: 14pt;
-}
-.nav-link{
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .search-container {
@@ -45,7 +38,7 @@
   border: none;
   cursor: pointer;
 }
-.nav-link .icon-font{
+.icon-font{
   font-size: 18pt;
 }
 .search-container i{

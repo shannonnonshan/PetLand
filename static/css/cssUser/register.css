@@ -12,7 +12,7 @@ body {
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+  background: linear-gradient(135deg, #FF94BD, #F3EC1C);
 }
 .container {
   max-width: 700px;
@@ -35,7 +35,7 @@ body {
   height: 3px;
   width: 30px;
   border-radius: 5px;
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+  background: linear-gradient(135deg, #FF94BD, #F3EC1C);
 }
 .content form .user-details {
   display: flex;
@@ -115,10 +115,10 @@ form .button input {
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+  background: linear-gradient(135deg, #FF94BD, #F3EC1C);
 }
 form .button input:hover {
-  background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+  background: linear-gradient(-135deg, #FF94BD, #F3EC1C);
 }
 /* Responsive media query code for mobile devices */
 @media(max-width: 584px) {

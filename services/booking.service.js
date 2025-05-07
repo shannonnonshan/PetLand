@@ -10,15 +10,59 @@ export default {
         const newbooking = new Booking(booking)
         return newbooking.save()
     },
+    async saveBookedService(booking)
+    {
+        return BookedService.findByIdAndUpdate(booking._id).lean()
+    },
     findBookingById(id)
     {
         return Booking.findById(id).lean()
+    },
+    findBookingByIdStatus(id)
+    {
+        return Booking.findById(id).populate({
+            path: 'bookedServices',
+            populate: [
+                { path: 'inCharge' },
+                { path: 'service' },
+                { path: 'shift' },
+                { path: 'customer'},
+            ]
+          })
+    },
+    findBookingByIdEmail(id)
+    {
+        return Booking.findById(id).populate({
+            path: 'bookedServices',
+            populate: [
+                { path: 'inCharge' },
+                { path: 'service' },
+                { path: 'shift' },
+                { path: 'customer'},
+            ]
+          }).lean()
+    },
+    findBookedById(id)
+    {
+        return BookedService.findById(id).populate('customer').populate('service')
+    },
+    findBookedAfterAddShiftById(id)
+    {
+        return BookedService.findById(id).populate('service').populate('shift')
     },
     findExistBooking(customerId)
     {
         return Booking.findOne({
             customer:customerId,
-            paymentStatus: 'PENDING'
+            paymentStatus: 'PENDING', 
+            createAt: null
+        });
+    },
+    findExistBookingWhioutTime(customerId)
+    {
+        return Booking.findOne({
+            customer:customerId,
+            paymentStatus: 'PENDING', 
         });
     },
     findExistBookingByTime(formattedDate){
@@ -59,13 +103,16 @@ export default {
     {
         return BookedService.findOne({customer:customerId,service: bookedServiceIds, status: status}).lean()
     },
-    findBookedServiceById(customerId)
+    findBookedServiceById(id)
     {
-        return BookedService.find({customer:customerId})
+        return BookedService.findById(id)
         .populate('service').populate('shift').lean().exec()
     },
-    findBookedServiceByBookedId(id){
-        return BookedService.findById(id)
+    
+    findBookedServiceByCustomerId(id)
+    {
+        return BookedService.find({customer:id})
+        .populate('service').populate('shift').sort({ updatedAt: -1 }).lean().exec()
     },
     deleteBookedServiceById(temp)
     {
@@ -77,17 +124,17 @@ export default {
     },
     findByStatus(id, paymentStatus)
     {
-        return Booking.find({customer:id, paymentStatus})
+        return Booking.find({customer:id, paymentStatus}).sort({ updatedAt: -1 }) 
     },
     findPendingBookedService(customerId)
     {
         return BookedService.find({customer: customerId, status: 'pending'})
-        .populate('service').lean().exec()
+        .populate('service').sort({ updatedAt: -1 }) .lean().exec()
     },
     findCompletedBookedService(customerId)
     {
         return BookedService.find({customer: customerId, status: 'completed'})
-        .populate('service').populate('shift').lean().exec()
+        .populate('service').populate('shift').sort({ updatedAt: -1 }) .lean().exec()
     },
     async findScheduledBookedService(customerId)
     {
@@ -97,21 +144,41 @@ export default {
         }
         return BookedService.find({ customer: customerId, status:'confirmed'})
         .populate('shift')
-        .populate('service')  
+        .populate('service')
+        .sort({ updatedAt: -1 })   
         .lean() 
         .exec();
     },
     findPaidBookedService(customerId)
     {
-        return Booking.find({customer: customerId, status: 'PAID'})
+        return Booking.find({customer: customerId, paymentStatus: 'PAID'})
         .populate({
             path: 'bookedServices',
-            populate: {
-              path: 'service', 
-            }
+            populate: [
+                { path: 'inCharge' },
+                { path: 'service' },
+                { path: 'shift' }
+            ]
           })
+          .sort({ updatedAt: -1 }) 
           .lean()
           .exec();
+    },
+    findAllPaid()
+    {
+        return Booking.find({paymentStatus: 'PAID'})
+        .populate({
+            path: 'bookedServices',
+            populate: [
+                { path: 'inCharge' },
+                { path: 'service' },
+                { path: 'shift' }
+            ]
+        })
+        .sort({ updatedAt: -1 }) 
+        .populate('accountant')
+        .lean()
+        .exec();
     },
     findBookedServiceUserServiceByBookedId(id)
     {
@@ -136,9 +203,108 @@ export default {
     {
         return Booking.findByIdAndDelete(id)
     },
-    updateStatusBookedService(bookedServiceId,status, shift)
+    findBookingOwner()
     {
-        return BookedService.findByIdAndUpdate(bookedServiceId,{status: status,shift:shift})
+        return BookedService.find({ status: { $ne: "pending" } })
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
+        .lean()
+        .exec();
+    },
+    
+    findRejectedOwner()
+    {
+        return BookedService.find({ status: "cancelled" })
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
+        .lean()
+        .exec();
+    },
+    findWaitShiftingOwner()
+    {
+        return BookedService.find({ inCharge: null, status: { $ne: null}})
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
+        .lean()
+        .exec();
+    },
+    findShiftedOwner()
+    {
+        return BookedService.find({inCharge: { $ne: null, $exists: true }})
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
+        .lean()
+        .exec();
+    },
+    findBookedByStaff(id)
+    {
+        return BookedService.find({inCharge: id})
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
+        .lean()
+        .exec();
+    },
+    async findBookedByStatus() {
+        const bookings = await Booking.find({paymentStatus:{ $ne: "PAID"}}).populate({
+            path: 'bookedServices',
+            populate: [
+                { path: 'inCharge' },
+                { path: 'service' },
+                { path: 'shift' }
+            ]
+        }).sort({ updatedAt: -1 }) .lean();
+        console.log(bookings)
+        const filteredBookings = bookings.filter(booking =>
+            booking.bookedServices.length > 0 &&
+            booking.bookedServices.every(bs => 
+                typeof bs.status === 'string' && bs.status.trim().toLowerCase() === 'completed'
+            )
+        );
+        console.log(filteredBookings)
+        return filteredBookings;
+    },
+    
+    findPaidBookedOwner() {
+        return Booking.find({ paymentStatus: 'COMPLETED' }) // nếu bạn dùng 'PAID' thì đảm bảo enum đúng
+          .populate({
+            path: 'bookedServices',
+            populate: [
+              { path: 'service' },
+              { path: 'customer' },
+              { path: 'shift' },
+              { path: 'inCharge' }
+            ]
+          }).sort({ updatedAt: -1 }) 
+          .lean()
+          .exec();
+      },
+    findOneWaitShiftingOwner(id)
+    {
+        return BookedService.findOne({ _id: id })
+        .populate('customer') 
+        .populate('service')   
+        .populate('shift') 
+        .lean()
+        .exec();
+    },
+    updateInCharge(id, inCharge)
+    {
+        return BookedService.findByIdAndUpdate(id,{ inCharge: inCharge })
     }
 
 }

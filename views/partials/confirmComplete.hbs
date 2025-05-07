@@ -1,0 +1,33 @@
+<div
+    id="completeSuccessModal"
+    class="popupModel tw-fixed tw-inset-0  tw-bg-black/50 tw-items-center tw-flex tw-justify-center 
+    {{#if showSuccessModal}}tw-block{{else}}
+    tw-hidden
+    {{/if}} tw-z-[500]"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    >
+    <div class="tw-bg-white  tw-shadow-xl tw-p-6 tw-w-[100%] tw-max-w-lg tw-h-[40%]">
+        <h2 class="tw-text-lg tw-font-semibold tw-mb-4">Your complete</h2>
+        <p class="tw-mb-4">Your book service is added</p>
+        <hr class=" tw-bg-black tw-mb-10">
+        <div class="tw-mb-5 tw-flex tw-justify-center tw-gap-2">    
+        <button
+            class="tw-stroke-1 tw-px-4 tw-py-2 hover:tw-bg-gray-400"
+            onclick="closeModal(true)"
+        >
+            Cancel
+        </button>
+        <a
+            href="/staff/manageService/complete?id={{_id}}"
+            class="tw-bg-[#FF94BD] tw-text-black tw-px-4 tw-py-2 hover:tw-bg-[#FF94BD]"
+        >
+            Confirm
+        </a>
+        </div>
+    </div>
+</div>
+{{#section "js"}}
+
+{{/section}}

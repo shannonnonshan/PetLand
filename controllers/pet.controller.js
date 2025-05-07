@@ -87,7 +87,7 @@ async function handlePetTransition({ pet, contextMethod }) {
   await pet.save();
 }
 
-// ===== CONTROLLERS =====
+
 
 export const approvePet = async (req, res) => {
   try {
@@ -127,11 +127,10 @@ export const completeAdoption = async (req, res) => {
     const { petid } = req.body;
     const pet = await Pet.findById(petid);
     if (!pet) return res.status(404).send('Không tìm thấy thú cưng');
-
-    pet.completeAdoption();
+    const context = new PetContext(pet);
+    context.completeAdoption();
     await pet.save();
-
-    res.redirect('/pet/adopted');
+    res.redirect('/owner/managePet/adopt_completed');
   } catch (error) {
     console.error('CompleteAdoption Error:', error);
     res.status(500).send('Lỗi khi hoàn tất nhận nuôi');

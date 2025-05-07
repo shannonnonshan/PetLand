@@ -1,9 +1,7 @@
-import mongoose from 'mongoose';
+import { mongoose } from '../utils/db.js'; 
 
-mongoose.connect('mongodb+srv://donnade:thanhvyneh@petland.lruap6s.mongodb.net/petland?retryWrites=true&w=majority&appName=Petland')
-  .then(() => console.log('Connected!'));
-
-const serviceSchema = new mongoose.Schema({
+const { Schema, model } = mongoose;
+const serviceSchema = new Schema({
   id: { type: String, required: true },
   serviceName: { type: String, required: true },
   petType: { type: Number, enum: [1, 2, 3], required: true }, // 1: Dog, 2: Cat, 3: Both
@@ -11,10 +9,12 @@ const serviceSchema = new mongoose.Schema({
   shortDescription: { type: String },
   price: { type: Number, required: true },
   duration: { type: Number, required: true },
-  imageUrl: { type: String }
+  imageUrl: { type: String },
+  hidden: { type: Boolean },
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 }, { collection: 'Service' });
 
 
-const Service = mongoose.model('Service', serviceSchema);
+const Service = model('Service', serviceSchema);
 
 export { Service};

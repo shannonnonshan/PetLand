@@ -1,0 +1,126 @@
+{{#section 'staffcss'}}
+<style>
+    .nav-link.active{
+        font-weight: bold;
+        background-color: #F3EC1C !important;
+    }
+    .tab-content{
+        max-height: max-content;
+        padding-bottom:10% ;
+    }
+</style>
+{{/section}}
+<div class=" tw-mt-[50px] tw-flex tw-justify-center tw-h-screen">
+    {{!-- Left side --}}
+    <div class="tw-py-5 tw-pt-[70px] tw-px-3 tw-overflow-y-scroll tw-bg-white tw-w-[80%] tw-max-w-[100%]" id="mainContent" style="overflow: scroll; scrollbar-width: none;">
+        <h3>Your booking</h3>
+      <nav>
+            <div class="nav nav-tabs" id="booking-tab" role="tablist">
+                <button class="nav-link active" id="tab-all" data-bs-toggle="tab" data-bs-target="#content-all" type="button" role="tab" aria-controls="content-all" aria-selected="true">All</button>
+                <button class="nav-link" id="tab-schedule" data-bs-toggle="tab" data-bs-target="#content-schedule" type="button" role="tab" aria-controls="content-schedule" aria-selected="false">My schedule</button>
+                <button class="nav-link" id="tab-completed" data-bs-toggle="tab" data-bs-target="#content-completed" type="button" role="tab" aria-controls="content-completed" aria-selected="false">Check Out</button>
+                <button class="nav-link" id="tab-paid" data-bs-toggle="tab" data-bs-target="#content-paid" type="button" role="tab" aria-controls="content-paid" aria-selected="false">Paid</button>
+            </div>
+            </nav>
+
+            <div class="tab-content mt-3" id="booking-tabContent">
+            <div class="tab-pane fade show active" id="content-all" role="tabpanel" aria-labelledby="tab-all" tabindex="0">
+                {{#each booking}}
+                <div class="card">
+                    <div class="card-header">
+                        {{status}}
+                    </div>
+                    <div class="card-body tw-flex tw-flex-row tw-gap-2">
+                        <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
+                        <div>
+                        <h5 class="card-title">{{service.serviceName}}</h5>
+                        <p class="card-text">{{status.description}}</p>
+                        <p>Duration: {{service.duration}} minute</p>
+                        <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
+                        <span>Status: {{status}}</span>
+                        <h4 class="tw-text-yellow-500">Staff: {{inCharge.name}}</h4>
+                    </div>
+                    </div>
+                    </div>
+                {{/each}}
+            </div>
+          
+            <div class="tab-pane fade" id="content-schedule" role="tabpanel" aria-labelledby="tab-schedule" tabindex="0">
+               {{#each bookingMyShedule}}
+                <div class="card">
+                    <div class="card-header">
+                        {{status}}
+                    </div>
+                    <div class="card-body tw-flex tw-flex-row tw-gap-2">
+                        <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
+                        <div>
+                        <h5 class="card-title">{{service.serviceName}}</h5>
+                        <p class="card-text">{{status.description}}</p>
+                        <p>Duration: {{service.duration}} minute</p>
+                        <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
+                        <h4 class="tw-text-yellow-500">Staff: {{inCharge.name}}</h4>
+                        <span>Status: {{status}}</span>
+                        <p>Your appointment: <b class="tw-text-yellow-400">{{formatDate shift.startTime}}</b></p>
+                        {{#if (eq status "completed")}}
+
+                        {{else}}
+                        {{> completedButton _id=this._id}}
+                        {{/if}}
+                    </div>
+                    </div>
+                    </div>
+                {{/each}}
+            </div>
+            <div class="tab-pane fade" id="content-completed" role="tabpanel" aria-labelledby="tab-completed" tabindex="0">
+                {{#each bookingCheckOut}}
+                <div class="card">
+                    <div class="card-header">
+                        {{paymentStatus}}
+                        <p>{{formatDate createAt}}</p>
+                    </div>
+                    <div class="card-body tw-flex tw-flex-row tw-gap-2">
+                        <div>
+                        {{#each bookedServices}}
+                        <img src="{{service.imageUrl}}" class="tw-w-[50px] tw-h-[50px]" alt="">
+                        <h5 class="card-title">{{service.serviceName}}</h5>
+                        <p class="card-text">{{status.description}}</p>
+                        <p>Duration: {{service.duration}} minute</p>
+                        <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
+                        <span>Status: {{status}}</span>
+                        <h4 class="tw-text-yellow-500">Staff: {{inCharge.name}}</h4>
+                        {{/each}}
+                    </div>
+                    </div>
+                    {{> checkOutButton _id=this._id }}
+                    </div>
+                {{/each}}
+            </div>
+            <div class="tab-pane fade" id="content-paid" role="tabpanel" aria-labelledby="tab-paid" tabindex="0">
+                {{#each bookingPaid}}
+               <div class="card">
+                    <div class="card-header">
+                        {{paymentStatus}}
+                         <p>{{formatDate createAt}}</p>
+                    </div>
+                    <div class="card-body tw-flex tw-flex-row tw-gap-2">
+                        <div>
+                        {{#each bookedServices}}
+                        <img src="{{service.imageUrl}}" class="tw-w-[50px] tw-h-[50px]" alt="">
+                        <h5 class="card-title">{{service.serviceName}}</h5>
+                        <p class="card-text">{{status.description}}</p>
+                        <p>Duration: {{service.duration}} minute</p>
+                        <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
+                        <span>Status: {{status}}</span>
+                        <h4 class="tw-text-yellow-500">Staff: {{inCharge.name}}</h4>
+                        {{/each}}
+                        <h4 class="tw-text-red-500">Accountant: {{accountant.name}}</h4>
+                        </div>
+                    </div>
+                {{/each}}
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+

@@ -9,6 +9,8 @@ import serviceService from '../services/service.service.js';
 import bookingService from '../services/booking.service.js';
 import { Booking } from '../models/Booking.js';
 import shiftService from '../services/shift.service.js';
+import ServiceContext from '../state/serviceState/serviceContext.js';
+import {notifyEmailLater} from '../controllers/service.controller.js';
 
 const route = express.Router();
 dotenv.config();
@@ -23,10 +25,22 @@ route.get('/detail', async function(req,res){
         authUser: req.session.authUser
     })
 })
-route.get('/booking', async function(req,res){
+route.get('/byCat', async function(req, res){
+    let list = await serviceService.findAll().lean();
+    console.log(typeof req.query.id)
+    console.log(req.query.id)
+    if (req.query.id) {
+        list = list.filter(service  => service.petType === Number(req.query.id));
+    } 
+    res.render('vwService/byCat', {
+        list: list,
+    });
+})
+
+route.get('/booking', auth, async function(req,res){
     if (req.session.authUser) {
     const id = req.session.authUser.id;
-    let booking = await bookingService.findBookedServiceById(id)
+    let booking = await bookingService.findBookedServiceByCustomerId(id)
     let bookingPending = await bookingService.findPendingBookedService(id)
     let bookingCompleted = await bookingService.findCompletedBookedService(id)
     let bookingConfirmed = await bookingService.findScheduledBookedService(id)
@@ -80,7 +94,7 @@ route.post('/cancel-booking',async function(req,res){
     const { bookedServiceIds } = req.body;
     const customerId = req.session.authUser.id;
     try {
-        let booking = await bookingService.findExistBooking(customerId)
+        let booking = await bookingService.findExistBookingWhioutTime(customerId)
         const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceIds)
         if(shiftAdded)
         {
@@ -89,7 +103,6 @@ route.post('/cancel-booking',async function(req,res){
         await bookingService.updateAfterDeleteBookedService(booking._id,bookedServiceIds)
         const reloadedBooking = await bookingService.findBookingById(booking._id)
         await bookingService.deleteBookedService(bookedServiceIds);
-        console.log(reloadedBooking)
         if (!reloadedBooking.bookedServices || reloadedBooking.bookedServices.length === 0) {
             await bookingService.deleteBookingById(reloadedBooking._id);
         }
@@ -156,14 +169,12 @@ route.post('/schedule', async function(req,res)
         const phone = req.body.phone
         const email = req.body.email
         const bookedServiceId = req.body.bookedServiceId
-        const updateBookedServie = await bookingService.findBookedServiceById(bookedServiceId)
-        if(updateBookedServie){
+        const updateBookedService = await bookingService.findBookedServiceById(bookedServiceId)
+        if(updateBookedService){
             await userService.updateUserforShift(customer._id, name, phone, email)
             const startTime = moment(req.body.startTime, "DD/MM/YYYY HH:mm").toDate()
             const endTime = moment(req.body.endTime, "DD/MM/YYYY HH:mm").toDate()
             const formattedDate = moment(req.body.startTime, "DD/MM/YYYY HH:mm").startOf('day').toDate();
-            console.log(startTime)
-            console.log(endTime)
             const entity = {
                     bookedService: bookedServiceId,
                     startTime: startTime,
@@ -171,8 +182,6 @@ route.post('/schedule', async function(req,res)
                 }
             await shiftService.add(entity);
             const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceId)
-            await bookingService.updateStatusBookedService(bookedServiceId,'confirmed',shiftAdded._id)
-            await bookingService.findBookedAndDeleteAfterSchedule(bookedServiceId)
             let booking = await bookingService.findExistBookingByTime(formattedDate)
             if (booking && booking._id) {
                 await bookingService.saveNewBookedService(booking, bookedServiceId);
@@ -186,11 +195,30 @@ route.post('/schedule', async function(req,res)
             });
             await bookingService.save(booking);
             }
-            const url = req.session.retUrl || '/';
-            res.redirect(url);
+            try{
+                    const bookedStatus = await bookingService.findBookedById(bookedServiceId)
+                    const statusContext = new ServiceContext(bookedStatus);
+                    statusContext.confirm(shiftAdded._id);
+                    await statusContext.save();  
+                    const bookedShiftAdded = await bookingService.findBookedAfterAddShiftById(bookedServiceId)
+                    await notifyEmailLater(customer._id,"confirmScheduledBooking",bookedShiftAdded)
+                    await bookingService.findBookedAndDeleteAfterSchedule(bookedServiceId)  
+                    const url = '/service/booking';
+                    res.redirect(url);
+                }
+                catch(error)
+                {
+                    console.error(error); // in ra lỗi để debug
+                    const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceId);
+                    if (shiftAdded) {
+                      await shiftService.deleteShiftById(shiftAdded._id);
+                    }
+                    return res.status(500).send("error, try again");
+                }
+            
         }else{
             console.error(error);
-            const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceId)
+            const shiftAdded= await shiftService.findShiftByBookedService(bookedServiceId)
             await shiftService.deleteShiftById(shiftAdded._id);
             res.status(500).send('Error updating booking');
         }
@@ -199,5 +227,14 @@ route.post('/schedule', async function(req,res)
         res.render('partials/loginRequired',{ showLoginModal: true })
     }   
 })
-
+route.post('/review',async function(req,res){
+    if (req.session.authUser) {
+        const url = '/service/booking';
+        res.redirect(url);
+    }
+        
+    else{
+        res.render('partials/loginRequired',{ showLoginModal: true })
+    }
+});
 export default route;

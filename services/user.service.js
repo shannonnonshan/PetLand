@@ -2,6 +2,8 @@
 
 import User from '../models/User.js';
 import OtpUser from "../models/OtpUser.js";
+import { BookedService } from '../models/Booking.js';
+import { Shift } from '../models/Booking.js';
 
 export default {
     findAll() {
@@ -59,5 +61,32 @@ export default {
     findByRequired(customer)
     {
         return User.findOne(customer)
+    },
+    findStaff()
+    { 
+        return User.find({role:"Staff"})
+    },
+    async findStaffAvailableDuring(startTime, endTime) {
+        return User.find({
+            role: 'Staff',
+            _id: {
+                $nin: await BookedService.find({
+                    $or: [
+                        { inCharge: { $ne: null } },
+                        { inCharge: { $exists: true } }
+                    ],
+                    shift: {
+                        $in: await Shift.find({
+                            $or: [
+                                { 
+                                    startTime: { $lt: endTime }, 
+                                    endTime: { $gt: startTime } 
+                                }
+                            ]
+                        }).distinct('_id')
+                    }
+                }).distinct('inCharge')
+            }
+        }).lean();
     }
 };

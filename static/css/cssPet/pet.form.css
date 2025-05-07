@@ -5,12 +5,15 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
+  
 }
 body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+
+  background: linear-gradient(135deg, #FF94BD, #F3EC1C);
+  height: 100vh;
 }
 .container {
   max-width: 800px;

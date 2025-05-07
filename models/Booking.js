@@ -1,9 +1,7 @@
-import mongoose from 'mongoose';
+import { mongoose } from '../utils/db.js'; 
 
-mongoose.connect('mongodb+srv://donnade:thanhvyneh@petland.lruap6s.mongodb.net/petland?retryWrites=true&w=majority&appName=Petland')
-  .then(() => console.log('Connected!'));
-const Schema = mongoose.Schema; 
-const bookedServiceSchema = new mongoose.Schema({
+const { Schema, model } = mongoose;
+const bookedServiceSchema = new Schema({
     service: {
       type: Schema.Types.ObjectId,
       ref: 'Service',
@@ -15,7 +13,7 @@ const bookedServiceSchema = new mongoose.Schema({
     },
     status: {
       type: String,
-      enum: ['pending', 'confirmed', 'completed'], //confirmed là khách hàng đã confirm giờ đặt
+      enum: ['pending', 'confirmed', 'completed', 'cancelled'], //confirmed là khách hàng đã confirm giờ đặt
       default: 'pending',
     },
     inCharge: {
@@ -27,8 +25,8 @@ const bookedServiceSchema = new mongoose.Schema({
       ref: 'User',
       required: true,
     }
-  }, { collection: "BookedService" });
-const bookingSchema = new mongoose.Schema({
+  }, { collection: "BookedService",timestamps: true });
+const bookingSchema = new Schema({
     customer: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -52,13 +50,13 @@ const bookingSchema = new mongoose.Schema({
 
     paymentStatus: {
       type: String,
-      enum: ['COMPLETED', 'PENDING'],
+      enum: ['PAID', 'PENDING'],
       default: 'PENDING',
     }
-  }, { collection: "Booking" });
-const shiftSchema = new mongoose.Schema({
+  }, { collection: "Booking", timestamps: true });
+const shiftSchema = new Schema({
     bookedService: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'BookedService',
       required: true,
     },
@@ -70,9 +68,30 @@ const shiftSchema = new mongoose.Schema({
       type: Date, // 'HH:mm'
       required: true,
     },
-  }, { collection: 'Shift' });
+  }, { collection: 'Shift', timestamps: true });
+  bookedServiceSchema.methods.setState = function(state) {
+    this._state = state;  // Cập nhật trạng thái hiện tại của đối tượng
+    this.status = state.status;  // Cập nhật trạng thái trong cơ sở dữ liệu nếu cần thiết
+};
   
-const Booking = mongoose.model('Booking', bookingSchema);
-const BookedService = mongoose.model('BookedService',bookedServiceSchema);
-const Shift = mongoose.model('Shift',shiftSchema);
+  bookedServiceSchema.methods.confirm = function () {
+    this._state.confirm(); // Gọi phương thức confirm() của trạng thái hiện tại
+  };
+  
+  bookedServiceSchema.methods.complete = function () {
+    this._state.complete(); // Gọi phương thức complete() của trạng thái hiện tại
+  };
+
+  bookingSchema.methods.setState = function(state) {
+    this._state = state;  // Cập nhật trạng thái hiện tại của đối tượng
+    this.status = state.status;  // Cập nhật trạng thái trong cơ sở dữ liệu nếu cần thiết
+};
+  
+  bookingSchema.methods.paid = function () {
+    this._state.paid(); // Gọi phương thức confirm() của trạng thái hiện tại
+  };
+  
+const Booking = model('Booking', bookingSchema);
+const BookedService = model('BookedService',bookedServiceSchema);
+const Shift = model('Shift',shiftSchema);
 export {Booking, BookedService, Shift};
