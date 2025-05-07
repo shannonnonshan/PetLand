@@ -1,0 +1,44 @@
+<div class="tw-mt-5 tw-w-[80%] tw-m-auto tw-py-10">
+<div class=" tw-mt-5 tw-flex tw-flex-row tw-justify-between ">
+    <h2>Our Services</h2>
+    <div class="tw-flex tw-flex-row tw-justify-end tw-gap-1">
+    <a href="/service/byCat?id=1">
+        <button class=" tw-rounded-md tw-text-center hover:tw-border-2 hover:tw-bg-white hover:tw-border-red-300 tw-p-2 hover:tw-text-red-500 tw-bg-red-400 tw-text-white">
+    Dog
+    </button>
+    </a>
+    <a href="/service/byCat?id=2">
+        <button class=" tw-rounded-md tw-text-center hover:tw-border-2 hover:tw-bg-white hover:tw-border-yellow-300 tw-p-2 hover:tw-text-yellow-500 tw-bg-yellow-400 tw-text-white">
+    Cat
+    </button>
+    </a>
+    <a href="/service/byCat?id=3">
+        <button class=" tw-rounded-md tw-text-center hover:tw-border-2 hover:tw-bg-white hover:tw-border-green-300 tw-p-2 hover:tw-text-green-500 tw-bg-green-400 tw-text-white">
+    Both
+    </button>
+    </a>
+    </div>
+
+</div>
+<hr style="color: #E2E1E1; border: 1px solid; width: 100%">
+<div class="card-body">
+    <div class="row">
+        {{#each list}}
+           <div class="col-12 col-sm-6 col-md-4 mb-3">
+             <div class="card tw-border-2 tw-w-[100%] tw-h-[350px] tw-mr-2 tw-flex tw-flex-col tw-items-start tw-p-4 tw-justify-center" >
+                <img class="tw-h-[150px] tw-self-center tw-mb-2 tw-object-cover" src="{{imageUrl}}" alt="{{imageUrl}}">
+                <span class="  tw-text-xl tw-font-bold tw-font-spartan">{{serviceName}}</span>
+                <p class="tw-mb-0">{{shortDescription}}</p>
+                <span>Duration: {{duration}} minutes</span>
+                <a href="detail?id={{id}}" class="tw-w-full">
+                <button type="submit" class="tw-bg-[#F3EC1C] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-w-[100%] tw-p-2 transition-colors duration-200"
+                >
+                View detail
+                </button>
+                </a>
+             </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
+</div>

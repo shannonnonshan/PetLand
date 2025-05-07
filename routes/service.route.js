@@ -25,6 +25,18 @@ route.get('/detail', async function(req,res){
         authUser: req.session.authUser
     })
 })
+route.get('/byCat', async function(req, res){
+    let list = await serviceService.findAll().lean();
+    console.log(typeof req.query.id)
+    console.log(req.query.id)
+    if (req.query.id) {
+        list = list.filter(service  => service.petType === Number(req.query.id));
+    } 
+    res.render('vwService/byCat', {
+        list: list,
+    });
+})
+
 route.get('/booking', auth, async function(req,res){
     if (req.session.authUser) {
     const id = req.session.authUser.id;
