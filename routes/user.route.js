@@ -49,7 +49,7 @@ route.post('/login', async function (req, res) {
         email: user.email,
         role: user.role
     };
-    const retUrl = req.body.url;
+    const retUrl = req.session.retUrl;
     if(retUrl){
         return res.redirect(retUrl);
     }
