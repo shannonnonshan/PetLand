@@ -17,7 +17,7 @@ route.get('/byCat', async function(req, res){
     }
     res.render('vwPet/viewByCat', {
         list: list,
-        layout: 'pet-layout'
+        layout: 'main'
     });
 })
 
