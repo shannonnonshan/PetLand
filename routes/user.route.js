@@ -11,10 +11,20 @@ const route = express.Router();
 dotenv.config();
 
 route.get('/login', function (req, res) {
+    const url = req.session.retUrl || null;
+    console.log(url);
     res.render('vwUser/login', {
-        layout: 'account-layout'
+        layout: 'account-layout',
+        url: url
     });
     
+});
+
+route.get('/popupLogin', function(req, res){
+    res.render('partials/loginRequired',
+        { 
+            showLoginModal: true,
+        })
 });
 
 route.post('/login', async function (req, res) {
@@ -39,16 +49,22 @@ route.post('/login', async function (req, res) {
         email: user.email,
         role: user.role
     };
-    switch (user.role) {
-        case 'Customer':
-            return res.redirect('/user/customer');
-        case 'Staff':
-            return res.redirect('/staff/manageService/all');
-        case 'Owner':
-            return res.redirect('/user/owner');
-        default:
-            return res.redirect(retUrl);
+    const retUrl = req.body.url;
+    if(retUrl){
+        return res.redirect(retUrl);
     }
+    else{
+        switch (user.role) {
+            case 'Customer':
+                return res.redirect('/user/customer');
+            case 'Staff':
+                return res.redirect('/staff/manageService/all');
+            case 'Owner':
+                return res.redirect('/user/owner');
+            default:
+                return res.redirect('/');
+        }
+    } 
 });
 
 

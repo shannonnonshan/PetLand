@@ -10,6 +10,7 @@ export default function (app) {
         res.locals.authUser = req.session.authUser || null;
         next();
     });
+    
     app.use(async (req, res, next) => {
         const dogCategories = await serviceService.findByPetType(1);
         const catCategories = await serviceService.findByPetType(2);

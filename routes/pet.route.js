@@ -34,36 +34,28 @@ route.get('/detail', async function(req, res){
 
 route.get('/viewAdopted', auth, async function(req, res) {
   const adopter = req.session.authUser || null;
-  if(adopter){
-    const status = req.query.status;
-  
-    let list = [];
-    if (status) {
-      list = await petService.findAllByAdoptIdAndStatus(adopter.id, status).lean();
-    } else {
-      list = await petService.findAllByAdoptId(adopter.id).lean();
-    }
+  const status = req.query.status;
 
-    res.render('vwPet/viewAdoptList', {
-      layout: 'pet-layout',
-      list: list
-    });
-  }else{
-    res.render('partials/loginRequired',{ showLoginModal: true })
+  let list = [];
+  if (status) {
+    list = await petService.findAllByAdoptIdAndStatus(adopter.id, status).lean();
+  } else {
+    list = await petService.findAllByAdoptId(adopter.id).lean();
   }
-  
+
+  res.render('vwPet/viewAdoptList', {
+    layout: 'pet-layout',
+    list: list
+  });
 });
 
 route.get('/donate', auth, function(req, res){
     const user = req.session.authUser || null;
-    if(user){
-      res.render('vwPet/donatePetForm', {
-        layout: 'account-layout',
-        user: user
+    res.render('vwPet/donatePetForm', {
+      layout: 'account-layout',
+      user: user
     });
-    }else{
-      res.render('partials/loginRequired',{ showLoginModal: true })
-  }
+    
 })
 
 const storage = multer.diskStorage({
@@ -109,18 +101,13 @@ const storage = multer.diskStorage({
 
 route.get('/adopt', auth, async function(req, res){
     const user = req.session.authUser || null;
-    if (user){
-      const id = (req.query.id).toString() || '0';
-      const pet = await petService.findPetById(id).lean();
-      res.render('vwPet/adoptPetForm', {
-        layout: 'account-layout',
-          pet: pet,
-          user: user
-      });
-    }
-    else{
-      res.render('partials/loginRequired',{ showLoginModal: true })
-  }
+    const id = (req.query.id).toString() || '0';
+    const pet = await petService.findPetById(id).lean();
+    res.render('vwPet/adoptPetForm', {
+      layout: 'account-layout',
+        pet: pet,
+        user: user
+    });
 })
 
 route.post('/adopt', async function(req, res) {

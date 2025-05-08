@@ -1,10 +1,10 @@
 
 
 export default function auth(req, res, next) {
-    if (!req.session && !req.session.authUser) {
-        req.session.retUrl = req.originalUrl;
-        res.render('partials/loginRequired',{ showLoginModal: true, retUrl:req.session.retUrl })
-        // return res.redirect('/user/login');
+    if (!req.session.auth || !req.session.authUser) {
+        req.session.retUrl = req.originalUrl || null;
+        console.log(req.session.retUrl);
+        return res.redirect('/user/popupLogin');
     }
     next();
 }

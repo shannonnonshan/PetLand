@@ -38,7 +38,6 @@ route.get('/byCat', async function(req, res){
 })
 
 route.get('/booking', auth, async function(req,res){
-    if (req.session.authUser) {
     const id = req.session.authUser.id;
     let booking = await bookingService.findBookedServiceByCustomerId(id)
     let bookingPending = await bookingService.findPendingBookedService(id)
@@ -46,16 +45,12 @@ route.get('/booking', auth, async function(req,res){
     let bookingConfirmed = await bookingService.findScheduledBookedService(id)
     let bookingPaid = await bookingService.findPaidBookedService(id)
     res.render('vwBooking/bookingOfCustomer',{
-        booking:booking,
+        booking: booking,
         bookingPending: bookingPending,
         bookingCompleted: bookingCompleted,
         bookingConfirmed: bookingConfirmed,
         bookingPaid: bookingPaid
     })
-    }
-    else{
-        res.render('partials/loginRequired',{ showLoginModal: true })
-    }
 })
 route.post('/create-booking',async function(req,res){
     if (req.session.authUser) {

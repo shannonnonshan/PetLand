@@ -254,6 +254,21 @@
       clearTimeout(hideTimeout);
     }
   </script>
+  <script>
+    const avatarBtn = document.getElementById('navbarAccount');
+      const dropdown = document.getElementById('info-dropdown');
+      if (avatarBtn && dropdown) {
+          avatarBtn.addEventListener('click', function (e) {
+              e.preventDefault();
+              dropdown.classList.toggle('show');
+          });
+          document.addEventListener('click', function (e) {
+              if (!dropdown.contains(e.target) && !avatarBtn.contains(e.target)) {
+                  dropdown.classList.remove('show');
+              }
+          });
+      }
+  </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{{_sections.pet}}}
 </body>
