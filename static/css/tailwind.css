@@ -126,6 +126,10 @@
   bottom: 1.5rem !important
 }
 
+.tw-bottom-\[85px\] {
+  bottom: 85px !important
+}
+
 .tw-left-0 {
   left: 0px !important
 }
@@ -142,18 +146,6 @@
   top: 100% !important
 }
 
-.tw-bottom-\[80px\] {
-  bottom: 80px !important
-}
-
-.tw-bottom-\[100px\] {
-  bottom: 100px !important
-}
-
-.tw-bottom-\[85px\] {
-  bottom: 85px !important
-}
-
 .tw-z-10 {
   z-index: 10 !important
 }
@@ -164,10 +156,6 @@
 
 .tw-z-\[500\] {
   z-index: 500 !important
-}
-
-.tw-z-\[50\] {
-  z-index: 50 !important
 }
 
 .tw-m-\[20\%\] {
@@ -267,12 +255,12 @@
   margin-top: 2rem !important
 }
 
-.tw-mt-\[50px\] {
-  margin-top: 50px !important
-}
-
 .tw-mt-\[10px\] {
   margin-top: 10px !important
+}
+
+.tw-mt-\[50px\] {
+  margin-top: 50px !important
 }
 
 .tw-block {
@@ -508,12 +496,12 @@
   gap: 0.5rem !important
 }
 
-.tw-gap-5 {
-  gap: 1.25rem !important
-}
-
 .tw-gap-4 {
   gap: 1rem !important
+}
+
+.tw-gap-5 {
+  gap: 1.25rem !important
 }
 
 .tw-gap-8 {
@@ -795,14 +783,6 @@
   padding-top: 70px !important
 }
 
-.tw-pt-\[10px\] {
-  padding-top: 10px !important
-}
-
-.tw-pt-\[10\%\] {
-  padding-top: 10% !important
-}
-
 .tw-text-left {
   text-align: left !important
 }
@@ -946,11 +926,6 @@
 .tw-text-yellow-500 {
   --tw-text-opacity: 1 !important;
   color: rgb(234 179 8 / var(--tw-text-opacity, 1)) !important
-}
-
-.tw-text-gray-400 {
-  --tw-text-opacity: 1 !important;
-  color: rgb(156 163 175 / var(--tw-text-opacity, 1)) !important
 }
 
 .tw-text-yellow-600 {
