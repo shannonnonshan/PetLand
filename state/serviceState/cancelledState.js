@@ -1,4 +1,4 @@
-// state/pendingState.js
+// cancelledState.js
 import ServiceState from './serviceState.js';
 
 class CancelledState extends ServiceState {

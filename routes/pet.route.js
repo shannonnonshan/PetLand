@@ -23,6 +23,7 @@ route.get('/byCat', async function(req, res){
 route.get('/detail', async function(req, res){
     const id = (req.query.id).toString() || '0';
     const pet = await petService.findPetById(id).lean();
+    console.log(pet.images)
     let suggest = await petService.findBySpecie(pet.specie, pet._id, 3, 'approved').lean();
     res.render('vwPet/viewPetDetail', {
         layout: 'pet-layout',

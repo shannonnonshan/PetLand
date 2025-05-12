@@ -1,3 +1,4 @@
+//pendingBookingState.js
 import BookingState from "./bookingState.js";
 
 class PendingBookingState extends BookingState {

@@ -1,3 +1,4 @@
+//serviceState.js
 class ServiceState {
     constructor(bookedService) {
       this.bookedService = bookedService;

@@ -1,4 +1,4 @@
-// state/pendingState.js
+// completedState.js
 import ServiceState from './serviceState.js';
 
 class CompletedState extends ServiceState {
