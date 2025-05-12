@@ -223,6 +223,22 @@ route.post('/schedule', async function(req,res)
         res.render('partials/loginRequired',{ showLoginModal: true })
     }   
 })
+route.get('/review',async function(req,res){
+    const id = String(req.query.id) || 0;
+    const bookedService = await bookingService.findBookedServiceUserServiceByBookedId(id)
+    if (req.session.authUser){
+        res.render('vwBooking/review',{
+            bookedService: bookedService,
+            id:id,
+            user: bookedService.customer,
+            service: bookedService.service,
+            isHome:true
+        })
+    }
+    else{
+        res.render('partials/loginRequired',{ showLoginModal: true })
+    }
+});
 route.post('/review',async function(req,res){
     if (req.session.authUser) {
         const url = '/service/booking';
