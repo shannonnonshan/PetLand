@@ -1,3 +1,4 @@
+//bookingContext.js
 import PaidState from "./paidState.js";
 import PendingBookingState from "./pendingBookingState.js";
 class BookingContext {
