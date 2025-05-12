@@ -1,15 +1,13 @@
 
-
-<hr style="color: #E2E1E1; border: 1px solid; width: 100%">
-<div class="card-body">
-    <div class="row">
-        {{#each list}}
-           <div class="col-12 col-sm-6 col-md-4 mb-3">
-                <div class="card" style="width: 100%;">
-                    <img src="{{images.[0]}}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h5 class="card-title mb-0 tw-font-bold">{{name}}</h5>
+    <div class="card-body tw-w-[80%] tw-mt-5 tw-m-auto tw-py-10">
+        <hr style="border: 1px solid #E2E1E1; width: 100%;">
+        <div class="row">
+            {{#each list}}
+            <div class="col-12 col-sm-6 col-md-4 mb-3">
+                    <div class="card tw-border-2 tw-w-[100%] tw-h-[350px] tw-mr-2 tw-flex tw-flex-col tw-items-start tw-p-4 tw-justify-center">
+                        <img src="{{images.[0]}}" class="card-img-top tw-self-center tw-mb-2" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="tw-w-full tw-flex tw-flex-row tw-justify-between">
+                            <span class="tw-text-xl tw-font-bold tw-font-spartan">{{name}}</span>
                             <div class="d-flex">
                                 <a class="btn btn-outline-primary tag"
                                 href="/pet/byCat?specie={{specie}}"
@@ -23,16 +21,10 @@
                                 </a>
                             </div>
                         </div>
-
-                        <p class="card-text" style="font-size: 10pt;">{{truncate description 100}}</p>
-                        
-
-                        <a href="/pet/detail?id={{_id}}" class="btn btn-warning tw-w-full tw-text-white tw-text-[12pt]">See Details</a>
+                        <p class="tw-w-full" style="font-size: 10pt;">{{truncate description 100}}</p>
+                        <a href="/pet/detail?id={{_id}}" class="btn btn-warning tw-w-full tw-text-white tw-text-[12pt]">View Details</a>
                     </div>
-                    
                 </div>
-                
-            </div>
-        {{/each}}
-    </div>
+            {{/each}}
+        </div>
 </div>

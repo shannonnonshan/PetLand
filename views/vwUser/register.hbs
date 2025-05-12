@@ -5,6 +5,48 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
 </script>
 <script>
+  function validatePasswordField() {
+      const password = document.querySelector('#txtPassword').value;
+      const errorField = document.querySelector('#passwordError');
+      const minLength = 8;
+      const hasUpper = /[A-Z]/.test(password);
+      const hasLower = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasSpecialChar = /[!@#\$%\^\&*\)\(+=._-]/.test(password);
+
+      if (password.length < minLength) {
+          errorField.textContent = 'Password must be at least 8 characters long.';
+          errorField.style.display = 'block';
+      } else if (!hasUpper || !hasLower || !hasNumber || !hasSpecialChar) {
+          errorField.textContent = 'Password must include uppercase, lowercase, number, and special character.';
+          errorField.style.display = 'block';
+      } else {
+          errorField.textContent = '';
+          errorField.style.display = 'none';
+      }
+  }
+
+  function validateConfirmPasswordField() {
+      const password = document.querySelector('#txtPassword').value;
+      const confirmPassword = document.querySelector('#txtConfirmPassword').value;
+      const confirmError = document.querySelector('#confirmPasswordError');
+
+      if (confirmPassword !== password) {
+          confirmError.textContent = 'Passwords do not match.';
+          confirmError.style.display = 'block';
+      } else {
+          confirmError.textContent = '';
+          confirmError.style.display = 'none';
+      }
+  }
+
+  document.querySelector('#txtPassword').addEventListener('input', validatePasswordField);
+  document.querySelector('#txtPassword').addEventListener('blur', validatePasswordField);
+  document.querySelector('#txtConfirmPassword').addEventListener('input', validateConfirmPasswordField);
+  document.querySelector('#txtConfirmPassword').addEventListener('blur', validateConfirmPasswordField);
+</script>
+
+<script>
 
     function checkValidEmail() {
         const email = document.querySelector('#txtEmail').value;
@@ -22,7 +64,7 @@
         const minLength = 8;
         const hasUpper = /[A-Z]/.test(password);
         const hasLower = /[a-z]/.test(password);
-        const hasNumber = /[0-9]/.test(password);
+        const hasNumber = /[0-9]`/.test(password);
         const hasSpecialChar = /[!@#\$%\^\&*\)\(+=._-]/.test(password);
 
         if (password.length < minLength) {
@@ -102,15 +144,13 @@
                 });
 
             } else {
-                // Hiển thị thông báo đăng ký thành công
                 Swal.fire({
                     title: 'Success!',
-                    text: "You have successfully signed up. Welcome to Newsland!",
+                    text: "Check your EMAIL!",
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Gửi form nếu người dùng xác nhận
                         $('#fmSignup').off('submit').submit();
                     }
                 });
@@ -154,16 +194,18 @@
           <div class="input-box">
             <span class="details" for="txtPassword">Password</span>
             <input type="password" name="raw_password" id="txtPassword" placeholder="Enter your password" required>
+            <small id="passwordError" style="color: red; display: none;"></small>
           </div>
           <div class="input-box">
             <span class="details" for="txtPassword" >Confirm Password</span>
             <input type="password" id="txtConfirmPassword" name="confirm_password" placeholder="Confirm your password" required>
+             <small id="confirmPasswordError" style="color: red; display: none;"></small>
           </div>
         </div>
         <div class="gender-details">
           <!-- Radio buttons for gender selection -->
           <input type="radio" name="gender" id="dot-1" value="Male">
-          <input type="radio" name="gender" id="dot-2" value="Femail">
+          <input type="radio" name="gender" id="dot-2" value="Female">
           <input type="radio" name="gender" id="dot-3" value="none">
           <span class="gender-title">Gender</span>
           <div class="category">

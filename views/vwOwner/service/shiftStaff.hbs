@@ -1,0 +1,64 @@
+{{#section 'css'}}
+
+<style>
+    .input-box{
+        margin-bottom: 15px;
+        height: auto;
+        width: 100%;
+    }
+    input{
+        width: 100%;
+        margin-top: 5px;
+    }
+    .input-box span{
+        font-weight: bold;
+    }
+    .scrollbar-none {
+      -ms-overflow-style: none; /* IE/Edge */
+      scrollbar-width: none;    /* Firefox */
+    }
+  
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;            /* Chrome, Safari, Opera */
+    }
+    option{
+        width: 100%;
+    }
+</style>
+{{/section}}
+
+<form id="frmShift" action="/owner/manageService/shift-staff?id={{id}}" class="tw-bg-white tw-pt-[50px] tw-h-screen tw-max-w-lg tw-mx-auto" method="POST" >
+    <div class="tw-px-3 tw-pb-[20%] tw-w-auto tw-h-[100%] tw-max-h-max tw-border-2 tw-overflow-y-scroll tw-border-black" style="overflow: scroll; scrollbar-width: none;">
+        <h2>Shift your staff</h2>
+        <input id="bookedServiceId" name="bookedServiceId" value="{{bookedService._id}}" hidden>
+    <div class="input-box">
+        <span class="details" for="txtService">Service</span>
+        <span name="serviceName" value="{{service.serviceName}}" placeholder="{{service.serviceName}}" ></span>
+    </div>   
+    <div class="input-box">
+    <span>Duration: <b class="tw-text-[#FF94BD]">{{service.duration}}</b> minutes</span>
+    </div>
+    <div class="input-box">
+        <div class="flex items-center space-x-1 mb-4">
+        <span for="txtStartTime" class="tw-bg-white tw-text-black ">Start Time</span>
+        <input type="text" name="startTime" id="txtStartTime" value="{{shift.startTime}}" readonly>
+        <span for="txtStartTime" class="tw-bg-white tw-text-black ">Start Time</span>
+        <input type="text" name="endTime" id="txtEndTime" value="{{shift.endTime}}"readonly>
+    </div>
+    <div class="tw-w-full tw-mb-4 input-group">
+    <label class="input-group-text" for="inputGroupSelect01">Staff</label>
+    <select class="form-select" id="inputGroupSelect01" name="inCharge">
+        <option selected>Choose...</option>
+        {{#each staff}}
+        <option value="{{_id}}">{{name}}</option>
+        {{/each}}
+    </select>
+    </div>
+    </div>
+    <span id="alert" class="tw-text-red-500"></span>
+    <button type="submit" class="tw-bg-[#F3EC1C] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-w-full tw-p-2 transition-colors duration-200"
+    >
+    Confirm Shifting
+    </button>
+    </div>
+</form>

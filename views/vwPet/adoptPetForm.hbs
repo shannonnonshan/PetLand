@@ -2,6 +2,11 @@
     <link rel="stylesheet" href="/static/css/cssPet/pet.form.css">
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+    <style>
+      body{
+        height: 100vh;
+      }
+    </style>
 {{/section}}
 {{#section "signupjs"}}
     <script
@@ -113,9 +118,9 @@
         </div>
         <div class="button-container">
           <div class="button">
-            <button type="button">
+            <button onclick="window.location.href='/pet/byCat'">
               <i class="bi bi-arrow-bar-left"></i>
-                Return
+              Return
             </button>
           </div>
           <div class="button">

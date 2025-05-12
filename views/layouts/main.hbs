@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link href="/css/tailwind.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -17,7 +18,7 @@
 </head>
 
 <body id="mainContent" aria-hidden="false">
-    <div id="header-nav" class="tw-fixed tw-top-0 tw-left-0 tw-w-full tw-z-10 tw-bg-transparent tw-px-10">
+    <div id="header-nav" class="tw-fixed tw-top-0 tw-left-0 tw-w-full tw-z-10 {{#if isHome}}tw-bg-transparent{{else}}tw-bg-white{{/if}} tw-px-10">
         <div id="header" class=" d-flex flex-row justify-content-between align-items-center tw-p-[10px]">
             <a href="/"><img id="brand-logo" class=" tw-w-[45px] tw-h-[45px]" src="/static/imgs/logo.jpg"  alt="logo"></a>
             <nav class=" tw-flex tw-justify-center tw-space-x-13" role="tablist" aria-label="Main Menu Tabs">
@@ -26,10 +27,10 @@
                   <div role="tablist" aria-label="Main Tabs" class="tw-text-[14pt] tw-flex tw-gap-10">
                     <a
                       role="tab"
-                      id="tab-services"
-                      aria-controls="tabpanel"
+                      id="nav-tab-services"
+                      aria-controls="tabpanelNav"
                       aria-selected="true"
-                      href="#"
+                      href="/service/byCat"
                       class="tw-text-white tw-font-bold"
                       style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"
                       onmouseenter="switchTab('services')"
@@ -38,8 +39,8 @@
                     </a>
                     <a
                       role="tab"
-                      id="tab-pet"
-                      aria-controls="tabpanel"
+                      id="nav-tab-pet"
+                      aria-controls="tabpanelNav"
                       aria-selected="false"
                       href="/pet/byCat"
                       class="tw-text-white tw-font-bold"
@@ -50,10 +51,10 @@
                     </a>
                     <a
                       role="tab"
-                      id="tab-about"
-                      aria-controls="tabpanel"
+                      id="nav-tab-about"
+                      aria-controls="tabpanelNav"
                       aria-selected="false"
-                      href="#aboutUs"
+                      href="/#aboutUs"
                       style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"
                       class="tw-text-white tw-font-bold"
                     >
@@ -61,17 +62,17 @@
                     </a>
                   </div>
 
-                  <!-- Shared TabPanel -->
+                  <!-- Shared tabpanelNav -->
                   <div
-                    role="tabpanel"
-                    id="tabpanel"
-                    aria-labelledby="tab-services"
-                    class="tw-absolute tw-mt-[10px] tw-w-screen tw-top-full tw-left-0 tw-bg-white tw-hidden tw-z-50"
+                    role="tabpanelNav"
+                    id="tabpanelNav"
+                    aria-labelledby="nav-tab-services"
+                    class="tw-absolute tw-w-screen tw-top-full tw-left-0 tw-bg-white tw-hidden tw-z-50"
                     onmouseenter="cancelHidePanel()"
                     onmouseleave="hidePanel()"
                   >
                     <!-- Inner contents for each tab -->
-                    <div id="panel-services" class="tab-content tw-grid tw-px-[20%] tw-py-5 tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4">
+                    <div id="nav-panelservices" class="nav-tab-content tw-grid tw-px-[20%] tw-py-5 tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4">
                       <!-- For Dogs -->
                       <div>
                         <p class="tw-font-semibold tw-mb-1">For Dogs</p>
@@ -90,8 +91,6 @@
                         </a>
                         {{/each}}
                       </div>
-
-                      
 
                       <!-- Combo Services -->
                       <div>
@@ -116,65 +115,51 @@
                         </a>
                       </div>
                     </div>
-                    <div id="panel-pet" class="tab-content tw-p-4 tw-hidden">
-              <div class="tw-grid tw-px-[20%] tw-py-5 tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4">
-                <!-- Column 1: Characteristics A–L -->
+                    <div id="nav-panelpet" class="nav-tab-content tw-p-4 tw-hidden">
+              <div class="tw-grid tw-px-[20%] tw-py-5 tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-2 lg:tw-grid-cols-2">
+                <!-- Column 1: Donate -->
+
                 <div>
-                  <h4 class="tw-font-semibold tw-text-lg tw-mb-2">Characteristics</h4>
-                  <ul>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Hardy</a></li>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Lonely</a></li>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Adamant</a></li>
-                    
-                    
-                  </ul>
+                <a href="/pet/donate" class="tw-flex tw-items-center tw-text-black hover:tw-text-pink-500 tw-py-2">
+                    <img src="https://t4.ftcdn.net/jpg/00/97/58/97/360_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg" 
+                    class="tw-w-[30px] tw-h-[30px] tw-pr-1" alt=""> <h5>Rehome Your Pet</h5>
+                 </a>
                 </div>
 
-                <!-- Column 2: Characteristics M–Z -->
+                <!-- Column 2: Adopt -->
                 <div>
-                  <h4 class="tw-font-semibold tw-text-lg tw-mb-2">Characteristics</h4>
-                  <ul>
-                   
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Gentle</a></li>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Careful</a></li>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Quirky</a></li>
-                    
-                  </ul>
+                <a href="/pet/byCat" class="tw-flex tw-items-center tw-text-black hover:tw-text-pink-500 tw-py-2">
+                    <img src="https://dm6g3jbka53hp.cloudfront.net/static-images/adopt-me-pet-02032021.jpg" 
+                    class="tw-w-[30px] tw-h-[30px] tw-pr-1" alt=""> <h5>Adopt Pet</h5>
+                 </a>
                 </div>
 
-                <!-- Column 3: Dog Attributes -->
-                <div>
-                  <h4 class="tw-font-semibold tw-text-lg tw-mb-2">Dog Attributes</h4>
-                  <ul>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Female</a></li>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Male</a></li>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Small</a></li>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Large</a></li>
-                  </ul>
-                </div>
-
-                    <!-- Column 4: Cat Attributes -->
-                <div>
-                  <h4 class="tw-font-semibold tw-text-lg tw-mb-2">Cat Attributes</h4>
-                  <ul>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Female</a></li>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Male</a></li>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Small</a></li>
-                    <li><a href="#" class="tw-text-black hover:tw-text-pink-500">Large</a></li>
-                  </ul>
-                </div>
                   </div>
                 </div>
                 </div>
                 </div>
 
 
-              </nav>
-            <div>
-            <a href="/service/booking" onclick="return handleClick(event)"><i class="bi bi-calendar tw-drop-shadow-2xl tw-text-[20pt] tw-pr-5" style="color:white; text-shadow: 2px 2px 4px rgb(1, 0, 0);" ></i></a>
-            <a href="javascript:void(0)" onclick="handleClick()"><i class="bi bi-bell-fill tw-drop-shadow-2xl tw-text-[20pt]" style="color:white;text-shadow: 2px 2px 4px rgb(1, 0, 0);"></i></a>
+            </nav>
+            <div class="tw-flex tw-flex-row tw-items-center tw-gap-1">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 3rem; height: 3rem; padding: 0; background: transparent; border: transparent">
+                        <i class="bi bi-calendar tw-drop-shadow-2xl tw-text-[20pt] tw-pr-5 text-white" style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="/service/booking">Booking</a>
+                        <a class="dropdown-item" href="/pet/viewAdopted">Pet</a>
+                    </div>
+                </div>
+
+                <a href="javascript:void(0)">
+                  <i class="bi bi-bell-fill tw-drop-shadow-2xl tw-text-[20pt] text-white" style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"></i>
+                </a>
             </div>
-    </div>
+            
+
+            
+      </div>
     </div>
 
     {{{body}}}
@@ -190,7 +175,6 @@
         <button class="tw-bg-white tw-rounded-full tw-w-[4rem] tw-h-[4rem] tw-flex tw-items-center tw-border-0 tw-justify-center " style="box-shadow:rgb(1, 0, 0)">
           <i class="bi bi-search tw-text-3xl"></i>
         </button>
-        
         <!-- Profile Button -->
         {{#if authUser}}
         <button onclick="handleLogoutClick()" class="tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center" style="box-shadow:rgb(1, 0, 0)">
@@ -212,7 +196,11 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
     {{{_sections.js}}}
+    
+
   <script>
       const authUser = {{#if authUser}}true{{else}}false{{/if}};
       function handleClick() {
@@ -236,31 +224,41 @@
             main.setAttribute('aria-hidden', 'true');
           }
       }
-      function closeModal() {
-        const modal = document.getElementById('loginModal') || document.getElementById('logoutModal');
+
+      function closeModal(gohome = false) {
+        console.log("gohome:", gohome);
+        const modal = document.querySelector('.popupModel');
         const main = document.getElementById('mainContent');
         modal.classList.add('tw-hidden');
         modal.setAttribute('aria-hidden', 'true');
         main.setAttribute('aria-hidden', 'false');
+        
+        if (gohome) {
+          window.location.href = '/';
+        } else {
+          window.location.reload();
+        }
+          
       }
+      
     </script>
   <script>
     let hideTimeout;
 
     function switchTab(tab) {
       document.querySelectorAll('[role="tab"]').forEach(el => el.setAttribute('aria-selected', 'false'));
-      document.getElementById('tab-' + tab).setAttribute('aria-selected', 'true');
+      document.getElementById('nav-tab-' + tab).setAttribute('aria-selected', 'true');
 
-      document.getElementById('tabpanel').classList.remove('tw-hidden');
-      document.getElementById('tabpanel').setAttribute('aria-labelledby', 'tab-' + tab);
+      document.getElementById('tabpanelNav').classList.remove('tw-hidden');
+      document.getElementById('tabpanelNav').setAttribute('aria-labelledby', 'nav-tab-' + tab);
 
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('tw-hidden'));
-      document.getElementById('panel-' + tab).classList.remove('tw-hidden');
+      document.querySelectorAll('.nav-tab-content').forEach(el => el.classList.add('tw-hidden'));
+      document.getElementById('nav-panel' + tab).classList.remove('tw-hidden');
     }
 
     function hidePanel() {
       hideTimeout = setTimeout(() => {
-        document.getElementById('tabpanel').classList.add('tw-hidden');
+        document.getElementById('tabpanelNav').classList.add('tw-hidden');
       }, 200); 
     }
 
@@ -268,6 +266,7 @@
       clearTimeout(hideTimeout);
     }
   </script>
+  
 </body>
 
 </html>

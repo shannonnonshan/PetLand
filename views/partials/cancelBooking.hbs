@@ -1,0 +1,35 @@
+<button onclick="handleCancelClick()" class="tw-rounded-md tw-text-center tw-border-1 tw-p-2 tw-bg-white hover:tw-bg-gray-400 hover:tw-text-white">
+Cancel
+</button>
+<div
+    id="cancelSuccessModal"
+    class="popupModel tw-fixed tw-inset-0  tw-bg-black/50 tw-items-center tw-flex tw-justify-center 
+    {{#if showSuccessModal}}tw-block{{else}}
+    tw-hidden
+    {{/if}} tw-z-[500]"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    >
+    <div id="mainContent" class="tw-bg-white  tw-shadow-xl tw-p-6 tw-w-[100%] tw-max-w-lg tw-h-[45%]">
+        <h2 class="tw-text-lg tw-font-semibold tw-mb-4">Your Cancel</h2>
+        <p class="tw-mb-4">Do you cancel this service? If you schedule you may lose the booking slot.</p>
+        <hr class=" tw-bg-black tw-mb-10">
+        <div class="tw-mb-5 tw-flex tw-justify-center tw-gap-2">    
+        <button
+            class="tw-bg-[#FF94BD] tw-rounded-md tw-text-black tw-px-4 tw-py-2 hover:tw-bg-[#FF94BD]"
+            onclick="closeModal()"
+        >
+            Cancel
+        </button>
+        </button>
+        <form action="/service/cancel-booking" method="POST">
+          <input type="hidden" name="customerId" value="{{customerId}}">
+          <input type="hidden" name="bookedServiceIds" value="{{bookedServiceIds}}">
+            <button class=" tw-rounded-md tw-text-center tw-border-1 tw-p-2 tw-bg-white hover:tw-bg-gray-400 hover:tw-text-white">
+            Cancel Booking
+            </button>
+        </form>
+        </div>
+    </div>
+</div>

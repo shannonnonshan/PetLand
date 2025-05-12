@@ -1,148 +1,216 @@
 {{#section 'css'}}
-    <link rel="stylesheet" href="/static/css/cssPet/pet.adoptedlist.css">
+  <link rel="stylesheet" href="/static/css/cssPet/pet.adoptedlist.css">
 {{/section}}
 
-{{#section 'pet'}}
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const params = new URLSearchParams(window.location.search);
-          const status = params.get('status');
+{{#section 'js'}}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.btn-view').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const id = this.getAttribute('data-id') || null;
+      console.log(id);
+      fetch(`/pet/api/detail/${id}`)
+        .then(response => response.json())
+        .then(data => {
+          // Cập nhật nội dung sidebar
+          const sidebar = document.getElementById('sidebar');
+          sidebar.style.display = 'block';
+          const formattedDate = new Date(data.adoptDate).toLocaleDateString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          });
 
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
+          sidebar.innerHTML = `
+          <div class="card tw-border tw-border-gray-300 tw-rounded-lg tw-shadow-md tw-p-4 mb-3">
+              <div class="card-body tw-space-y-2 tw-border">
+                <h5 class="card-title tw-text-xl tw-font-bold tw-text-gray-800">${data.name}</h5>
+                <hr class="tw-my-2">
+
+                <p class="card-text">
+                  <span class="tw-font-semibold tw-text-gray-600">Species:</span>
+                  <span class="tw-text-green-600">${data.specie}</span>
+                </p>
+                <p class="card-text">
+                  <span class="tw-font-semibold tw-text-gray-600">Gender:</span>
+                  <span class="tw-text-blue-600 capitalize">${data.gender}</span>
+                </p>
+                <p class="card-text">
+                  <span class="tw-font-semibold tw-text-gray-600">Age:</span>
+                  <span class="tw-text-purple-600">${data.age} months</span>
+                </p>
+                <p class="card-text">
+                  <span class="tw-font-semibold tw-text-gray-600">Weight:</span>
+                  <span class="tw-text-yellow-600">${data.weight} kg</span>
+                </p>
+                <p class="card-text">
+                  <span class="tw-font-semibold tw-text-gray-600">Receive Date:</span>
+                  <span class="tw-text-pink-600">
+                    ${data.adoptDate ? formattedDate : 'Not received yet'}
+                  </span>
+                </p>
+
+                <p class="card-text tw-text-sm tw-text-gray-400">
+                  <small>Last updated just now</small>
+                </p>
+              </div>
+              </div>
+            `;
+        })
+        .catch(error => {
+          console.error('Lỗi khi lấy chi tiết thú cưng:', error);
         });
-
-        let selector;
-        if (status) {
-            selector = `.nav-link[href*="status=${status}"]`;
-        } else {
-            selector = `.nav-link[href="/pet/viewAdopted"]`;
-        }
-
-        const currentLink = document.querySelector(selector);
-        if (currentLink) {
-            currentLink.classList.add('active');
-        }
     });
+  });
+});
+
 
 </script>
 <script>
-  document.querySelectorAll('.btn-cancel').forEach(btn => {
-    btn.addEventListener('click', function () {
-      const petId = this.getAttribute('data-id');
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('status');
 
-      Swal.fire({
-        title: 'Do you really want to cancel?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch('/pet/cancel-adopt', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ petid: petId })
-          })
-          .then(response => response.json())  
-          .then(data => {
-            if (data.message) {
-              Swal.fire({
-                icon: 'success',
-                title: data.message,
-                showConfirmButton: false,
-                timer: 1500
-              }).then(() => {
-                // Redirect to /pet/byCat after success
-                window.location.href = '/pet/viewAdopted';
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('active');
+    });
+
+    let selector;
+    if (status) {
+      selector = `.nav-link[href*="status=${status}"]`;
+    } else {
+      selector = `.nav-link[href="/pet/viewAdopted"]`;
+    }
+
+    const currentLink = document.querySelector(selector);
+    if (currentLink) {
+      currentLink.classList.add('active');
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.btn-cancel').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const petId = this.getAttribute('data-id');
+
+        Swal.fire({
+          title: 'Do you really want to cancel?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch('/pet/cancel-adopt', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ petid: petId })
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.message) {
+                  Swal.fire({
+                    icon: 'success',
+                    title: data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                  }).then(() => {
+                    window.location.href = '/pet/viewAdopted';
+                  });
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Phê duyệt thất bại!',
+                    text: 'Vui lòng thử lại sau.'
+                  });
+                }
+              })
+              .catch(error => {
+                console.error('Lỗi:', error);
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Đã xảy ra lỗi!',
+                  text: 'Không thể kết nối tới máy chủ.'
+                });
               });
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Phê duyệt thất bại!',
-                text: 'Vui lòng thử lại sau.'
-              });
-            }
-          })
-          .catch(error => {
-            console.error('Lỗi:', error);
-            Swal.fire({
-              icon: 'error',
-              title: 'Đã xảy ra lỗi!',
-              text: 'Không thể kết nối tới máy chủ.'
-            });
-          });
-        } else {
-          // User canceled the action, no further steps
-          console.log("User canceled the action.");
-        }
+          }
+        });
       });
     });
   });
 </script>
 {{/section}}
-<div class="tw-mx-[10%]">
-  <div class="card text-center tw-mt-10">
-    <div class="card-header">
-      
-      <ul class="nav nav-tabs card-header-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" href="/pet/viewAdopted">All</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="/pet/viewAdopted?status=adopt_approved">Adopting</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/pet/viewAdopted?status=adopt_requested">Request</a>
-        </li>
-        
-        <li class="nav-item">
-          <a class="nav-link" href="/pet/viewAdopted?status=adopt_completed">Completed</a>
-        </li>
-      </ul>
-    </div>
+<div class="tw-flex tw-overflow-y-scroll tw-flex-col lg:tw-flex-row tw-gap-8 tw-px-[5%] tw-max-w-screen-xl tw-mx-auto tw-mt-10" 
+     style="overflow: scroll; scrollbar-width: none; ">
 
-    <div class="tab-content mt-3" id="booking-tabContent">
+
+  <!-- Cột trái: Nội dung chính (2/3) -->
+  <div class="tw-w-full lg:tw-w-2/3 card text-center tw-mt-10" style="border: 1px solid transparent !important;">
+    <nav class="tw-mb-3">
+      <div class="nav nav-tabs" id="booking-tab" role="tablist">
+        <button class="nav-link active" href="/pet/viewAdopted" id="tab-all" data-bs-toggle="tab" data-bs-target="#content-all" type="button" role="tab" aria-controls="content-all" aria-selected="true">All</button>
+        <button class="nav-link" href="/pet/viewAdopted?status=adopt_requested" id="tab-waitshifting" data-bs-toggle="tab" data-bs-target="#content-waitshifting" type="button" role="tab" aria-controls="content-waitshifting" aria-selected="false">Pending Request</button>
+        <button class="nav-link" href="/pet/viewAdopted?status=adopt_approved" id="tab-rejected" data-bs-toggle="tab" data-bs-target="#content-rejected" type="button" role="tab" aria-controls="content-rejected" aria-selected="false">Adopting</button>
+        <button class="nav-link" href="/pet/viewAdopted?status=adopt_completed" id="tab-completed" data-bs-toggle="tab" data-bs-target="#content-completed" type="button" role="tab" aria-controls="content-completed" aria-selected="false">Finish</button>
+        <button class="nav-link" id="tab-paid" data-bs-toggle="tab" data-bs-target="#content-paid" type="button" role="tab" aria-controls="content-paid" aria-selected="false">Paid</button>
+      </div>
+    </nav>
+
+    <div class="tab-content" id="booking-tabContent">
       <div class="tab-pane fade show active" id="content-all" role="tabpanel" aria-labelledby="tab-all" tabindex="0">
         {{#if list.length}}
-        {{#each list}}
-            <div class="card-calendar tw-bg-white tw-shadow-lg tw-rounded-xl tw-p-6 tw-mb-4 tw-border tw-border-gray-200 tw-text-sm tw-text-left">
-                <div class="tw-flex tw-justify-between tw-items-center mb-4">
-                    <h5 class="tw-font-semibold tw-text-xl tw-text-gray-800" name="id">#{{_id}}</h5>
-                    <span class="bg">{{formatDate adoptDate}}</span>
+          {{#each list}}
+            <div class="card-calendar tw-bg-white tw-shadow-lg tw-rounded-xl tw-p-6 tw-text-sm tw-text-left tw-mb-4" style="border: 2px solid rgb(164, 164, 164);">
+
+              <div class="tw-flex tw-justify-between tw-items-center">
+                <span class="bg">{{status}}</span>
+                <h5 class="tw-font-semibold tw-text-xl tw-text-gray-800" name="name">{{name}}</h5>
+                <span class="bg">{{formatDate adoptDate}}</span>
+              </div>
+              <hr>
+             <div class="tw-flex tw-items-start tw-gap-4">
+                <div class="tw-w-24 tw-h-24 tw-flex-shrink-0">
+                  <img src="{{images.[0]}}" class="tw-w-full tw-h-full tw-object-cover tw-rounded" alt="Pet image">
                 </div>
 
-                <!-- Pet details -->
-                <div class="tw-mt-4 tw-text-gray-600">
-                    <p class="tw-font-medium tw-text-lg">Pet Name: <span class="tw-font-semibold tw-text-gray-800">{{name}}</span></p>
-                    <p class="tw-text-sm">Specie: <span class="tw-font-semibold tw-text-green-600">{{specie}}</span></p>
+                <div class="tw-text-gray-600">
+                  <p class=""><span class="tw-text-gray-800">{{description}}</span></p>
+                  <p class="tw-text-sm">Specie: <span class="tw-font-semibold tw-text-green-600">{{specie}}</span></p>
                 </div>
-                {{#if (eq status 'adopt_completed')}}
-                <div class="button-container button flex justify-end space-x-4 mt-6">
-                    <a href="/pet/detail/{{_id}}" class="btn-view tw-cursor-pointer">
-                        <i class="cart-icon ion-bag tw-mr-2"></i>VIEW DETAIL
-                    </a>
-                </div>
-                {{else}}
-                <div class="button-container button flex justify-end space-x-4 mt-6">
-                    <a href="#" class="btn-cancel tw-cursor-pointer" data-id="{{_id}}">
-                        CANCEL
-                    </a>
-                    <a href="/pet/detail/{{_id}}" class="btn-view tw-cursor-pointer">
-                        <i class="cart-icon ion-bag tw-mr-2"></i>VIEW DETAIL
-                    </a>
-                </div>
-                {{/if}}
+              </div>
+
+
+              {{#if (eq status 'adopt_completed')}}
+              <div class="button-container button flex justify-end space-x-4 mt-6">
+                <a data-id="{{_id}}" class="btn-view tw-cursor-pointer">
+                  <i class="cart-icon ion-bag tw-mr-2"></i>VIEW DETAIL
+                </a>
+              </div>
+              {{else}}
+              <div class="button-container button flex justify-end space-x-4 mt-6">
+                <a class="btn-cancel tw-cursor-pointer" data-id="{{_id}}">
+                  CANCEL
+                </a>
+                <a class="btn-view tw-cursor-pointer" data-id="{{_id}}">
+                  <i class="cart-icon ion-bag tw-mr-2"></i>VIEW DETAIL
+                </a>
+
+              </div>
+              {{/if}}
             </div>
-        {{/each}}
+          {{/each}}
         {{else}}
-        <div class="tw-text-center tw-text-gray-500 tw-mt-10">
-          None..
-        </div>
-      {{/if}}
+          <div class="tw-text-center tw-text-gray-500 tw-mt-10">
+            None..
+          </div>
+        {{/if}}
       </div>
     </div>
   </div>
-</div>
 
+  <!-- Cột phải: Sidebar (1/3) -->
+  <div class="tw-w-full lg:tw-w-1/3 tw-mt-20" id="sidebar" style="display: none;">
+  </div>
+</div>

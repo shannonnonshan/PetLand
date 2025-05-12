@@ -12,8 +12,12 @@
                 <span class="  tw-text-xl tw-font-bold tw-font-spartan">{{serviceName}}</span>
                 <p class="tw-mb-0">{{shortDescription}}</p>
                 <span>Duration: {{duration}} minutes</span>
-                {{> bookingButton bookedServiceIds=_id}}
-                {{> loginRequired}}
+                <a href="detail?id={{id}}">
+                <button type="submit" class="tw-bg-[#F3EC1C] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-w-full tw-p-2 transition-colors duration-200"
+                >
+                View detail
+                </button>
+                </a>
              </div>
              {{/each}}
         </div>
