@@ -33,3 +33,30 @@ body{
 {
 color: red;
 }
+.button-wrapper {
+  display: flex;
+  justify-content: center; /* Căn giữa theo chiều ngang */
+}
+
+.btn-info {
+  width: 80%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(0, 0, 0);
+  background-color: #f1f964;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-info:hover {
+  color: aliceblue;
+  background-color: #dca089; /* Tailwind: hover:bg-sky-600 */
+}

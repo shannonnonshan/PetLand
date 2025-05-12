@@ -122,6 +122,7 @@ route.get('/schedule', async function(req,res)
             id:id,
             user: bookedService.customer,
             service: bookedService.service,
+            isHome:true
         })
     }
     else{
