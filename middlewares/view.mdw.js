@@ -59,8 +59,12 @@ export default function (app) {
           }, 
           or: function (a, b) {
             return a || b;
-          },    
-      }
+          }, 
+          add: function (a, b) {
+            return a + b;
+          }, 
+
+        }
   }));
   app.set('view engine', 'hbs');
   app.set('views', './views');
