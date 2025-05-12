@@ -6,14 +6,20 @@
     justify-content: flex-end;
     gap: 10px;
 }
-
+.nav-link.active{
+        font-weight: bold;
+        background-color: #F3EC1C !important;
+    }
+    .tab-content{
+        max-height: max-content;
+        padding-bottom:10% ;
+    }
 .bg {
 	display: inline-block;
-	color: #fff;
-	background: cornflowerblue;
+	color: black;
+	background: #F3EC1C;
 	padding: 5px 10px;
 	border-radius: 50px;
-	font-size: .7em;
 }
 
 

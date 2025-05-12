@@ -17,7 +17,6 @@ route.get('/byCat', async function(req, res){
     }
     res.render('vwPet/viewByCat', {
         list: list,
-        layout: 'main'
     });
 })
 
@@ -32,6 +31,24 @@ route.get('/detail', async function(req, res){
     });
 })
 
+route.get('/api/detail/:id', async function(req, res) {
+  try {
+    const petId = req.params.id || null;
+    console.log(petId);
+    const pet = await Pet.findById(petId).lean();
+
+    if (!pet) {
+      return res.status(404).json({ message: 'Pet not found' });
+    }
+
+    // Trả về dữ liệu pet
+    res.json(pet);
+  } catch (err) {
+    console.error('Error fetching pet detail:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 route.get('/viewAdopted', auth, async function(req, res) {
   const adopter = req.session.authUser || null;
   const status = req.query.status;
@@ -44,7 +61,6 @@ route.get('/viewAdopted', auth, async function(req, res) {
   }
 
   res.render('vwPet/viewAdoptList', {
-    layout: 'pet-layout',
     list: list
   });
 });

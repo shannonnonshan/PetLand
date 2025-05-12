@@ -3,71 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner</title>
+    <title>Animated Sidebar</title>
     <link rel="icon" href="/static/imgs/logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/cssOwner/owner.layout.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="/css/tailwind.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .menu-item-hover {
+            position: relative;
+            overflow: hidden;
+        }
+        .menu-item-hover::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease-out;
+        }
+        .menu-item-hover:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        .search-container {
+            border: 1px solid black;
+            background: #ffffff;
+            height: 40px;
+            border-radius: 30px;
+            padding: 5px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.8s;
+            }
+
+            .search-container:hover > .search-input {
+            width: 200px;
+            }
+
+            .search-container .search-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 0px;
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.8s;
+            color: rgb(0, 0, 0);
+            }
+
+            .search-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            }
+            .icon-font{
+            font-size: 18pt;
+            }
+            .search-container i{
+            font: 14pt;
+            color: white;
+            }
+
+            @keyframes hoverShake {
+            0% {transform: skew(0deg,0deg);}
+            25% {transform: skew(5deg, 5deg);}
+            75% {transform: skew(-5deg, -5deg);}
+            100% {transform: skew(0deg,0deg);}
+            }
+
+            .search-container:hover {
+            animation: hoverShake 0.15s linear 3;
+            }
+            a:hover {
+                color: black !important;
+                text-decoration: none !important; /* Thêm gạch chân khi hover */
+            }
+
+    </style>
     {{{_sections.css}}}
 </head>
-<body>
-    <div class='dashboard'>
-      <div class="dashboard-nav">
-          <header><a href="#!" class="menu-toggle"><i class="fas fa-bars"></i></a><a href="#" class="brand-logo"><i
-                  class="fas fa-anchor"></i> 
-                  <span class="flex items-center gap-2">
-                <img src="/static/imgs/logo.jpg" alt="Logo" class="tw-w-10 tw-h-10 tw-rounded-full">
-                PETLAND
-              </span>
-              </a>
-          </header>
-          <nav class="dashboard-nav-list">
-              <a href="/owner/home" class="dashboard-nav-item">
-            `   <i class="bi bi-house"></i>
-                Home 
-              </a>
-              <a href="#" class="dashboard-nav-item">
-                <i class="bi bi-speedometer2 "></i> View Statis
-              </a>
-                <div class='dashboard-nav-dropdown'>
-                <a href="/owner/manageService/shift" class="dashboard-nav-item dashboard-nav-dropdown-toggle">
-                  <i class="bi bi-outlet"></i> Manage Service
+<body class="min-h-screen flex">
+        <aside id="sidebar" class="w-1/5tw-w-full bg-white dark:bg-gray-800 w-64 min-h-screen flex flex-col transition-all duration-300 ease-in-out">
+            <div class="p-4 flex justify-center items-center border-b border-gray-200 dark:border-gray-700">
+                <img src="/static/imgs/logo.jpg" alt="Logo" class="w-20 h-20 rounded-full object-cover">
+                <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-yellow-300">
+                    PetLand
+                    </h1>
+
+            </div>
+            <nav class="flex-1 overflow-y-auto">
+                <ul class="p-4 space-y-2">
+                    <span class="tw-mt-3">Home</span>
+                    <li class="animate-fade-in" style="animation-delay: 0.1s;">
+                        <a href="#" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="animate-fade-in" style="animation-delay: 0.2s;">
+                        <a href="#" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            Analytics
+                        </a>
+                    </li>
+                    <hr>
+                    <span class="inline-block mt-2">Service</span>
+                    <li class="animate-fade-in" style="animation-delay: 0.3s;">
+                        <a href="" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            Manage Service
+                        </a>
+                    </li>
+                    <li class="animate-fade-in" style="animation-delay: 0.3s;">
+                        <a href="#" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            Manage Shift
+                        </a>
+                    </li>
+                    <li class="animate-fade-in" style="animation-delay: 0.3s;">
+                        <a href="#" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            Manage Booking
+                        </a>
+                    </li>
+                    <hr>
+                    <span class="inline-block mt-2">Pet</span>
+                    <div class="mt-6">
+                        <!-- Toggle Button -->
+                        <div class="flex items-center cursor-pointer group collapsible-toggle">
+                            <a href="#" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-300 menu-item-hover">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Request
+                            </a>
+
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                            class="arrow w-3 h-3 fill-slate-800 group-hover:fill-slate-900 transition-all transform rotate-90"
+                            viewBox="0 0 492.004 492.004">
+                            <path
+                                d="M382.678 226.804 163.73 7.86C158.666 2.792 151.906 0 144.698 0s-13.968 2.792-19.032 7.86l-16.124 16.12c-10.492 10.504-10.492 27.576 0 38.064L293.398 245.9l-184.06 184.06c-5.064 5.068-7.86 11.824-7.86 19.028 0 7.212 2.796 13.968 7.86 19.04l16.124 16.116c5.068 5.068 11.824 7.86 19.032 7.86s13.968-2.792 19.032-7.86L382.678 265c5.076-5.084 7.864-11.872 7.848-19.088.016-7.244-2.772-14.028-7.848-19.108z" />
+                            </svg>
+                        </div>
+
+                        <!-- Collapsible Content -->
+                        <ul class="space-y-1 mt-2 pl-4 max-h-[500px] overflow-hidden transition-all duration-300">
+                            <li class="animate-fade-in" style="animation-delay: 0.4s;">
+                                <a href="/owner/managePet/pending" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                                    Donation Request
+                                </a>
+                            </li>
+                            <li class="animate-fade-in" style="animation-delay: 0.4s;">
+                                <a href="/owner/managePet/adopt_requested" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                                    Adoption Request
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <li class="animate-fade-in" style="animation-delay: 0.4s;">
+                        <a href="/owner/managePet/approved" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                            <img src="https://cdn-icons-png.flaticon.com/128/10078/10078695.png" alt="Pet Food Icon" class="h-6 w-6 mr-3">
+                            Approved Donation
+                        </a>
+                    </li>
+                    <li class="animate-fade-in" style="animation-delay: 0.4s;">
+                        <a href="/owner/managePet/adopt_approved" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                            <img src="https://cdn-icons-png.flaticon.com/128/3047/3047827.png" alt="Pet Food Icon" class="h-6 w-6 mr-3">
+                            Adopting
+                        </a>
+
+                    </li>
+                    
+                    <li class="animate-fade-in" style="animation-delay: 0.4s;">
+                        <a href="/owner/managePet/adopt_completed" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                            <img src="https://cdn-icons-png.flaticon.com/128/18294/18294822.png" alt="Pet Food Icon" class="h-6 w-6 mr-3">
+                            Completed
+                        </a>
+                    </li>
+                    <li class="animate-fade-in" style="animation-delay: 0.4s;">
+                        <a href="/owner/managePet/rejected" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                            <img src="https://cdn-icons-png.flaticon.com/128/2623/2623031.png" alt="Pet Food Icon" class="h-6 w-6 mr-3">
+                            Rejected
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+        </aside>
+
+    
+    <div class="w-4/5 w-full">
+        <div class="card">
+            <div class="card-header bg-white flex justify-between items-center">
+                <a href="#" class="m-3 flex items-center justify-center w-10 h-10 rounded-full hover:bg-yellow-100 dark:bg-yellow-100 hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-colors duration-300">
+                    <img src="https://cdn-icons-png.flaticon.com/128/8338/8338801.png" alt="Pet Food Icon" class="w-6 h-6 rounded-full">
                 </a>
-                <div class='dashboard-nav-dropdown-menu'>
-                  <a href="/owner/manageService/shift" class="dashboard-nav-dropdown-item">Manage Shift</a>
-                  <a href="/owner/manageService/booking" class="dashboard-nav-dropdown-item">Manage Booking</a>
+                <div class="flex items-center">
+                    <div class="search-container">
+                        <input type="text" name="search" placeholder="Search..." class="search-input">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3031/3031293.png" alt="Pet Food Icon" class="w-6 h-6 rounded-full">
+                    </div>
+                    <div class="p-2">
+                        <a href="#" class="flex items-center text-gray-700 dark:text-gray-200 hover:text-yellow-800 dark:hover:text-white transition-colors duration-300">
+                            <img src="https://i.pravatar.cc/40?img=1" alt="User avatar" class="w-8 h-8 rounded-full mr-3">
+                            <span class="font-medium">John Doe</span>
+                        </a>
+                    </div>
                 </div>
-              </div>              
-              <div class='dashboard-nav-dropdown'>
-                <a href="#!" class="dashboard-nav-item dashboard-nav-dropdown-toggle">
-                  <i class="bi bi-outlet"></i> Manage Pet
-                </a>
-                <div class='dashboard-nav-dropdown-menu'>
-                  <a href="/owner/managePet/all" class="dashboard-nav-dropdown-item">All</a>
-                  <a href="/owner/managePet/pending" class="dashboard-nav-dropdown-item">Pending Donation</a>
-                  <a href="/owner/managePet/approved" class="dashboard-nav-dropdown-item">Approved Donation</a>
-                  <a href="/owner/managePet/adopt_requested" class="dashboard-nav-dropdown-item">Adoption Request</a>
-                  <a href="/owner/managePet/adopt_approved" class="dashboard-nav-dropdown-item">Adopting</a>
-                  <a href="/owner/managePet/adopt_completed" class="dashboard-nav-dropdown-item">Completed</a>
-                  <a href="/owner/managePet/rejected" class="dashboard-nav-dropdown-item">Rejected</a>
-                  
-                </div>
-              </div>
-              <form id="frmLogout" action="/user/logout" method="post"></form>
-            <a id="btn-logout" href="javascript:void(0);" class="dashboard-nav-item"><i class="fas fa-sign-out-alt"></i> Logout </a>
-          </nav>
-      </div>
-      <div class="dashboard-content">
-        {{{body}}}
+                
+            </div>
+            <hr>
+            <div class="card-body m-[5%] h-full">
+                {{{body}}}
+            </div>
+        </div>
+        
     </div>
-  </div>
- <script>
+    <script>
+        document.querySelectorAll('.collapsible-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+            const arrow = toggle.querySelector('.arrow');
+            const content = toggle.nextElementSibling;
+
+            content.classList.toggle('max-h-[500px]');
+            content.classList.toggle('max-h-0');
+            arrow.classList.toggle('rotate-90');
+            arrow.classList.toggle('rotate-0');
+            });
+        });
+    </script>
+      <script>
   document.addEventListener('DOMContentLoaded', () => {
     const currentPath = window.location.pathname;
     document.querySelectorAll('.dashboard-nav-item, .dashboard-nav-dropdown-item').forEach(link => {
@@ -147,6 +345,6 @@
         modal.classList.remove('tw-hidden');
         modal.setAttribute('aria-hidden', 'false');
     }
-  </script>
+  </script>   
 </body>
 </html>
