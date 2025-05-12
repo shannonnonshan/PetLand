@@ -8,9 +8,15 @@
         height: auto;
         width: 100%;
     }
-    input{
+    input, input[readonly] {
         width: 100%;
         margin-top: 5px;
+        border: 1px solid #F3EC1C; /* thêm độ dày */
+        border-radius: 5px;        /* thêm giá trị hợp lệ */
+        padding: 10px;
+        background-color: white !important; 
+        color: black;            /* chống chữ bị mờ */
+        cursor: pointer; 
     }
     .input-box span{
         font-weight: bold;
@@ -25,9 +31,9 @@
     }
 </style>
 {{/section}}
-<div class=" tw-border-black tw-bg-white tw-pt-[50px] tw-max-w-lg tw-mx-auto">
-<form id="frmSchedule" action="/service/schedule?id={{id}}" class="tw-bg-yellow-200"  method="POST" >
-    <div class="tw-px-3 tw-pb-[20%] tw-w-auto tw-h-[100%] tw-max-h-max tw-border-2 tw-overflow-y-scroll " style="overflow: scroll; scrollbar-width: none;">
+<div style="background: linear-gradient(135deg, #FF94BD, #F3EC1C); overflow: scroll; scrollbar-width: none;" 
+class=" tw-h-max-full tw-overflow-y-scroll tw-h-full tw-w-full tw-border-black tw-py-[5%] tw-scrollbar-none">
+<form id="frmSchedule" action="/service/schedule?id={{id}}" class="tw-bg-white tw-p-5 tw-rounded-md tw-mx-auto tw-max-w-lg "  method="POST" >
         <h2>Schedule your service</h2>
         <input id="bookedServiceId" name="bookedServiceId" value="{{bookedService._id}}" hidden>
     <div class="input-box">
@@ -69,11 +75,11 @@
     </div>
     </div>
     <span id="alert" class="tw-text-red-500"></span>
-    <button type="submit" class="tw-bg-[#F3EC1C] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-w-full tw-p-2 transition-colors duration-200"
+    <button type="submit"  class=" tw-mt-[10px] tw-bg-[linear-gradient(135deg,_#FF94BD,_#F3EC1C)] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-w-full tw-p-2 transition-colors duration-200"
     >
     Confirm Schedule
     </button>
-    </div>
+   
 </form>
 </div>
 {{#section 'js'}}

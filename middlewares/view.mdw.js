@@ -39,6 +39,9 @@ export default function (app) {
           formatDate: function (date) {
               return moment(date).format('YYYY-MM-DD HH:mm'); // Định dạng ngày theo YYYY-MM-DD
           }, 
+          formatDay: function (date) {
+              return moment(date).format('YYYY-MM-DD'); 
+          }, 
           truncate: function (text, length) {
             if (text && text.length > length) {
                 return text.substring(0, length) + '...'; // Thêm dấu ba chấm sau khi cắt

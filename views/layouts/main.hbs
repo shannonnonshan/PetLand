@@ -146,33 +146,51 @@
             </div>
     </div>
     </div>
-
+    <div class="tw-h-screen">
     {{{body}}}
+    </div>
     {{> loginRequired}}
     {{> logoutRequired}}
-    <div id="footnote" class="tw-fixed tw-bottom-6 tw-left-0 tw-z-10 tw-right-0 tw-flex tw-justify-center tw-gap-[20%]">
+    <nav class="tw-flex tw-flex-col tw-gap-10">
+    <div id="navbarToggleExternalContent" class="collapse tw-fixed tw-bottom-[85px] tw-left-0 tw-w-full tw-z-10">
+      <div class="tw-bg-white tw-p-4">
+        <h5 class="tw-text-xl">Collapsed content</h5>
+        <span class="-400">Toggleable via the navbar brand.</span>
+      </div>
+    </div>
+    <div id="footnote" class="tw-fixed  tw-bottom-6 tw-left-0 tw-z-10 tw-right-0 tw-flex tw-justify-center tw-gap-[20%]">
+      
         <!-- Home Button -->
-        <button onclick="window.location.href='/';" class="tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center " style="box-shadow:rgb(1, 0, 0)">
+        <button onclick="window.location.href='/';" class="tw-shadow-lg tw-shadow-black/50 tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center " >
           <i class="bi bi-house-fill tw-text-2xl"></i>
         </button>
 
         <!-- Search Button -->
-        <button class="tw-bg-white tw-rounded-full tw-w-[4rem] tw-h-[4rem] tw-flex tw-items-center tw-border-0 tw-justify-center " style="box-shadow:rgb(1, 0, 0)">
+        
+       
+          <button class="navbar-toggler tw-shadow-lg tw-shadow-black/50 tw-bg-white tw-rounded-full tw-w-[4rem] tw-h-[4rem] tw-flex tw-items-center tw-border-0 tw-justify-center" 
+          type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+              <i class="bi bi-search tw-text-3xl"></i>
+          </button>
+        
+      
+        {{!-- <button class="tw-shadow-lg tw-shadow-black/50 tw-bg-white tw-rounded-full tw-w-[4rem] tw-h-[4rem] tw-flex tw-items-center tw-border-0 tw-justify-center " >
           <i class="bi bi-search tw-text-3xl"></i>
-        </button>
+        </button> --}}
         
         <!-- Profile Button -->
         {{#if authUser}}
-        <button onclick="handleLogoutClick()" class="tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center" style="box-shadow:rgb(1, 0, 0)">
+        <button onclick="handleLogoutClick()" class="tw-shadow-lg tw-shadow-black/50 tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center" >
           <i class="bi bi-person tw-text-2xl"></i>
         </button>
         {{else}}
-        <button onclick="handleClick()" class="tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center" style="box-shadow:rgb(1, 0, 0)">
+        <button onclick="handleClick()" class="tw-shadow-lg tw-shadow-black/50 tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center">
           <i class="bi bi-person tw-text-2xl"></i>
         </button>
         {{/if}}
         
     </div>  
+    </nav>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
         integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
