@@ -1,0 +1,60 @@
+{{#section 'staffcss'}}
+<style>
+  .nav-link.active {
+    font-weight: bold;
+    background-color: #F3EC1C !important;
+  }
+  .tab-content {
+    max-height: max-content;
+    padding-bottom: 10%;
+  }
+</style>
+{{/section}}
+
+<div class="tw-mt-[50px] tw-flex tw-justify-center tw-h-screen">
+  <div class="tw-py-5 tw-pt-[70px] tw-px-3 tw-overflow-y-scroll tw-bg-white tw-w-[80%] tw-max-w-[100%]" id="mainContent" style="overflow: scroll; scrollbar-width: none;">
+
+    <h3 class="mb-4">Support Request Detail</h3>
+
+    <div class="card tw-mb-4">
+      <div class="card-header tw-font-bold">
+        {{request.subject}} <br/>
+        <span class="tw-text-sm tw-text-gray-600">From: {{request.customerEmail}}</span>
+      </div>
+      <div class="card-body">
+        <p class="tw-font-semibold">Message:</p>
+        <p>{{request.message}}</p>
+
+        <hr class="tw-my-4">
+
+        <p><strong>Created At:</strong> {{request.createdAt}}</p>
+
+        {{#if request.respondedAt}}
+          <p><strong>Replied At:</strong> {{request.respondedAt}}</p>
+          <p class="tw-font-semibold">Reply Content:</p>
+          <p>{{request.response}}</p>
+        {{else}}
+          <form action="/staff/support/{{request.id}}/reply" method="post">
+            {{#if error}}
+              <div class="alert alert-danger">{{error}}</div>
+            {{/if}}
+
+            <div class="form-group">
+              <label for="reply" class="tw-font-semibold">Your Reply</label>
+              <textarea name="reply" id="reply" rows="4" class="form-control" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success tw-mt-3">
+              <i class="bi bi-reply-fill"></i> Send Reply
+            </button>
+          </form>
+        {{/if}}
+      </div>
+    </div>
+
+    <a href="/staff/requestSupport" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Back to List
+    </a>
+
+  </div>
+</div>
