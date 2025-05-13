@@ -110,13 +110,13 @@ route.get('/support/:id', auth, async (req, res) => {
   if (!request) {
     return res.status(404).send('Not found');
   }
-
+  request.id = request._id.toString();
   // Gắn customerEmail
   request.customerEmail = request.customerId?.email || 'Unknown';
   // Format time
-  request.createdAtFormatted = moment(req.createdAt).format('DD/MM/YYYY HH:mm:ss');
+  request.createdAtFormatted = moment(request.createdAt).format('DD/MM/YYYY HH:mm:ss');
   if (request.respondedAt) {
-    request.respondedAtFormatted = moment(req.respondedAt).format('DD/MM/YYYY HH:mm:ss');
+    request.respondedAtFormatted = moment(request.respondedAt).format('DD/MM/YYYY HH:mm:ss');
   }
   res.render('vwStaff/detail', {
     layout: 'staff-layout',
@@ -127,9 +127,12 @@ route.get('/support/:id', auth, async (req, res) => {
 // Xử lý phản hồi
 route.post('/support/:id/reply', auth, async (req, res) => {
   const { reply } = req.body;
+
+  // Kiểm tra xem reply có trống không
   if (!reply) {
     const request = await supportService.findById(req.params.id);
     request.customerEmail = request.customerId?.email || 'Unknown';
+    request.id = request._id.toString();
     return res.render('vwStaff/detail', {
       layout: 'staff-layout',
       request,
@@ -137,8 +140,23 @@ route.post('/support/:id/reply', auth, async (req, res) => {
     });
   }
 
+  // Cập nhật phản hồi
   await supportService.replyToRequest(req.params.id, reply);
-  res.redirect('/staff/requestSupport?success=true');
+
+  // Lấy lại dữ liệu mới sau khi cập nhật
+  const updatedRequest = await supportService.findById(req.params.id);
+
+  // Format thời gian
+  updatedRequest.customerEmail = updatedRequest.customerId?.email || 'Unknown';
+  updatedRequest.id = updatedRequest._id.toString();
+  updatedRequest.createdAtFormatted = moment(updatedRequest.createdAt).format('DD/MM/YYYY HH:mm:ss');
+  updatedRequest.respondedAtFormatted = moment(updatedRequest.respondedAt).format('DD/MM/YYYY HH:mm:ss');
+
+  // Render lại trang chi tiết với dữ liệu đã cập nhật
+  res.render('vwStaff/detail', {
+    layout: 'staff-layout',
+    request: updatedRequest
+  });
 });
 
 export default route;

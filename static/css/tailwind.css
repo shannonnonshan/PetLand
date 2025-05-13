@@ -122,8 +122,8 @@
   inset: 0px !important
 }
 
-.tw-bottom-0 {
-  bottom: 0px !important
+.tw-bottom-20 {
+  bottom: 5rem !important
 }
 
 .tw-bottom-6 {
@@ -132,6 +132,10 @@
 
 .tw-left-0 {
   left: 0px !important
+}
+
+.tw-left-11 {
+  left: 2.75rem !important
 }
 
 .tw-right-0 {
@@ -144,46 +148,6 @@
 
 .tw-top-full {
   top: 100% !important
-}
-
-.tw-bottom-4 {
-  bottom: 1rem !important
-}
-
-.tw-bottom-16 {
-  bottom: 4rem !important
-}
-
-.tw-bottom-20 {
-  bottom: 5rem !important
-}
-
-.tw-left-4 {
-  left: 1rem !important
-}
-
-.tw-top-4 {
-  top: 1rem !important
-}
-
-.tw-top-20 {
-  top: 5rem !important
-}
-
-.tw-left-20 {
-  left: 5rem !important
-}
-
-.tw-top-10 {
-  top: 2.5rem !important
-}
-
-.tw-left-6 {
-  left: 1.5rem !important
-}
-
-.tw-left-11 {
-  left: 2.75rem !important
 }
 
 .tw-z-10 {
@@ -252,12 +216,12 @@
   margin-bottom: 0.5rem !important
 }
 
-.tw-mb-32 {
-  margin-bottom: 8rem !important
-}
-
 .tw-mb-4 {
   margin-bottom: 1rem !important
+}
+
+.tw-mb-40 {
+  margin-bottom: 10rem !important
 }
 
 .tw-mb-5 {
@@ -284,6 +248,10 @@
   margin-top: 0.5rem !important
 }
 
+.tw-mt-20 {
+  margin-top: 5rem !important
+}
+
 .tw-mt-3 {
   margin-top: 0.75rem !important
 }
@@ -302,14 +270,6 @@
 
 .tw-mt-\[50px\] {
   margin-top: 50px !important
-}
-
-.tw-mt-20 {
-  margin-top: 5rem !important
-}
-
-.tw-mb-40 {
-  margin-bottom: 10rem !important
 }
 
 .tw-block {
@@ -688,6 +648,10 @@
   padding: 1rem !important
 }
 
+.tw-p-5 {
+  padding: 1.25rem !important
+}
+
 .tw-p-6 {
   padding: 1.5rem !important
 }
@@ -698,14 +662,6 @@
 
 .tw-p-\[10px\] {
   padding: 10px !important
-}
-
-.tw-p-3 {
-  padding: 0.75rem !important
-}
-
-.tw-p-5 {
-  padding: 1.25rem !important
 }
 
 .tw-px-10 {
@@ -866,11 +822,6 @@
   color: rgb(0 0 0 / var(--tw-text-opacity, 1)) !important
 }
 
-.tw-text-blue-600 {
-  --tw-text-opacity: 1 !important;
-  color: rgb(37 99 235 / var(--tw-text-opacity, 1)) !important
-}
-
 .tw-text-gray-500 {
   --tw-text-opacity: 1 !important;
   color: rgb(107 114 128 / var(--tw-text-opacity, 1)) !important
@@ -916,8 +867,10 @@
   color: rgb(234 179 8 / var(--tw-text-opacity, 1)) !important
 }
 
-.tw-underline {
-  text-decoration-line: underline !important
+.tw-shadow {
+  --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color) !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important
 }
 
 .tw-shadow-lg {
@@ -935,12 +888,6 @@
 .tw-shadow-xl {
   --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color) !important;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important
-}
-
-.tw-shadow {
-  --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
-  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color) !important;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important
 }
 
