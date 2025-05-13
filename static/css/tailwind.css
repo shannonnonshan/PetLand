@@ -295,6 +295,10 @@
   height: 2rem !important
 }
 
+.tw-h-\[300px\] {
+  height: 300px !important
+}
+
 .tw-h-\[30px\] {
   height: 30px !important
 }
@@ -556,6 +560,10 @@
 
 .tw-rounded-md {
   border-radius: 0.375rem !important
+}
+
+.tw-rounded-sm {
+  border-radius: 0.125rem !important
 }
 
 .tw-rounded-xl {

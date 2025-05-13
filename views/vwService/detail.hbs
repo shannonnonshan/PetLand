@@ -4,16 +4,16 @@
         <img class=" tw-mx-[20%] tw-w-[450px] tw-h-[450px] tw-mb-[25px]" src="{{service.imageUrl}}" alt="{{service.imageUrl}}">
         <h3>Reccomendation</h3>
         
-        <div id="container" class="tw-flex tw-flex-row tw-overflow-x-auto tw-max-w-[100%] tw-mt-8"
+        <div id="container" class="tw-flex tw-flex-row tw-overflow-x-auto tw-max-w-[100%] tw-mt-8 tw-py-[5%] tw-px-[5%]"
       style=" -ms-overflow-style: none; scrollbar-width: none; ">
           {{#each this.list}}
-             <div class="tw-w-[250px] tw-h-[350px] tw-mr-2 tw-flex tw-flex-col tw-items-start tw-p-4" >
+             <div class="tw-shadow-lg tw-rounded-sm tw-w-[250px] tw-h-[350px] tw-mr-2 tw-flex tw-flex-col tw-items-start tw-p-4 " >
                 <img class="tw-w-[200px] tw-h-[150px] tw-self-center tw-mb-2" src="{{imageUrl}}" alt="{{imageUrl}}">
                 <span class="  tw-text-xl tw-font-bold tw-font-spartan">{{serviceName}}</span>
                 <p class="tw-mb-0">{{shortDescription}}</p>
                 <span>Duration: {{duration}} minutes</span>
                 <a href="detail?id={{id}}">
-                <button type="submit" class="tw-bg-[#F3EC1C] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-w-full tw-p-2 transition-colors duration-200"
+                <button type="submit" class=" tw-w-full tw-bg-[#F3EC1C] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-p-2 transition-colors duration-200"
                 >
                 View detail
                 </button>
@@ -22,15 +22,21 @@
              {{/each}}
         </div>
         <h3>Reviews</h3>
-        <span>{{starRating 5}} <b>4.8</b> 999+</span>
         <hr class=" tw-bg-black">
-        <h5>Date of review: {{formatDate '2024-11-25'}}</h5>
-        <span>{{starRating 4.5}} </span>
+        {{#if review.length}}
+        <span>{{starRating (avgRating review)}} <b>{{avgRating review}}</b> ( + {{count review}})</span>
+        <hr class=" tw-bg-black">
+        {{#each review}}
+        <h5>Date of review: {{formatDate createAt}}</h5>
+        <span>{{starRating rating}} </span>
         <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium at inventore odio consequuntur quisquam deserunt. Nemo itaque hic voluptas adipisci corporis? 
-        Animi in praesentium temporibus architecto modi atque omnis libero!
+        {{review}}
         </p>
+        {{/each}}
         <hr class=" tw-bg-black">
+        {{else}}
+        <p class="tw-text-gray-500 tw-font-semibold">No Review Yet</p>
+        {{/if}}
     </div>
     
     <!-- Phần bên phải (Fixed content) -->

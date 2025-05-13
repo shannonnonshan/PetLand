@@ -35,6 +35,14 @@ export default function (app) {
             });
             return count;
           },
+          count: function(array) {
+              let count = 0;
+              array.forEach(item => {
+                  count++;
+                
+              });
+              return count;
+          },
           section: hbs_sections(),
           formatDate: function (date) {
               return moment(date).format('DD-MM-YYYY'); // Định dạng ngày theo YYYY-MM-DD
@@ -60,7 +68,15 @@ export default function (app) {
           or: function (a, b) {
             return a || b;
           },    
-      }
+          avgRating: function (reviews) {
+              if (!reviews || reviews.length === 0) return '0.0';
+
+              const total = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+              const average = total / reviews.length;
+
+              return average.toFixed(1);
+            }
+          }
   }));
   app.set('view engine', 'hbs');
   app.set('views', './views');

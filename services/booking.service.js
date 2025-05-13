@@ -86,9 +86,10 @@ export default {
     
         return result;
     },
-    findService(bookedServiceIds)
+    async findService(bookedServiceIds)
     {
-        return Service.findById(bookedServiceIds)
+        const bookedService = await BookedService.findById(bookedServiceIds)
+        return Service.findById(bookedService.service)
     },
     insertBookedService(bookedService)
     {
@@ -129,7 +130,7 @@ export default {
     findPendingBookedService(customerId)
     {
         return BookedService.find({customer: customerId, status: 'pending'})
-        .populate('service').sort({ updatedAt: -1 }) .lean().exec()
+        .populate('service').sort({ updatedAt: -1 }).lean().exec()
     },
     findCompletedBookedService(customerId)
     {

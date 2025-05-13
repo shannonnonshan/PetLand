@@ -1,14 +1,13 @@
 {{#section 'css'}}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20
-/jquery.datetimepicker.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
+    
     .input-box{
         margin-bottom: 15px;
         height: auto;
         width: 100%;
     }
-    input, input[readonly] {
+    input, textarea {
         width: 100%;
         margin-top: 5px;
         border: 1px solid #F3EC1C; /* thêm độ dày */
@@ -16,7 +15,8 @@
         padding: 10px;
         background-color: white !important; 
         color: black;            /* chống chữ bị mờ */
-        cursor: pointer; 
+        cursor: pointer;
+        resize:none 
     }
     .input-box span{
         font-weight: bold;
@@ -29,58 +29,69 @@
     .scrollbar-none::-webkit-scrollbar {
       display: none;            /* Chrome, Safari, Opera */
     }
+    .checked {
+    color: #FF94BD !important;
+    }
+    .fa-star {
+    font-size: 24px;
+    cursor: pointer;
+    color: gray;
+    }
 </style>
 {{/section}}
 <div style="background: linear-gradient(135deg, #FF94BD, #F3EC1C); overflow: scroll; scrollbar-width: none;" 
 class=" tw-h-max-full tw-overflow-y-scroll tw-h-full tw-w-full tw-border-black tw-py-[5%] tw-scrollbar-none">
-<form id="frmSchedule" action="/service/schedule?id={{id}}" class="tw-bg-white tw-p-5 tw-rounded-md tw-mx-auto tw-max-w-lg "  method="POST" >
-        <h2>Schedule your service</h2>
+<form id="frmSchedule" action="/service/review?id={{id}}" class="tw-bg-white tw-p-5 tw-rounded-md tw-mx-auto tw-max-w-lg "  method="POST" >
+        <h2>Rate our service</h2>
+        <span class="tw-mb-1">Date: {{formatDate shift.startTime}}</span>
         <input id="bookedServiceId" name="bookedServiceId" value="{{bookedService._id}}" hidden>
+        <div class="tw-flex tw-flex-row tw-items-center tw-mt-5 tw-gap-5">
+        <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
+        <div>
+        <h5 class="card-title">{{service.serviceName}}</h5>
+        <p class="card-text">{{status.description}}</p>
+        <p>Duration: {{service.duration}} minute</p>
+        <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
+        <span class="tw-mb-1">Status: {{bookedService.status}}</span>
+        </div>
+        </div>
     <div class="input-box">
-        <span class="details" for="txtName">Name</span>
-        {{#if (eq user.name null)}}
-        <input id="txtUsername" name="name" placeholder="Fill your name" required>
-        {{else}}
-        <input name="name" value="{{user.name}}" placeholder="{{user.name}}" readonly>
-        {{/if}}
-    </div>
-    <div class="input-box">
-        <span class="details" for="txtPhone">Phone number</span>
-        {{#if (eq user.phone null)}}
-        <input name="phone" placeholder="Fill your number" required>
-        {{else}}
-        <input name="phone" value="{{user.phone}}" placeholder="{{user.phone}}" readonly>
-        {{/if}}
-    </div>
-    <div class="input-box">
-        <span class="details" for="txtEmail">Email</span>
-        {{#if (eq user.email null)}}
-        <input id="txtEmail" name="email" placeholder="Fill your number" required>
-        {{else}}
-        <input id="txtEmail"  name="email" value="{{user.email}}" placeholder="{{user.email}}" readonly>
-        {{/if}}
-    </div>
-    <p class="tw-italic">
-    Tip: Want to change your default info? Head over to your account page.
-    </p>    
-    <div class="input-box">
-    <span>Duration: <b class="tw-text-[#FF94BD]">{{service.duration}}</b> minutes</span>
+        <h4>Star Rating</h4>
+        <span class="fa fa-star" data-value="1"></span>
+        <span class="fa fa-star" data-value="2"></span>
+        <span class="fa fa-star" data-value="3"></span>
+        <span class="fa fa-star" data-value="4"></span>
+        <span class="fa fa-star" data-value="5"></span>
+        <input type="hidden" name="rating" id="ratingValue" value="0">
     </div>
     <div class="input-box">
-        <div class="flex items-center space-x-1 mb-4">
-        <span for="txtStartTime" class="tw-bg-white tw-text-black ">Start Time</span>
-        <input type="text" name="startTime" id="txtStartTime" class="form-control" placeholder="Select a date" aria-describedby="helpId" readonly>
-        <input type="text" name="endTime" id="txtEndTime"  hidden>
-        <span class="">Estimate Completed Time: <p id="lblEndTime" class="tw-mt-5 tw-text-[#FF94BD]"></p></span>
-    </div>
-    </div>
+        <h4>Review</h4>
+        <textarea type="text" name="review" class="tw-h-[300px]" placeholder="What do you think about our service?"></textarea>
+    </div> 
     <span id="alert" class="tw-text-red-500"></span>
     <button type="submit"  class=" tw-mt-[10px] tw-bg-[linear-gradient(135deg,_#FF94BD,_#F3EC1C)] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-w-full tw-p-2 transition-colors duration-200"
     >
-    Confirm Schedule
+    Confirm Review
     </button>
    
 </form>
 </div>
 {{#section 'js'}}
+<script>
+  const stars = document.querySelectorAll('.fa-star');
+  const ratingInput = document.getElementById('ratingValue');
+
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      const rating = star.getAttribute('data-value');
+      ratingInput.value = rating;
+
+      // Highlight stars
+      stars.forEach(s => s.classList.remove('checked'));
+      for (let i = 0; i < rating; i++) {
+        stars[i].classList.add('checked');
+      }
+    });
+  });
+</script>
 {{/section}}
