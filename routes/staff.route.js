@@ -11,7 +11,6 @@ import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import BookingContext from '../state/serviceState/bookingContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
-import supportService from '../services/staff.service.js';
 
 const route = express.Router();
 
