@@ -238,6 +238,17 @@ export default {
         .lean()
         .exec();
     },
+    findCompletedBookedServiceOwner()
+    {
+        return BookedService.find({ status: 'completed'})
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
+        .lean()
+        .exec();
+    },
     findShiftedOwner()
     {
         return BookedService.find({inCharge: { $ne: null, $exists: true }})

@@ -1,3 +1,4 @@
+//service.controller.js
 import User from '../models/User.js';
 import { sendServiceEmail } from '../utils/mailer.js';
 import moment from 'moment';

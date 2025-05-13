@@ -67,7 +67,7 @@ export default function (app) {
           }, 
           or: function (a, b) {
             return a || b;
-          },    
+          }, 
           avgRating: function (reviews) {
               if (!reviews || reviews.length === 0) return '0.0';
 
@@ -75,8 +75,18 @@ export default function (app) {
               const average = total / reviews.length;
 
               return average.toFixed(1);
+            },
+            add: function (a, b) {
+            return a + b;
+          },
+          range: function(start, end) {
+            let result = [];
+            for (let i = start; i <= end; i++) {
+                result.push(i);
             }
-          }
+            return result;
+        }, 
+        }
   }));
   app.set('view engine', 'hbs');
   app.set('views', './views');

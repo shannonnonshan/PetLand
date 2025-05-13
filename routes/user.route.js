@@ -86,7 +86,7 @@ route.get('/staff', requireRole('Staff'), (req, res) => {
 
 route.get('/owner', requireRole('Owner'), (req, res) => {
     if (req.session.authUser){
-        res.render('vwOwner/home', {
+        res.render('vwOwner/viewStatis', {
             layout: 'owner-layout',
             user: req.session.authUser
         })

@@ -1,3 +1,4 @@
+//pet.controller.js
 import Pet from '../models/Pet.js';
 import User from '../models/User.js';
 import PetContext from '../state/petState/petContext.js';
@@ -93,8 +94,8 @@ export const approvePet = async (req, res) => {
   try {
     const { petid } = req.body;
     const pet = await Pet.findById(petid);
-    if (!pet) return res.status(404).json({ error: 'Không tìm thấy thú cưng' });
-    if (pet.status === 'approved') return res.status(400).json({ error: 'Thú cưng đã được phê duyệt' });
+    if (!pet) return res.status(404).json({ error: 'Pet not found.' });
+    if (pet.status === 'approved') return res.status(400).json({ error: 'The pet has been approved.' });
 
     await handlePetTransition({ pet, contextMethod: 'approve' });
     res.status(200).json({ message: 'Successful' });
@@ -102,7 +103,7 @@ export const approvePet = async (req, res) => {
     notifyLater(pet.donator, 'approveDonation', pet, pet.dod);
   } catch (error) {
     console.error('ApprovePet Error:', error);
-    res.status(500).json({ error: 'Lỗi xử lý yêu cầu' });
+    res.status(500).json({ error: 'Something went wrong!' });
   }
 };
 
@@ -110,15 +111,15 @@ export const adoptPet = async (req, res) => {
   try {
     const { petid } = req.body;
     const pet = await Pet.findById(petid);
-    if (!pet) return res.status(404).json({ error: 'Không tìm thấy thú cưng' });
+    if (!pet) return res.status(404).json({ error: 'Pet not found.' });
 
     await handlePetTransition({ pet, contextMethod: 'adopt' });
-    res.status(200).json({ message: 'Yêu cầu nhận nuôi đã được gửi' });
+    res.status(200).json({ message: 'Successful' });
 
     notifyLater(pet.adopter, 'approveAdoption', pet, pet.adoptDate);
   } catch (error) {
     console.error('AdoptPet Error:', error);
-    res.status(500).json({ error: 'Lỗi khi gửi yêu cầu nhận nuôi' });
+    res.status(500).json({ error: 'Something went wrong!' });
   }
 };
 
@@ -126,43 +127,42 @@ export const completeAdoption = async (req, res) => {
   try {
     const { petid } = req.body;
     const pet = await Pet.findById(petid);
-    if (!pet) return res.status(404).send('Không tìm thấy thú cưng');
+    if (!pet) return res.status(404).send('Pet not found.');
     const context = new PetContext(pet);
     context.completeAdoption();
     await pet.save();
-    res.redirect('/owner/managePet/adopt_completed');
+    res.status(200).json({ message: 'Successful' });
   } catch (error) {
     console.error('CompleteAdoption Error:', error);
-    res.status(500).send('Lỗi khi hoàn tất nhận nuôi');
+    res.status(500).send('Something went wrong!');
   }
 };
 
 export const rejectPetAdoption = async (req, res) => {
   try {
     const pet = await petService.findPetById(req.body.petid);
-    if (!pet) return res.status(404).send('Không tìm thấy thú cưng');
+    if (!pet) return res.status(404).send('Pet not found.');
 
     await handlePetTransition({ pet, contextMethod: 'rejectPetAdoption' });
-    res.redirect('/owner/managePet/rejected');
-
+    res.status(200).json({ message: 'Successful' });
     notifyLater(pet.adopter, 'rejectAdoption', pet);
   } catch (error) {
     console.error('RejectPetAdoption Error:', error);
-    res.status(500).send('Lỗi khi từ chối nhận nuôi thú cưng');
+    res.status(500).send('Something went wrong!');
   }
 };
 
 export const rejectPetDonation = async (req, res) => {
   try {
     const pet = await petService.findPetById(req.body.petid);
-    if (!pet) return res.status(404).send('Không tìm thấy thú cưng');
+    if (!pet) return res.status(404).send('Pet not found.');
 
     await handlePetTransition({ pet, contextMethod: 'rejectPetDonation' });
-    res.redirect('/owner/managePet/rejected');
+    res.status(200).json({ message: 'Successful' });
 
     notifyLater(pet.donator, 'rejectDonation', pet);
   } catch (error) {
     console.error('RejectPetDonation Error:', error);
-    res.status(500).send('Lỗi khi từ chối quyên góp thú cưng');
+    res.status(500).send('Something went wrong!');
   }
 };

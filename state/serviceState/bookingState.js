@@ -1,3 +1,4 @@
+//bookingState.js
 class BookingState {
     constructor(bookingContext) {
       this.bookingContext = bookingContext;

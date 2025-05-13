@@ -1,4 +1,4 @@
-
+// states/AdoptCompletedState.js
 import PetState from './petState.js';
 
 class AdoptCompletedState extends PetState {

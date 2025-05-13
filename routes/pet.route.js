@@ -25,7 +25,6 @@ route.get('/detail', async function(req, res){
     const pet = await petService.findPetById(id).lean();
     let suggest = await petService.findBySpecie(pet.specie, pet._id, 3, 'approved').lean();
     res.render('vwPet/viewPetDetail', {
-        layout: 'pet-layout',
         pet: pet,
         suggest: suggest
     });
@@ -34,7 +33,6 @@ route.get('/detail', async function(req, res){
 route.get('/api/detail/:id', async function(req, res) {
   try {
     const petId = req.params.id || null;
-    console.log(petId);
     const pet = await Pet.findById(petId).lean();
 
     if (!pet) {
@@ -52,7 +50,6 @@ route.get('/api/detail/:id', async function(req, res) {
 route.get('/viewAdopted', auth, async function(req, res) {
   const adopter = req.session.authUser || null;
   const status = req.query.status;
-
   let list = [];
   if (status) {
     list = await petService.findAllByAdoptIdAndStatus(adopter.id, status).lean();
@@ -129,7 +126,7 @@ route.get('/adopt', auth, async function(req, res){
 route.post('/adopt', async function(req, res) {
   const { id, petid } = req.body || {};
   const ymd_dor =  moment(req.body.raw_dor).toDate();
-
+  const createdAt =  moment(Date.now()).toDate();
   if (!id || !petid) {
     return res.status(400).json({ message: 'Pet ID and User ID are required' });
   }
@@ -137,6 +134,7 @@ route.post('/adopt', async function(req, res) {
   try {
     const pet = await Pet.findByIdAndUpdate(petid, {
       adopter: id,
+      createdAt: createdAt,
       status: 'adopt_requested',
       adoptDate: ymd_dor
     });
