@@ -16,7 +16,7 @@ const route = express.Router();
 route.get('/managePet/all',auth, async function(req, res){
     
     const list = await petService.findAll().lean();
-    res.render('vwOwner/approved', {
+    res.render('vwOwner/pet/approved', {
         layout: 'owner-layout',
         list: list
     })
@@ -26,7 +26,7 @@ route.get('/managePet/pending',auth, async function(req, res){
     
 
     const list = await petService.findAllBy("pending").lean();
-    res.render('vwOwner/pending', {
+    res.render('vwOwner/pet/pending', {
         layout: 'owner-layout',
         list: list
     })
@@ -36,7 +36,7 @@ route.get('/managePet/approved',auth, async function(req, res){
     
 
     const list = await petService.findAllBy("approved").lean();
-    res.render('vwOwner/approved', {
+    res.render('vwOwner/pet/approved', {
         layout: 'owner-layout',
         list: list
     })
@@ -46,7 +46,7 @@ route.get('/managePet/adopt_requested',auth, async function(req, res){
     
 
     const list = await petService.findAllBy("adopt_requested").lean();
-    res.render('vwOwner/pending-adopt', {
+    res.render('vwOwner/pet/pending-adopt', {
         layout: 'owner-layout',
         list: list
     })
@@ -55,7 +55,7 @@ route.get('/managePet/adopt_approved',auth, async function(req, res){
     
 
     const list = await petService.findAllBy("adopt_approved").lean();
-    res.render('vwOwner/completed-adopt', {
+    res.render('vwOwner/pet/completed-adopt', {
         layout: 'owner-layout',
         list: list
     })
@@ -64,7 +64,7 @@ route.get('/managePet/rejected',auth, async function(req, res){
     
 
     const list = await petService.findAllBy("rejected").lean();
-    res.render('vwOwner/approved', {
+    res.render('vwOwner/pet/approved', {
         layout: 'owner-layout',
         list: list
     })
@@ -74,7 +74,7 @@ route.get('/managePet/adopt_completed',auth, async function(req, res){
     
 
     const list = await petService.findAllBy("adopt_completed").lean();
-    res.render('vwOwner/approved', {
+    res.render('vwOwner/pet/approved', {
         layout: 'owner-layout',
         list: list
     })
