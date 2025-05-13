@@ -1,14 +1,15 @@
-import mongoose from 'mongoose';
+import { mongoose } from '../utils/db.js'; 
+import User from './User.js'; // Import model User để đảm bảo liên kết chính xác
 
 const SupportRequestSchema = new mongoose.Schema({
   customerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // liên kết với bảng User
+    ref: 'User', // Liên kết với model User
     required: true
   },
   customerEmail: {
     type: String,
-    required: true // đảm bảo email luôn có
+    required: true // Đảm bảo email luôn có
   },
   subject: {
     type: String,
@@ -32,6 +33,18 @@ const SupportRequestSchema = new mongoose.Schema({
   },
   respondedAt: {
     type: Date
+  }
+});
+
+// Tạo một hook middleware để xác thực khi lưu SupportRequest
+SupportRequestSchema.pre('save', async function (next) {
+  // Kiểm tra xem customerId có tồn tại trong bảng User không
+  const user = await User.findById(this.customerId);
+  if (!user) {
+    const error = new Error('User not found');
+    next(error);
+  } else {
+    next();  // Nếu người dùng tồn tại, tiếp tục lưu
   }
 });
 

@@ -30,6 +30,11 @@ app.use(passport.session());
 activate_locals_middleware(app);
 activate_view_middleware(app);
 activate_route_middleware(app);
+
+// Import route và sử dụng với app
+import customerRoute from './routes/customer.route.js';
+app.use('/', customerRoute);
+
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');
 });
