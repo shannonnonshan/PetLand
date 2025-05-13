@@ -23,9 +23,9 @@
     {{!-- Tabs filter --}}
     <nav>
       <div class="nav nav-tabs" id="support-tab" role="tablist">
-        <a class="nav-link {{#unless queryStatus}}active{{/unless}}" href="/staff/support">All ({{counts.total}})</a>
-        <a class="nav-link {{#if (eq queryStatus 'pending')}}active{{/if}}" href="/staff/support?status=pending">Pending ({{counts.pending}})</a>
-        <a class="nav-link {{#if (eq queryStatus 'responded')}}active{{/if}}" href="/staff/support?status=responded">Responded ({{counts.responded}})</a>
+        <a class="nav-link {{#unless queryStatus}}active{{/unless}}" href="/staff/requestSupport">All ({{counts.total}})</a>
+        <a class="nav-link {{#if (eq queryStatus 'pending')}}active{{/if}}" href="/staff/requestSupport?status=pending">Pending ({{counts.pending}})</a>
+        <a class="nav-link {{#if (eq queryStatus 'responded')}}active{{/if}}" href="/staff/requestSupport?status=responded">Responded ({{counts.responded}})</a>
       </div>
     </nav>
 
@@ -56,7 +56,7 @@
                       <span class="badge badge-success">Responded</span>
                     {{/if}}
                   </td>
-                  <td>{{this.createdAt}}</td>
+                  <td>{{this.createdAtFormatted}}</td>
                   <td>
                     <a href="/staff/support/{{this._id}}" class="btn btn-sm btn-primary">
                       <i class="bi bi-eye"></i> View

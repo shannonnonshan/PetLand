@@ -27,10 +27,10 @@
 
         <hr class="tw-my-4">
 
-        <p><strong>Created At:</strong> {{request.createdAt}}</p>
+        <p><strong>Created At:</strong> {{request.createdAtFormatted}}</p>
 
-        {{#if request.respondedAt}}
-          <p><strong>Replied At:</strong> {{request.respondedAt}}</p>
+        {{#if (eq request.status 'responded')}}
+          <p><strong>Replied At:</strong> {{request.respondedAtFormatted}}</p>
           <p class="tw-font-semibold">Reply Content:</p>
           <p>{{request.response}}</p>
         {{else}}

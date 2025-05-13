@@ -92,6 +92,7 @@ route.get('/requestSupport', auth, async (req, res) => {
   // Gắn customerEmail từ customerId
   requests.forEach(req => {
     req.customerEmail = req.customerId?.email || 'Unknown';
+    req.createdAtFormatted = moment(req.createdAt).format('DD/MM/YYYY HH:mm:ss');
   });
 
   res.render('vwStaff/list', {
@@ -112,7 +113,11 @@ route.get('/support/:id', auth, async (req, res) => {
 
   // Gắn customerEmail
   request.customerEmail = request.customerId?.email || 'Unknown';
-
+  // Format time
+  request.createdAtFormatted = moment(req.createdAt).format('DD/MM/YYYY HH:mm:ss');
+  if (request.respondedAt) {
+    request.respondedAtFormatted = moment(req.respondedAt).format('DD/MM/YYYY HH:mm:ss');
+  }
   res.render('vwStaff/detail', {
     layout: 'staff-layout',
     request
