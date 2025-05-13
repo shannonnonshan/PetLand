@@ -263,6 +263,10 @@
   margin-top: 50px !important
 }
 
+.tw-mb-\[2\%\] {
+  margin-bottom: 2% !important
+}
+
 .tw-block {
   display: block !important
 }
@@ -667,6 +671,25 @@
   background-image: linear-gradient(135deg, #FF94BD, #F3EC1C) !important
 }
 
+.tw-bg-gradient-to-r {
+  background-image: linear-gradient(to right, var(--tw-gradient-stops)) !important
+}
+
+.tw-from-pink-400 {
+  --tw-gradient-from: #f472b6 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(244 114 182 / 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important
+}
+
+.tw-to-yellow-300 {
+  --tw-gradient-to: #fde047 var(--tw-gradient-to-position) !important
+}
+
+.tw-bg-clip-text {
+  -webkit-background-clip: text !important;
+          background-clip: text !important
+}
+
 .tw-stroke-black {
   stroke: #000 !important
 }
@@ -706,6 +729,10 @@
 
 .tw-p-\[10px\] {
   padding: 10px !important
+}
+
+.tw-p-\[2\%\] {
+  padding: 2% !important
 }
 
 .tw-px-10 {
@@ -758,6 +785,11 @@
   padding-bottom: 1.25rem !important
 }
 
+.tw-py-\[2\%\] {
+  padding-top: 2% !important;
+  padding-bottom: 2% !important
+}
+
 .tw-py-\[5\%\] {
   padding-top: 5% !important;
   padding-bottom: 5% !important
@@ -783,12 +815,16 @@
   padding-top: 5% !important
 }
 
-.tw-pt-\[50px\] {
-  padding-top: 50px !important
-}
-
 .tw-pt-\[70px\] {
   padding-top: 70px !important
+}
+
+.tw-pb-\[2\%\] {
+  padding-bottom: 2% !important
+}
+
+.tw-pb-\[3\%\] {
+  padding-bottom: 3% !important
 }
 
 .tw-text-left {
@@ -981,6 +1017,10 @@
   /* Chrome, Safari, Opera */
 }
 
+.hover\:tw-border:hover {
+  border-width: 1px !important
+}
+
 .hover\:tw-border-2:hover {
   border-width: 2px !important
 }
@@ -998,6 +1038,11 @@
 .hover\:tw-border-yellow-300:hover {
   --tw-border-opacity: 1 !important;
   border-color: rgb(253 224 71 / var(--tw-border-opacity, 1)) !important
+}
+
+.hover\:tw-border-yellow-600:hover {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(202 138 4 / var(--tw-border-opacity, 1)) !important
 }
 
 .hover\:tw-bg-\[\#F3EC1C\]:hover {
@@ -1018,6 +1063,11 @@
 .hover\:tw-bg-white:hover {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1)) !important
+}
+
+.hover\:tw-bg-yellow-100:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(254 249 195 / var(--tw-bg-opacity, 1)) !important
 }
 
 .hover\:tw-bg-yellow-400:hover {

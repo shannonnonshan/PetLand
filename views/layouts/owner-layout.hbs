@@ -7,15 +7,11 @@
     <link rel="icon" href="/static/imgs/logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    {{!-- <link rel="stylesheet" href="/static/css/cssOwner/owner.layout.css"> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="/css/tailwind.css" rel="stylesheet">
     <style>
-      body{
-        color: black !important;
-      }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -105,13 +101,15 @@
                 color: black !important;
                 text-decoration: none !important; /* Thêm gạch chân khi hover */
             }
+            @media (prefers-color-scheme: light) {
+            }
 
     </style>
     {{{_sections.css}}}
 </head>
 <body class="min-h-screen flex">
-        <aside id="sidebar" class="w-1/5tw-w-full bg-white dark:bg-gray-800 w-64 min-h-screen flex flex-col transition-all duration-300 ease-in-out">
-            <div class="p-4 flex justify-center items-center border-b border-gray-200 dark:border-gray-700">
+        <aside id="sidebar" class="w-1/5tw-w-full bg-white w-64 min-h-screen flex flex-col transition-all duration-300 ease-in-out">
+            <div class="p-4 flex justify-center items-center border-b border-gray-200 ">
                 <img src="/static/imgs/logo.jpg" alt="Logo" class="w-20 h-20 rounded-full object-cover">
                 <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-yellow-300">
                     PetLand
@@ -122,7 +120,7 @@
                 <ul class="p-4 space-y-2">
                     <span class="tw-mt-3">Home</span>
                     <li class="animate-fade-in" style="animation-delay: 0.1s;">
-                        <a href="#" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                        <a href="#" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
@@ -130,7 +128,7 @@
                         </a>
                     </li>
                     <li class="animate-fade-in" style="animation-delay: 0.2s;">
-                        <a href="#" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                        <a href="#" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
@@ -140,7 +138,7 @@
                     <hr>
                     <span class="inline-block mt-2">Service</span>
                     <li class="animate-fade-in" style="animation-delay: 0.3s;">
-                        <a href="" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                        <a href="" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
@@ -148,7 +146,7 @@
                         </a>
                     </li>
                     <li class="animate-fade-in" style="animation-delay: 0.3s;">
-                        <a href="/owner/manageService/shift" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                        <a href="/owner/manageService/shift" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
@@ -156,7 +154,7 @@
                         </a>
                     </li>
                     <li class="animate-fade-in" style="animation-delay: 0.3s;">
-                        <a href="/owner/manageService/booking" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                        <a href="/owner/manageService/booking" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
@@ -168,7 +166,7 @@
                     <div class="mt-6">
                         <!-- Toggle Button -->
                         <div class="flex items-center cursor-pointer group collapsible-toggle">
-                            <a href="#" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-300 menu-item-hover">
+                            <a href="#" class="flex items-center p-2 text-gray-700  rounded-lg transition-colors duration-300 menu-item-hover">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
@@ -186,25 +184,25 @@
                         <!-- Collapsible Content -->
                         <ul class="space-y-1 mt-2 pl-4 max-h-[500px] overflow-hidden transition-all duration-300">
                             <li class="animate-fade-in" style="animation-delay: 0.4s;">
-                                <a href="/owner/managePet/pending" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                                <a href="/owner/managePet/pending" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                                     Donation Request
                                 </a>
                             </li>
                             <li class="animate-fade-in" style="animation-delay: 0.4s;">
-                                <a href="/owner/managePet/adopt_requested" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                                <a href="/owner/managePet/adopt_requested" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                                     Adoption Request
                                 </a>
                             </li>
                         </ul>
                     </div>
                     <li class="animate-fade-in" style="animation-delay: 0.4s;">
-                        <a href="/owner/managePet/approved" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                        <a href="/owner/managePet/approved" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                             <img src="https://cdn-icons-png.flaticon.com/128/10078/10078695.png" alt="Pet Food Icon" class="h-6 w-6 mr-3">
                             Approved Donation
                         </a>
                     </li>
                     <li class="animate-fade-in" style="animation-delay: 0.4s;">
-                        <a href="/owner/managePet/adopt_approved" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                        <a href="/owner/managePet/adopt_approved" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                             <img src="https://cdn-icons-png.flaticon.com/128/3047/3047827.png" alt="Pet Food Icon" class="h-6 w-6 mr-3">
                             Adopting
                         </a>
@@ -212,13 +210,13 @@
                     </li>
                     
                     <li class="animate-fade-in" style="animation-delay: 0.4s;">
-                        <a href="/owner/managePet/adopt_completed" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                        <a href="/owner/managePet/adopt_completed" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                             <img src="https://cdn-icons-png.flaticon.com/128/18294/18294822.png" alt="Pet Food Icon" class="h-6 w-6 mr-3">
                             Completed
                         </a>
                     </li>
                     <li class="animate-fade-in" style="animation-delay: 0.4s;">
-                        <a href="/owner/managePet/rejected" class="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900 transition-colors duration-300 menu-item-hover">
+                        <a href="/owner/managePet/rejected" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100 transition-colors duration-300 menu-item-hover">
                             <img src="https://cdn-icons-png.flaticon.com/128/2623/2623031.png" alt="Pet Food Icon" class="h-6 w-6 mr-3">
                             Rejected
                         </a>
@@ -232,7 +230,7 @@
     <div class="w-4/5 w-full">
         <div class="card">
             <div class="card-header bg-white flex justify-between items-center">
-                <a href="#" class="m-3 flex items-center justify-center w-10 h-10 rounded-full hover:bg-yellow-100 dark:bg-yellow-100 hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-colors duration-300">
+                <a href="#" class="m-3 flex items-center justify-center w-10 h-10 rounded-full hover:bg-yellow-100  hover:bg-yellow-200 transition-colors duration-300">
                     <img src="https://cdn-icons-png.flaticon.com/128/8338/8338801.png" alt="Pet Food Icon" class="w-6 h-6 rounded-full">
                 </a>
                 <div class="flex items-center">
@@ -241,7 +239,7 @@
                         <img src="https://cdn-icons-png.flaticon.com/128/3031/3031293.png" alt="Pet Food Icon" class="w-6 h-6 rounded-full">
                     </div>
                     <div class="p-2">
-                        <a href="#" class="flex items-center text-gray-700 dark:text-gray-200 hover:text-yellow-800 dark:hover:text-white transition-colors duration-300">
+                        <a href="#" class="flex items-center text-gray-700  hover:text-yellow-800  transition-colors duration-300">
                             <img src="https://i.pravatar.cc/40?img=1" alt="User avatar" class="w-8 h-8 rounded-full mr-3">
                             <span class="font-medium">John Doe</span>
                         </a>
@@ -250,7 +248,7 @@
                 
             </div>
             <hr>
-            <div class="card-body h-full">
+            <div class="h-screen p-1">
                 {{{body}}}
             </div>
         </div>

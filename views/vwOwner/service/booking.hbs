@@ -11,7 +11,7 @@
 </style>
 {{/section}}
     <div class=" tw-overflow-y-scroll tw-max-w-[100%]" id="mainContent" style="overflow: scroll; scrollbar-width: none;">
-        <h1>All booking</h1>
+        <h1 class="card-title text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-yellow-300">All booking</h1>
       <nav>
             <div class="nav nav-tabs" id="booking-tab" role="tablist">
                 <button class="nav-link active" id="tab-all" data-bs-toggle="tab" data-bs-target="#content-all" type="button" role="tab" aria-controls="content-all" aria-selected="true">All</button>
@@ -32,7 +32,9 @@
                     <div class="card-body tw-flex tw-flex-row tw-gap-2">
                         <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
                         <div>
-                        <h5 class="card-title">{{service.serviceName}}</h5>
+                        <a href="/service/detail?id={{service.id}}">
+                        <h5 class="card-title tw-text-xl tw-font-bold tw-bg-clip-text tw-bg-gradient-to-r tw-from-pink-400 tw-to-yellow-300">{{service.serviceName}}</h5>
+                        </a>
                         <p class="card-text">{{service.shortDescription}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <p>Start Time: {{formatDate shift.startTime}}</p>
@@ -69,7 +71,9 @@
                     <div class="card-body tw-flex tw-flex-row tw-gap-2">
                         <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
                         <div>
-                        <h5 class="card-title">{{service.serviceName}}</h5>
+                        <a href="/service/detail?id={{service.id}}">
+                        <h5 class="card-title tw-text-xl tw-font-bold tw-bg-clip-text tw-bg-gradient-to-r tw-from-pink-400 tw-to-yellow-300">{{service.serviceName}}</h5>
+                        </a>
                         <p class="card-text">{{service.shortDescription}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
@@ -96,7 +100,9 @@
                     <div class="card-body tw-flex tw-flex-row tw-gap-2">
                         <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
                         <div>
-                        <h5 class="card-title">{{service.serviceName}}</h5>
+                        <a href="/service/detail?id={{service.id}}">
+                        <h5 class="card-title tw-text-xl tw-font-bold tw-bg-clip-text tw-bg-gradient-to-r tw-from-pink-400 tw-to-yellow-300">{{service.serviceName}}</h5>
+                        </a>
                         <p class="card-text">{{service.shortDescription}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
@@ -115,7 +121,9 @@
                     <div class="card-body tw-flex tw-flex-row tw-gap-2">
                         <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
                         <div>
-                        <h5 class="card-title">{{service.serviceName}}</h5>
+                        <a href="/service/detail?id={{service.id}}">
+                        <h5 class="card-title tw-text-xl tw-font-bold tw-bg-clip-text tw-bg-gradient-to-r tw-from-pink-400 tw-to-yellow-300">{{service.serviceName}}</h5>
+                        </a>
                         <p class="card-text">{{service.shortDescription}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">Staff: {{inCharge}}</h4>
@@ -138,7 +146,9 @@
                         <div class="tw-flex tw-flex-row tw-items-center tw-mt-2 tw-gap-5">
                         <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
                         <div>
-                        <h5 class="card-title">{{service.serviceName}}</h5>
+                        <a href="/service/detail?id={{service.id}}">
+                        <h5 class="card-title tw-text-xl tw-font-bold tw-bg-clip-text tw-bg-gradient-to-r tw-from-pink-400 tw-to-yellow-300">{{service.serviceName}}</h5>
+                        </a>
                         <p class="card-text">{{status.description}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>

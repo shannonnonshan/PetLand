@@ -229,7 +229,7 @@ export default {
     },
     findWaitShiftingOwner()
     {
-        return BookedService.find({ inCharge: null, status: { $ne: null}})
+        return BookedService.find({ inCharge: null, status: 'confirmed'})
         .populate('customer') 
         .populate('inCharge')  
         .populate('service')   // Populate service (thông tin dịch vụ)
