@@ -13,6 +13,13 @@
 
 <div class="tw-mt-[50px] tw-flex tw-justify-center tw-h-screen">
   <div class="tw-py-5 tw-pt-[70px] tw-px-3 tw-overflow-y-scroll tw-bg-white tw-w-[80%] tw-max-w-[100%]" id="mainContent" style="overflow: scroll; scrollbar-width: none;">
+    
+    {{#if success}}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{success}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{/if}}
 
     <h3 class="mb-4">Support Request Detail</h3>
 
