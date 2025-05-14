@@ -157,6 +157,8 @@ route.get('/is-available', async function (req, res) {
 route.post('/logout', auth, function (req, res) {
     req.session.auth = false;
     req.session.authUser = null;
+    req.session.retUrl = null;
+    req.session.message = null;
     res.redirect('/');
 });
 
