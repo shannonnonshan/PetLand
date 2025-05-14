@@ -1,0 +1,97 @@
+{{#section 'css'}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    
+    .input-box{
+        margin-bottom: 15px;
+        height: auto;
+        width: 100%;
+    }
+    input, textarea {
+        width: 100%;
+        margin-top: 5px;
+        border: 1px solid #F3EC1C; /* thêm độ dày */
+        border-radius: 5px;        /* thêm giá trị hợp lệ */
+        padding: 10px;
+        background-color: white !important; 
+        color: black;            /* chống chữ bị mờ */
+        cursor: pointer;
+        resize:none 
+    }
+    .input-box span{
+        font-weight: bold;
+    }
+    .scrollbar-none {
+      -ms-overflow-style: none; /* IE/Edge */
+      scrollbar-width: none;    /* Firefox */
+    }
+  
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;            /* Chrome, Safari, Opera */
+    }
+    .checked {
+    color: #FF94BD !important;
+    }
+    .fa-star {
+    font-size: 24px;
+    cursor: pointer;
+    color: gray;
+    }
+</style>
+{{/section}}
+<div style="background: linear-gradient(135deg, #FF94BD, #F3EC1C); overflow: scroll; scrollbar-width: none;" 
+class=" tw-h-max-full tw-overflow-y-scroll tw-h-full tw-w-full tw-border-black tw-py-[5%] tw-scrollbar-none">
+<form id="frmSchedule" action="/service/review?id={{id}}" class="tw-bg-white tw-p-5 tw-rounded-md tw-mx-auto tw-max-w-lg "  method="POST" >
+        <h2>Rate our service</h2>
+        <span class="tw-mb-1">Date: {{formatDate shift.startTime}}</span>
+        <input id="bookedServiceId" name="bookedServiceId" value="{{bookedService._id}}" hidden>
+        <div class="tw-flex tw-flex-row tw-items-center tw-mt-5 tw-gap-5">
+        <img src="{{service.imageUrl}}" class="tw-w-[150px] tw-h-[150px]" alt="">
+        <div>
+        <h5 class="card-title">{{service.serviceName}}</h5>
+        <p class="card-text">{{status.description}}</p>
+        <p>Duration: {{service.duration}} minute</p>
+        <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
+        <span class="tw-mb-1">Status: {{bookedService.status}}</span>
+        </div>
+        </div>
+    <div class="input-box">
+        <h4>Star Rating</h4>
+        <span class="fa fa-star" data-value="1"></span>
+        <span class="fa fa-star" data-value="2"></span>
+        <span class="fa fa-star" data-value="3"></span>
+        <span class="fa fa-star" data-value="4"></span>
+        <span class="fa fa-star" data-value="5"></span>
+        <input type="hidden" name="rating" id="ratingValue" value="0">
+    </div>
+    <div class="input-box">
+        <h4>Review</h4>
+        <textarea type="text" name="review" class="tw-h-[300px]" placeholder="What do you think about our service?"></textarea>
+    </div> 
+    <span id="alert" class="tw-text-red-500"></span>
+    <button type="submit"  class=" tw-mt-[10px] tw-bg-[linear-gradient(135deg,_#FF94BD,_#F3EC1C)] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-w-full tw-p-2 transition-colors duration-200"
+    >
+    Confirm Review
+    </button>
+   
+</form>
+</div>
+{{#section 'js'}}
+<script>
+  const stars = document.querySelectorAll('.fa-star');
+  const ratingInput = document.getElementById('ratingValue');
+
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      const rating = star.getAttribute('data-value');
+      ratingInput.value = rating;
+
+      // Highlight stars
+      stars.forEach(s => s.classList.remove('checked'));
+      for (let i = 0; i < rating; i++) {
+        stars[i].classList.add('checked');
+      }
+    });
+  });
+</script>
+{{/section}}

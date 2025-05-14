@@ -10,7 +10,7 @@ import moment from 'moment';
 import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
-
+import { paginateQuery } from '../utils/pagination.js';
 const route = express.Router();
 
 route.get('/managePet/all', authOwner, async function(req, res){
@@ -84,7 +84,7 @@ route.get('/managePet/adopt_completed',authOwner, async function(req, res){
 route.get('/home', authOwner, function(req, res){
     
 
-    res.render('vwOwner/home', {
+    res.render('vwOwner/viewStatis', {
         layout: 'owner-layout',
     })
      
@@ -98,18 +98,37 @@ route.get('/manageService/shift',authOwner, async function(req, res){
 })
 
 route.get('/manageService/booking', authOwner, async function(req, res){
+    const pageAll = parseInt(req.query.pageAll) || 1;
+    const pageWaitShifting = parseInt(req.query.pageWaitShifting) || 1;
+    const pageRejected = parseInt(req.query.pageRejected) || 1;
+    const pagePaid = parseInt(req.query.pagePaid) || 1;
+    const pageCompleted = parseInt(req.query.pageCompleted) || 1;
+    const limit=6;
+
     const booking = await bookingService.findBookingOwner()
     const bookingRejected = await bookingService.findRejectedOwner()
     const bookingWaitShifting = await bookingService.findWaitShiftingOwner()
-    const bookingCompleted = await bookingService.findCompletedBookedService()
+    const bookingCompleted = await bookingService.findCompletedBookedServiceOwner()
     const bookingPaid = await bookingService.findAllPaid()
+
+    const paginatedBooking = await paginateQuery(booking, pageAll, limit);
+    const paginatedRejected = await paginateQuery(bookingRejected, pageRejected, limit);
+    const paginatedWaitShifting = await paginateQuery(bookingWaitShifting,pageWaitShifting, limit);
+    const paginatedCompleted = await paginateQuery(bookingCompleted, pageCompleted, limit);
+    const paginatedPaid = await paginateQuery(bookingPaid, pagePaid, limit);
     res.render('vwOwner/service/booking', {
         layout: 'owner-layout',
-        booking: booking,
-        bookingRejected: bookingRejected,
-        bookingWaitShifting: bookingWaitShifting,
-        bookingCompleted:bookingCompleted,
-        bookingPaid: bookingPaid
+        booking: paginatedBooking.data,
+        bookingRejected:  paginatedRejected.data,
+        bookingWaitShifting: paginatedWaitShifting.data,
+        bookingCompleted:paginatedCompleted.data,
+        bookingPaid: paginatedPaid.data,
+        bookingPagination: paginatedBooking,
+        bookingRejectedPagination: paginatedRejected,
+        bookingWaitShiftingPagination: paginatedWaitShifting,
+        bookingCompletedPagination:paginatedCompleted,
+        bookingPaidPagination: paginatedPaid,
+
     })
     
 })

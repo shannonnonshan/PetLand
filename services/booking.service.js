@@ -86,9 +86,10 @@ export default {
     
         return result;
     },
-    findService(bookedServiceIds)
+    async findService(bookedServiceIds)
     {
-        return Service.findById(bookedServiceIds)
+        const bookedService = await BookedService.findById(bookedServiceIds)
+        return Service.findById(bookedService.service)
     },
     insertBookedService(bookedService)
     {
@@ -129,7 +130,7 @@ export default {
     findPendingBookedService(customerId)
     {
         return BookedService.find({customer: customerId, status: 'pending'})
-        .populate('service').sort({ updatedAt: -1 }) .lean().exec()
+        .populate('service').sort({ updatedAt: -1 }).lean().exec()
     },
     findCompletedBookedService(customerId)
     {
@@ -228,7 +229,18 @@ export default {
     },
     findWaitShiftingOwner()
     {
-        return BookedService.find({ inCharge: null, status: { $ne: null}})
+        return BookedService.find({ inCharge: null, status: 'confirmed'})
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
+        .lean()
+        .exec();
+    },
+    findCompletedBookedServiceOwner()
+    {
+        return BookedService.find({ status: 'completed'})
         .populate('customer') 
         .populate('inCharge')  
         .populate('service')   // Populate service (thông tin dịch vụ)

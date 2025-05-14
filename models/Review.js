@@ -11,16 +11,13 @@ const reviewSchema = new Schema({
         type: String, required:true
     },
     reponse:{
-        type: String, required:true
+        type: String
     },
     rating:
     {
         type: Number, required:true
     },
-    status: {
-        type: Boolean,
-        required:true
-    },
+    status: { type: Boolean, default:true },
   }, { collection: 'Review', timestamps: true });
   
 const Review = model('Review',reviewSchema);

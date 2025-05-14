@@ -19,10 +19,12 @@ route.get('/detail', async function(req,res){
     const id = String(req.query.id) || 0;
     let service = await serviceService.findByServiceId(id)
     let listService = await serviceService.findByPetType(service.petType)
+    let review = service.reviews
     res.render('vwService/detail',{
         service:service,
         list: listService,
-        authUser: req.session.authUser
+        authUser: req.session.authUser,
+        review:review
     })
 })
 route.get('/byCat', async function(req, res){
@@ -223,9 +225,40 @@ route.post('/schedule', async function(req,res)
         res.render('partials/loginRequired',{ showLoginModal: true })
     }   
 })
+route.get('/review',async function(req,res){
+    const id = String(req.query.id) || 0;
+    const bookedService = await bookingService.findBookedServiceUserServiceByBookedId(id)
+    const shift = await shiftService.findShiftByBookedService(id)
+    if (req.session.authUser){
+        res.render('vwBooking/review',{
+            bookedService: bookedService,
+            id:id,
+            user: bookedService.customer,
+            service: bookedService.service,
+            isHome:true,
+            shift:shift
+        })
+    }
+    else{
+        res.render('partials/loginRequired',{ showLoginModal: true })
+    }
+});
 route.post('/review',async function(req,res){
     if (req.session.authUser) {
-        const url = '/service/booking';
+        const id = req.query.id
+        const rating = req.body.rating
+        const review = req.body.review
+        const service = await bookingService.findService(id)
+        const newReview =
+        {
+            rating : rating,
+            review : review,
+            bookedService: id,
+        }
+        const ret = await serviceService.saveReview(newReview)
+        const addedReview = await serviceService.findReviewByBookedId(id)
+        const retService = await serviceService.updateReviewSevice(service, addedReview._id)
+        const url = '/service/detail?id=${service}';
         res.redirect(url);
     }
         
