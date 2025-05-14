@@ -314,6 +314,10 @@
   height: 150px !important
 }
 
+.tw-h-\[250px\] {
+  height: 250px !important
+}
+
 .tw-h-\[2rem\] {
   height: 2rem !important
 }
@@ -356,6 +360,10 @@
 
 .tw-h-\[4rem\] {
   height: 4rem !important
+}
+
+.tw-h-\[50\%\] {
+  height: 50% !important
 }
 
 .tw-h-\[50px\] {
@@ -633,14 +641,29 @@
   border-top-width: 1px !important
 }
 
+.tw-border-\[\#FF94BD\] {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(255 148 189 / var(--tw-border-opacity, 1)) !important
+}
+
 .tw-border-black {
   --tw-border-opacity: 1 !important;
   border-color: rgb(0 0 0 / var(--tw-border-opacity, 1)) !important
 }
 
+.tw-border-blue-500 {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity, 1)) !important
+}
+
 .tw-border-gray-300 {
   --tw-border-opacity: 1 !important;
   border-color: rgb(209 213 219 / var(--tw-border-opacity, 1)) !important
+}
+
+.tw-border-red-500 {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(239 68 68 / var(--tw-border-opacity, 1)) !important
 }
 
 .tw-bg-\[\#F3EC1C\] {
@@ -670,6 +693,11 @@
 
 .tw-bg-black\/50 {
   background-color: rgb(0 0 0 / 0.5) !important
+}
+
+.tw-bg-gray-100 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1)) !important
 }
 
 .tw-bg-gray-200 {
@@ -863,6 +891,10 @@
   padding-right: 1.25rem !important
 }
 
+.tw-pt-2 {
+  padding-top: 0.5rem !important
+}
+
 .tw-pt-\[5\%\] {
   padding-top: 5% !important
 }
@@ -949,6 +981,11 @@
 .tw-text-black {
   --tw-text-opacity: 1 !important;
   color: rgb(0 0 0 / var(--tw-text-opacity, 1)) !important
+}
+
+.tw-text-blue-500 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(59 130 246 / var(--tw-text-opacity, 1)) !important
 }
 
 .tw-text-blue-600 {
@@ -1117,6 +1154,11 @@
 .hover\:tw-bg-yellow-400:hover {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(250 204 21 / var(--tw-bg-opacity, 1)) !important
+}
+
+.hover\:tw-text-black:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgb(0 0 0 / var(--tw-text-opacity, 1)) !important
 }
 
 .hover\:tw-text-green-500:hover {

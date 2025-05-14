@@ -1,10 +1,25 @@
+{{#section 'css'}}
+<style>
+    input, textarea {
+        width: 100%;
+        margin-top: 5px;
+        border: 1px solid #F3EC1C; /* thêm độ dày */
+        border-radius: 5px;        /* thêm giá trị hợp lệ */
+        padding: 10px;
+        background-color: white !important; 
+        color: black;            /* chống chữ bị mờ */
+        cursor: pointer;
+        resize:none 
+    }
+</style>
+{{/section}}
 <div class="maincontent tw-px-[5%] tw-pt-[70px] tw-flex tw-h-screen ">
     <!-- Phần bên trái (Main content) -->
     <div class="tw-h-screen tw-pb-[5%] tw-px-5 tw-overflow-y-scroll tw-bg-white tw-w-[55%] tw-max-w-[100%]" id="mainContent" style="overflow: scroll; scrollbar-width: none;">
         <img class=" tw-mx-[20%] tw-w-[450px] tw-h-[450px]" src="{{service.imageUrl}}" alt="{{service.imageUrl}}">
-        <h3>Reccomendation</h3>
+        <h3 class="tw-mt-2">Reccomendation</h3>
         
-        <div id="container" class="tw-flex tw-flex-row tw-overflow-x-auto tw-max-w-[100%] tw-mt-8 tw-py-[5%] tw-px-[5%]"
+        <div id="container" class="tw-flex tw-flex-row tw-overflow-x-auto tw-max-w-[100%] tw-mt-8 tw-pt-2 tw-pb-[5%] tw-px-[5%]"
       style=" -ms-overflow-style: none; scrollbar-width: none; ">
           {{#each this.list}}
              <div class="tw-shadow-lg tw-rounded-sm tw-w-[250px] tw-h-[350px] tw-mr-2 tw-flex tw-flex-col tw-items-start tw-p-4 " >
@@ -24,19 +39,54 @@
         <h3>Reviews</h3>
         <hr class=" tw-bg-black">
         {{#if review.length}}
-        <span>{{starRating (avgRating review)}} <b>{{avgRating review}}</b> ( + {{count review}})</span>
-        <hr class=" tw-bg-black">
+    <span>{{starRating (avgRating review)}} <b>{{avgRating review}}</b> (+ {{count review}})</span>
+    <hr class="tw-bg-black">
+
         {{#each review}}
-        <h5>Date of review: {{formatDate createAt}}</h5>
-        <span>{{starRating rating}} </span>
-        <p>
-        {{review}}
-        </p>
+            {{#if status}}
+                <!-- Đánh giá hiển thị công khai -->
+                <div class="tw-flex tw-flex-row tw-justify-between">
+                    <h5>Date of review: {{formatDate createAt}}</h5>
+
+                    {{#if (eq ../authUser.role 'Staff')}}
+                        <div>
+                            {{> respondReview reviewId=_id}}
+                            {{> hideReview reviewId=_id}}
+                        </div>
+                    {{/if}}
+                </div>
+
+                <span>{{starRating rating}}</span>
+                <p>{{review}}</p>
+
+                {{#if response}}
+                    <p class="tw-italic tw-font-semibold">From the store:</p>
+                    <p class="tw-bg-gray-100">{{response}}</p>
+                {{/if}}
+
+            {{else}}
+                <!-- Đánh giá bị ẩn, chỉ Staff mới thấy -->
+                {{#if (eq ../authUser.role 'Staff')}}
+                    <div class="tw-flex tw-flex-row tw-justify-between">
+                        <h5>Date of review: {{formatDate createAt}}</h5>
+                        {{> unhideReview reviewId=_id}}
+                    </div>
+
+                    <span>{{starRating rating}}</span>
+                    <p>{{review}}</p>
+
+                    {{#if response}}
+                        <p class="tw-italic tw-font-semibold">From the store:</p>
+                        <p class="tw-bg-gray-100">{{response}}</p>
+                    {{/if}}
+                {{/if}}
+            {{/if}}
         {{/each}}
-        <hr class=" tw-bg-black">
-        {{else}}
+
+        <hr class="tw-bg-black">
+    {{else}}
         <p class="tw-text-gray-500 tw-font-semibold">No Review Yet</p>
-        {{/if}}
+    {{/if}}
     </div>
     
     <!-- Phần bên phải (Fixed content) -->
@@ -50,3 +100,51 @@
         </div>
     </div>
 </div>
+{{#section 'js'}}
+<script>
+    function closeModal(gohome = false) {
+        console.log("gohome:", gohome);
+        const modal = document.querySelector('.popupModel');
+        const main = document.getElementById('mainContent');
+        modal.classList.add('tw-hidden');
+        modal.setAttribute('aria-hidden', 'true');
+        main.setAttribute('aria-hidden', 'false');
+        
+        if (gohome) {
+          window.location.href = '/';
+        } else {
+          window.location.reload();
+        }
+          
+      }
+  </script>
+  <script>
+     function handleRespondReviewClick(event) {
+        event.preventDefault();
+        const modal = document.getElementById('respondSuccessModal');
+        modal.classList.remove('tw-hidden');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+    function handleHideClick() {
+        event.preventDefault();
+          if (authUser) {
+            const modal =  document.getElementById('hideReviewModal');
+            const main = document.getElementById('mainContent');
+            modal.classList.remove('tw-hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            main.setAttribute('aria-hidden', 'true');
+          }
+      }
+    function handleUnHideClick() {
+        event.preventDefault();
+          if (authUser) {
+            const modal =  document.getElementById('unhideReviewModal');
+            const main = document.getElementById('mainContent');
+            modal.classList.remove('tw-hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            main.setAttribute('aria-hidden', 'true');
+          }
+      }
+  </script>  
+{{/section}}
+

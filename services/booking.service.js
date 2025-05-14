@@ -150,9 +150,9 @@ export default {
         .lean() 
         .exec();
     },
-    findPaidBookedService(customerId)
+    async findPaidBookedService(customerId)
     {
-        return Booking.find({customer: customerId, paymentStatus: 'PAID'})
+        const bookings = await Booking.find({customer: customerId, paymentStatus: 'PAID'})
         .populate({
             path: 'bookedServices',
             populate: [
@@ -164,6 +164,17 @@ export default {
           .sort({ updatedAt: -1 }) 
           .lean()
           .exec();
+        
+        bookings.sort((a, b) => {
+        const aHasReviewed = a.bookedServices.some(s => s.status === 'reviewed');
+        const bHasReviewed = b.bookedServices.some(s => s.status === 'reviewed');
+
+        if (aHasReviewed && !bHasReviewed) return 1;
+        if (!aHasReviewed && bHasReviewed) return -1;
+        return 0;
+        });
+
+        return bookings;
     },
     findAllPaid()
     {
@@ -180,6 +191,9 @@ export default {
         .populate('accountant')
         .lean()
         .exec();
+
+
+       
     },
     findBookedServiceUserServiceByBookedId(id)
     {

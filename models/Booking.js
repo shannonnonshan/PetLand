@@ -13,7 +13,7 @@ const bookedServiceSchema = new Schema({
     },
     status: {
       type: String,
-      enum: ['pending', 'confirmed', 'completed', 'cancelled'], //confirmed là khách hàng đã confirm giờ đặt
+      enum: ['pending', 'confirmed', 'completed', 'cancelled','reviewed'], //confirmed là khách hàng đã confirm giờ đặt
       default: 'pending',
     },
     inCharge: {

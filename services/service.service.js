@@ -37,4 +37,16 @@ export default {
     {
         return Review.findById(id)
     },
+    findReviewByService(id)
+    {
+        return Review.find()
+    },
+    updateReviewResponse(reviewId,response)
+    {
+        return Review.findByIdAndUpdate(reviewId,{response:response})
+    },
+    updateReviewStatus(reviewId,status)
+    {
+        return Review.findByIdAndUpdate(reviewId,{status:status})
+    }
 };
