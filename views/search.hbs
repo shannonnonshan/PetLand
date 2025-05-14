@@ -16,10 +16,16 @@
 
 <!-- Khung search nhích lên khỏi footer -->
 <div class="tw-fixed tw-bottom-20 tw-left-0 tw-w-full tw-px-10 tw-pb-6 bg-white tw-z-50">
-  <input id="searchInput" 
-         type="text" 
-         placeholder="Search for pet or service..." 
-         class="tw-w-full tw-border tw-p-4 tw-rounded-full tw-text-xl tw-shadow-md" />
+  <div class="tw-relative tw-w-[1000px] tw-mx-auto">
+    <input id="searchInput" 
+           type="text" 
+           placeholder="Search for pet or service..." 
+           class="tw-w-full tw-border tw-py-4 tw-pl-6 tw-pr-16 tw-rounded-full tw-text-xl tw-shadow-md" />
+    
+    <button class="tw-absolute tw-right-2 tw-top-1/2 tw-transform -tw-translate-y-1/2 tw-bg-white tw-rounded-full tw-w-12 tw-h-12 tw-flex tw-items-center tw-justify-center tw-border tw-shadow-md">
+      <i class="bi bi-search tw-text-2xl"></i>
+    </button>
+  </div>
 </div>
 
 <!-- JS xử lý tìm kiếm -->

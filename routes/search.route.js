@@ -14,15 +14,22 @@ router.get('/suggest', async (req, res) => {
   const query = req.query.q;
   if (!query) return res.json([]);
 
+  // Xử lý điều kiện tìm kiếm service
+  const serviceConditions = [{ serviceName: new RegExp(query, 'i') }];
+  const q = query.toLowerCase();
+  if (q === 'dog') serviceConditions.push({ petType: { $in: [1, 3] } });
+  else if (q === 'cat') serviceConditions.push({ petType: { $in: [2, 3] } });
+  else if (q === 'both') serviceConditions.push({ petType: 3 });
+
   const [petList, serviceList] = await Promise.all([
-  Pet.find({
-    $or: [
-      { name: new RegExp(query, 'i') },
-      { specie: new RegExp(query, 'i') }
-    ],
-    status: 'approved'
-  }).limit(5),
-    Service.find({ serviceName: new RegExp(query, 'i') }).limit(5)
+    Pet.find({
+      $or: [
+        { name: new RegExp(query, 'i') },
+        { specie: new RegExp(query, 'i') }
+      ],
+      status: 'approved'
+    }).limit(5),
+    Service.find({ $or: serviceConditions }).limit(5)
   ]);
 
   const suggestions = [
