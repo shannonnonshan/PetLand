@@ -36,7 +36,7 @@ export default {
     },
     
     updateStaff(id, entity) {
-        return User.findByIdAndUpdate(id, { username: entity.username, password: entity.password, name: entity.name, phone: entity.phone, email: entity.email, gender: entity.gender, avatar: entity.avatar});
+        return User.findByIdAndUpdate(id, { username: entity.username, password: entity.password, name: entity.name, phone: entity.phone, email: entity.email, gender: entity.gender});
     },
     deleteStaff(id) {
         return User.findByIdAndDelete(id);

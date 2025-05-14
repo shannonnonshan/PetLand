@@ -7,7 +7,6 @@ import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
 import ownerController from '../controllers/owner.controller.js';
-import multer from 'multer';
 
 const route = express.Router();
 
@@ -220,11 +219,9 @@ route.get('/manageStaff/update', auth, async function(req, res) {
     });
 });
 
-const upload = multer({ dest: 'uploads/' });
+route.post('/createStaff', ownerController.createStaff);
 
-route.post('/createStaff', upload.single('avatar'), ownerController.createStaff);
-
-route.post('/updateStaff/:id', upload.single('avatar'), ownerController.updateStaff);
+route.post('/updateStaff/:id', ownerController.updateStaff);
 
 route.delete('/deleteStaff/:id', ownerController.deleteStaff);
 

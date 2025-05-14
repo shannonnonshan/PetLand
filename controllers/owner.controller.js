@@ -5,7 +5,6 @@ export default {
     async createStaff(req, res) {
         try {
             const { username, password, name, email, phone, gender } = req.body;
-            const avatar = req.file ? req.file.filename : null;
 
             const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -16,7 +15,6 @@ export default {
                 email,
                 phone,
                 gender: gender || 'none',
-                avatar,
                 role: "Staff",
             };
 
@@ -32,7 +30,6 @@ export default {
         try {
             const { id } = req.params;
             const { username, password, name, email, phone, gender } = req.body;
-            const avatarPath = req.file ? req.file.path : null;
             const hashedPassword = await bcrypt.hash(password, 10);
 
             const staffData = {
@@ -42,10 +39,9 @@ export default {
                 email,
                 phone,
                 gender: gender || 'none',
-                avatar: avatarPath,
                 role: "Staff",
             };
-            
+
             const updatedStaff = await UserService.updateStaff(id, staffData);
 
             if (!updatedStaff) {
