@@ -5,7 +5,6 @@ export default {
     async createStaff(req, res) {
         try {
             const { username, password, name, email, phone, gender } = req.body;
-
             const hashedPassword = await bcrypt.hash(password, 10);
 
             const staffData = {
@@ -30,10 +29,10 @@ export default {
         try {
             const { id } = req.params;
             const { username, name, email, phone, gender } = req.body;
-            // const hashedPassword = await bcrypt.hash(password, 10);
+
             const staffData = {
                 username,
-                // password: hashedPassword,
+                password: hashedPassword,
                 name,
                 email,
                 phone,
@@ -60,10 +59,10 @@ export default {
                 return res.send({ message: 'Staff not found' });
             }
             
-            res.send({ message: 'Staff deleted successfully' });
+            res.send({ success: true, message: 'Staff deleted successfully' });
         } catch (error) {
             console.error('Error deleting staff:', error);
-            res.send({ message: 'Error deleting staff' });
+            res.send({ success: false, message: 'Error deleting staff' });
         }
     },
 };

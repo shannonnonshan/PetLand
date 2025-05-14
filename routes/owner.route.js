@@ -199,7 +199,8 @@ route.get('/manageStaff/list',auth, async function(req, res){
         list: list
     })
 })
-
+import multer from 'multer';
+const upload = multer(); // for form-data without file upload
 
 route.get('/manageStaff/create',auth, async function(req, res){
     res.render('vwOwner/staff/createStaff', {
@@ -219,9 +220,9 @@ route.get('/manageStaff/update', auth, async function(req, res) {
     });
 });
 
-route.post('/createStaff', ownerController.createStaff);
+route.post('/createStaff', upload.none(),ownerController.createStaff);
 
-route.post('/updateStaff/:id', ownerController.updateStaff);
+route.post('/updateStaff/:id', upload.none(),ownerController.updateStaff);
 
 route.delete('/deleteStaff/:id', ownerController.deleteStaff);
 
