@@ -146,20 +146,20 @@
   right: 0px !important
 }
 
-.tw-top-0 {
-  top: 0px !important
-}
-
-.tw-top-full {
-  top: 100% !important
-}
-
 .tw-right-2 {
   right: 0.5rem !important
 }
 
+.tw-top-0 {
+  top: 0px !important
+}
+
 .tw-top-1\/2 {
   top: 50% !important
+}
+
+.tw-top-full {
+  top: 100% !important
 }
 
 .tw-z-10 {
@@ -295,6 +295,10 @@
   height: 2.5rem !important
 }
 
+.tw-h-12 {
+  height: 3rem !important
+}
+
 .tw-h-\[100\%\] {
   height: 100% !important
 }
@@ -355,10 +359,6 @@
   height: 100vh !important
 }
 
-.tw-h-12 {
-  height: 3rem !important
-}
-
 .tw-max-h-max {
   max-height: -moz-max-content !important;
   max-height: max-content !important
@@ -368,8 +368,16 @@
   width: 2.5rem !important
 }
 
+.tw-w-12 {
+  width: 3rem !important
+}
+
 .tw-w-\[100\%\] {
   width: 100% !important
+}
+
+.tw-w-\[1000px\] {
+  width: 1000px !important
 }
 
 .tw-w-\[150px\] {
@@ -446,18 +454,6 @@
 
 .tw-w-screen {
   width: 100vw !important
-}
-
-.tw-w-\[500px\] {
-  width: 500px !important
-}
-
-.tw-w-\[1000px\] {
-  width: 1000px !important
-}
-
-.tw-w-12 {
-  width: 3rem !important
 }
 
 .tw-max-w-\[100\%\] {
@@ -733,6 +729,11 @@
   padding-bottom: 0.5rem !important
 }
 
+.tw-py-4 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important
+}
+
 .tw-py-5 {
   padding-top: 1.25rem !important;
   padding-bottom: 1.25rem !important
@@ -743,11 +744,6 @@
   padding-bottom: 5% !important
 }
 
-.tw-py-4 {
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important
-}
-
 .tw-pb-6 {
   padding-bottom: 1.5rem !important
 }
@@ -756,8 +752,16 @@
   padding-bottom: 20% !important
 }
 
+.tw-pl-6 {
+  padding-left: 1.5rem !important
+}
+
 .tw-pr-1 {
   padding-right: 0.25rem !important
+}
+
+.tw-pr-16 {
+  padding-right: 4rem !important
 }
 
 .tw-pr-5 {
@@ -770,14 +774,6 @@
 
 .tw-pt-\[70px\] {
   padding-top: 70px !important
-}
-
-.tw-pl-6 {
-  padding-left: 1.5rem !important
-}
-
-.tw-pr-16 {
-  padding-right: 4rem !important
 }
 
 .tw-text-left {
