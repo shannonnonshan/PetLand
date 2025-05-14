@@ -17,7 +17,7 @@ Respond
        <form action="/staff/manageService/response-review" method="POST">
         <div class="tw-flex tw-flex-col tw-w-full tw-gap-2 tw-justify-center tw-items-center">
           <input type="hidden" name="reviewId" value="{{reviewId}}">
-          <textarea type="text"class="tw-h-[250px]" name="response">
+          <textarea type="text"class="tw-h-[250px]" name="response" required>
             {{#if response}}
             {{response}}
             {{/if}}
