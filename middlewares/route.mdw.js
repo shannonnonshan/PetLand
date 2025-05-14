@@ -4,6 +4,8 @@ import serviceRoute from '../routes/service.route.js';
 import petRoute from '../routes/pet.route.js';
 import ownerRoute from '../routes/owner.route.js';
 import staffRoute from'../routes/staff.route.js';
+import customerRoute from './routes/customer.route.js';
+
 export default function (app) {
     
     app.get('/', function (req, res) {
