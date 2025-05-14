@@ -9,7 +9,6 @@ import {notifyEmailLater} from '../controllers/service.controller.js';
 import ownerController from '../controllers/owner.controller.js';
 import multer from 'multer';
 
-
 const route = express.Router();
 
 route.get('/managePet/all',auth, async function(req, res){
@@ -188,6 +187,12 @@ route.post('/manageService/shift-staff',  auth, async function(req,res)
       
 })
 
+route.get('/statistics',auth, async function(req, res){
+    res.render('vwOwner/statistics', {
+        layout: 'owner-layout',
+    })
+})
+
 route.get('/manageStaff/list',auth, async function(req, res){
     const list = await userService.findStaff().lean();
     res.render('vwOwner/staff/listStaff', {
@@ -215,22 +220,11 @@ route.get('/manageStaff/update', auth, async function(req, res) {
     });
 });
 
-route.get('/api/staff', auth, async function(req, res){
-    try {
-        const list = await userService.findStaff().lean();
-        res.json(list);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Failed to fetch staff list' });
-    }
-});
-
-
-const upload = multer({ dest: 'uploads/' }); // Or configure custom storage
+const upload = multer({ dest: 'uploads/' });
 
 route.post('/createStaff', upload.single('avatar'), ownerController.createStaff);
 
-route.put('/updateStaff/:id', ownerController.updateStaff);
+route.post('/updateStaff/:id', upload.single('avatar'), ownerController.updateStaff);
 
 route.delete('/deleteStaff/:id', ownerController.deleteStaff);
 

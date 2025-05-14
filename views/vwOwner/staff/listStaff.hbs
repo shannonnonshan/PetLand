@@ -54,8 +54,8 @@
 </div>
 
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
+{{!-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
     // Update button
     document.querySelectorAll('.updateBtn').forEach(btn => {
       btn.addEventListener('click', function () {
@@ -64,22 +64,69 @@
       });
     });
 
-    // Delete button
     document.querySelectorAll('.deleteBtn').forEach(btn => {
-      btn.addEventListener('click', async function () {
+    btn.addEventListener('click', async function () {
         const id = this.dataset.id;
         if (!confirm("Are you sure you want to delete this staff?")) return;
 
-        const response = await fetch(`/owner/deleteStaff/${id}`, {
-          method: 'DELETE'
-        });
+        try {
+            // Send the DELETE request
+            const response = await fetch(`/owner/deleteStaff/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Uncomment this if you have CSRF protection
+                    // 'CSRF-Token': csrfToken
+                }
+            });
 
-        if (response.ok) {
-          document.querySelector(`tr[data-id="${id}"]`).remove();
-        } else {
-          alert("Failed to delete staff.");
+            const data = await response.json();
+
+            if (response.ok) {
+                // If deletion is successful, remove the staff row
+                document.querySelector(`tr[data-id="${id}"]`).remove();
+                alert(data.message || 'Staff deleted successfully!');
+            } else {
+                // If an error occurred, alert the user
+                alert(data.message || 'Failed to delete staff.');
+            }
+        } catch (error) {
+            alert('Error occurred while trying to delete staff.');
         }
-      });
     });
-  });
+});
+</script> --}}
+
+<script>
+document.querySelectorAll('.deleteBtn').forEach(btn => {
+    btn.addEventListener('click', async function () {
+        const id = this.dataset.id;
+        if (!confirm("Are you sure you want to delete this staff?")) return;
+
+        try {
+            // Send the DELETE request
+            const response = await fetch(`/owner/deleteStaff/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Uncomment this if you have CSRF protection
+                    // 'CSRF-Token': csrfToken
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // If deletion is successful, remove the staff row
+                document.querySelector(`tr[data-id="${id}"]`).remove();
+                alert(data.message || 'Staff deleted successfully!');
+            } else {
+                // If an error occurred, alert the user
+                alert(data.message || 'Failed to delete staff.');
+            }
+        } catch (error) {
+            alert('Error occurred while trying to delete staff.');
+        }
+    });
+});
 </script>

@@ -30,8 +30,13 @@ export default {
     updateUser(username, user) {
         return User.findByIdAndUpdate(username, user, { new: true });
     }, 
+
     updateUserforShift(id,name, phone, email) {
         return User.findByIdAndUpdate(id,{name: name,phone:phone,email:email});
+    },
+    
+    updateStaff(id, entity) {
+        return User.findByIdAndUpdate(id, { username: entity.username, password: entity.password, name: entity.name, phone: entity.phone, email: entity.email, gender: entity.gender, avatar: entity.avatar});
     },
     deleteStaff(id) {
         return User.findByIdAndDelete(id);

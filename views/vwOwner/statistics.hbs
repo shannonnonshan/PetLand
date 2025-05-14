@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-type-btn,
+        .revenue-type-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chart-type-btn:hover,
+        .revenue-type-btn:hover {
+            background-color: #45a049;
+        }
+
+        .chart-type-btn.active,
+        .revenue-type-btn.active {
+            background-color: #3e8e41;
+        }
+
+        .date-picker {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #noDataMessage {
+            text-align: center;
+            font-size: 18px;
+            color: #ff0000;
+            display: none;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 400px;
+            margin: 0 auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Statistics</h1>
+
+        <!-- Date picker -->
+        <input type="date" id="date" name="date" class="date-picker">
+
+        <!-- Buttons for selecting chart type -->
+        <div class="btn-group">
+            <button id="barChartBtn" class="chart-type-btn">Bar Chart</button>
+            <button id="lineChartBtn" class="chart-type-btn active">Line Chart</button>
+        </div>
+
+        <!-- Buttons for selecting revenue type -->
+        <div class="btn-group">
+            <button id="customerRevenueBtn" class="revenue-type-btn active">Revenue from Customers</button>
+            <button id="serviceRevenueBtn" class="revenue-type-btn">Revenue from Services</button>
+        </div>
+
+        <!-- Placeholder for chart -->
+        <div>
+            <canvas id="revenueChart" width="400" height="200"></canvas>
+        </div>
+
+        <!-- No data message -->
+        <div id="noDataMessage">
+            <p>No data found for the selected date.</p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Set the default date picker value to today
+            const today = new Date().toISOString().split('T')[0];
+            $('#date').val(today);
+
+            // Initially load the line chart by default
+            loadChart('line');
+
+            // Handle chart type button clicks
+            $('#barChartBtn').click(function() {
+                $('#barChartBtn').addClass('active');
+                $('#lineChartBtn').removeClass('active');
+                loadChart('bar');
+            });
+
+            $('#lineChartBtn').click(function() {
+                $('#lineChartBtn').addClass('active');
+                $('#barChartBtn').removeClass('active');
+                loadChart('line');
+            });
+
+            // Handle revenue type button clicks
+            $('#customerRevenueBtn').click(function() {
+                $('#customerRevenueBtn').addClass('active');
+                $('#serviceRevenueBtn').removeClass('active');
+                fetchData('customer');
+            });
+
+            $('#serviceRevenueBtn').click(function() {
+                $('#serviceRevenueBtn').addClass('active');
+                $('#customerRevenueBtn').removeClass('active');
+                fetchData('service');
+            });
+
+            // Function to fetch data based on revenue type
+            function fetchData(revenueType) {
+                const date = $('#date').val();
+
+                if (!date) {
+                    alert("Please select a date.");
+                    return;
+                }
+
+                // Fake data for demonstration
+                const fakeData = {
+                    customer: {
+                        labels: ['2023-05-01', '2023-05-02', '2023-05-03', '2023-05-04'],
+                        data: [500, 800, 1200, 600]
+                    },
+                    service: {
+                        labels: ['2023-05-01', '2023-05-02', '2023-05-03', '2023-05-04'],
+                        data: [300, 450, 700, 350]
+                    }
+                };
+
+                // Simulating fetching data from the backend (choose customer or service revenue)
+                const chartData = fakeData[revenueType];
+
+                // Display no data message if the data is empty
+                if (!chartData || chartData.data.length === 0) {
+                    $('#noDataMessage').show();
+                    loadChartData({ labels: [], data: [] });  // Empty chart
+                } else {
+                    $('#noDataMessage').hide();
+                    loadChartData(chartData);  // Load chart with data
+                }
+            }
+
+            // Function to load chart data and render it using Chart.js
+            function loadChartData(chartData) {
+                const ctx = document.getElementById('revenueChart').getContext('2d');
+                new Chart(ctx, {
+                    type: $('#barChartBtn').hasClass('active') ? 'bar' : 'line',  // Toggle chart type
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            label: 'Revenue',
+                            data: chartData.data,
+                            backgroundColor: chartData.backgroundColor || 'rgba(0, 123, 255, 0.5)',
+                            borderColor: chartData.borderColor || 'rgba(0, 123, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Function to load chart and get data for the chart
+            function loadChart(chartType) {
+                const revenueType = $('#customerRevenueBtn').hasClass('active') ? 'customer' : 'service';
+                fetchData(revenueType);
+            }
+        });
+    </script>
+</body>
+</html>

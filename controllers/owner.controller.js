@@ -1,11 +1,13 @@
 import UserService from '../services/user.service.js';
 import bcrypt from 'bcryptjs';
+import moment from 'moment';
 
 export default {
+    // Create new staff
     async createStaff(req, res) {
         try {
             const { username, password, name, email, phone, gender } = req.body;
-            const avatar = req.file ? req.file.filename : null; // Handle avatar upload (optional)
+            const avatar = req.file ? req.file.filename : null;
 
             const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -15,49 +17,64 @@ export default {
                 name,
                 email,
                 phone,
-                gender: gender || 'none', // fallback to 'none' if not selected
+                gender: gender || 'none',
                 avatar,
                 role: "Staff",
             };
 
             const newStaff = await UserService.add(staffData);
-            return res.status(201).json({ message: "Staff created successfully", staff: newStaff });
+            res.json({ success: true, message: 'Staff created successfully' });
         } catch (error) {
             console.error("Error creating staff:", error);
-            return res.status(500).json({ message: "Failed to create staff" });
+            res.json({ success: false, message: "Failed to create staff" })
         }
     },
 
     async updateStaff(req, res) {
         try {
             const { id } = req.params;
-            const { name, email, phone } = req.body;
+            const { username, password, name, email, phone, gender } = req.body;
+            const avatarPath = req.file ? req.file.path : null;
+            const hashedPassword = await bcrypt.hash(password, 10);
 
-            const updatedStaff = await UserService.updateUserforShift(id, name, phone, email);
+            const staffData = {
+                username,
+                password: hashedPassword,
+                name,
+                email,
+                phone,
+                gender: gender || 'none',
+                avatar : avatarPath,
+                role: "Staff",
+            };
+            
+            const updatedStaff = await UserService.updateStaff(id, staffData);
+
             if (!updatedStaff) {
-                return res.status(404).json({ message: "Staff not found" });
+                return res.json({ success: false, message: 'Staff not found' });
             }
 
-            return res.status(200).json({ message: "Staff updated successfully", staff: updatedStaff });
+            res.json({ success: true, message: 'Staff updated successfully' });
         } catch (error) {
-            console.error("Error updating staff:", error);
-            return res.status(500).json({ message: "Failed to update staff" });
+            console.error('Error updating staff:', error);
+            res.json({ success: false, message: 'Failed to update staff' });
         }
     },
 
     async deleteStaff(req, res) {
         try {
-            const { id } = req.params;
+            const staffId = req.params.id;
+            
+            const result = await UserService.deleteStaff(staffId);
 
-            const deletedStaff = await UserService.deleteStaff(id);
-            if (!deletedStaff) {
-                return res.status(404).json({ message: "Staff not found" });
+            if (!result) {
+                return res.json({ success: false, message: 'Staff not found' });
             }
-
-            return res.status(200).json({ message: "Staff deleted successfully" });
+            
+            res.json({ success: true, message: 'Staff deleted successfully' });
         } catch (error) {
-            console.error("Error deleting staff:", error);
-            return res.status(500).json({ message: "Failed to delete staff" });
+            console.error('Error deleting staff:', error);
+            res.json({ success: false, message: 'Error deleting staff' });
         }
     },
 };
