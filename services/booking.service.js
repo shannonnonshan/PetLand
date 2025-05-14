@@ -86,9 +86,10 @@ export default {
     
         return result;
     },
-    findService(bookedServiceIds)
+    async findService(bookedServiceIds)
     {
-        return Service.findById(bookedServiceIds)
+        const bookedService = await BookedService.findById(bookedServiceIds)
+        return Service.findById(bookedService.service)
     },
     insertBookedService(bookedService)
     {
@@ -129,7 +130,7 @@ export default {
     findPendingBookedService(customerId)
     {
         return BookedService.find({customer: customerId, status: 'pending'})
-        .populate('service').sort({ updatedAt: -1 }) .lean().exec()
+        .populate('service').sort({ updatedAt: -1 }).lean().exec()
     },
     findCompletedBookedService(customerId)
     {
@@ -149,9 +150,9 @@ export default {
         .lean() 
         .exec();
     },
-    findPaidBookedService(customerId)
+    async findPaidBookedService(customerId)
     {
-        return Booking.find({customer: customerId, paymentStatus: 'PAID'})
+        const bookings = await Booking.find({customer: customerId, paymentStatus: 'PAID'})
         .populate({
             path: 'bookedServices',
             populate: [
@@ -163,6 +164,17 @@ export default {
           .sort({ updatedAt: -1 }) 
           .lean()
           .exec();
+        
+        bookings.sort((a, b) => {
+        const aHasReviewed = a.bookedServices.some(s => s.status === 'reviewed');
+        const bHasReviewed = b.bookedServices.some(s => s.status === 'reviewed');
+
+        if (aHasReviewed && !bHasReviewed) return 1;
+        if (!aHasReviewed && bHasReviewed) return -1;
+        return 0;
+        });
+
+        return bookings;
     },
     findAllPaid()
     {
@@ -179,6 +191,9 @@ export default {
         .populate('accountant')
         .lean()
         .exec();
+
+
+       
     },
     findBookedServiceUserServiceByBookedId(id)
     {
@@ -228,7 +243,18 @@ export default {
     },
     findWaitShiftingOwner()
     {
-        return BookedService.find({ inCharge: null, status: { $ne: null}})
+        return BookedService.find({ inCharge: null, status: 'confirmed'})
+        .populate('customer') 
+        .populate('inCharge')  
+        .populate('service')   // Populate service (thông tin dịch vụ)
+        .populate('shift')
+        .sort({ updatedAt: -1 })  
+        .lean()
+        .exec();
+    },
+    findCompletedBookedServiceOwner()
+    {
+        return BookedService.find({ status: 'completed'})
         .populate('customer') 
         .populate('inCharge')  
         .populate('service')   // Populate service (thông tin dịch vụ)

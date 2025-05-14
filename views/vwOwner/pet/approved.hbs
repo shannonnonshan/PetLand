@@ -3,7 +3,7 @@
 <div class="card-body">
     <div class="row">
         {{#each list}}
-           <div class="col-12 col-sm-6 col-md-3 mb-3">
+           <div class="col-12 col-sm-6 col-md-4 mb-3">
                 <div class="card" style="width: 100%;">
                     <input type="hidden" name="petid" value="{{_id}}">
                     <img src="{{images.[0]}}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
@@ -24,7 +24,7 @@
                             </div>
                         </div>
 
-                        <p class="card-text" style="font-size: 10pt; margin-bottom: 5px">{{truncate description 100}}</p>
+                        <p class="card-text" style="font-size: 10pt; margin-bottom: 5px">{{truncate description 90}}</p>
                         
                         <div class="d-flex justify-content-between align-items-center">
                             <a href="/pet/detail?id={{_id}}" class="btn btn-dark">See Details</a>

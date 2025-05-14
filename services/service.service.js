@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 import {Service} from '../models/Service.js';
+import { Review } from "../models/Review.js";
 
 export default {
     findAll() {
@@ -8,7 +9,7 @@ export default {
     },
     findByServiceId(id)
     {
-        return Service.findOne({id:id}).lean()
+        return Service.findOne({id:id}).populate('reviews').lean()
     },
     findByName(name)
     {
@@ -17,5 +18,35 @@ export default {
     findByPetType(petType)
     {
         return Service.find({ petType: petType }).lean()
+    },
+    saveReview(review)
+    {
+        const newReview = new Review(review)
+        return newReview.save()
+    },
+    findReviewByBookedId(id)
+    {
+        return Review.findOne({bookedService: id})
+    },
+    updateReviewSevice(id,addedReview)
+    {
+        return Service.findByIdAndUpdate(id, { $push: { reviews: addedReview } })
+
+    },
+    findReviewService(id)
+    {
+        return Review.findById(id)
+    },
+    findReviewByService(id)
+    {
+        return Review.find()
+    },
+    updateReviewResponse(reviewId,response)
+    {
+        return Review.findByIdAndUpdate(reviewId,{response:response})
+    },
+    updateReviewStatus(reviewId,status)
+    {
+        return Review.findByIdAndUpdate(reviewId,{status:status})
     }
 };

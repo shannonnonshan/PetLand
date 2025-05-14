@@ -24,9 +24,10 @@ export default {
     findAllBy(com){
         return Pet.find({status: com});
     },
-    findAllByAdoptIdAndStatus(id, status){
-        return Pet.find({adopter: id, status: status});
+    findAllByAdoptIdAndStatus(id, status) {
+        return Pet.find({ adopter: id, status: status }).sort({ createdAt: -1 });
     },
+
     findAllByAdoptId(id){
         return Pet.find({adopter: id});
     },

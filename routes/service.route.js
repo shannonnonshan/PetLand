@@ -11,7 +11,7 @@ import { Booking } from '../models/Booking.js';
 import shiftService from '../services/shift.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
-
+import { paginateQuery } from '../utils/pagination.js';
 const route = express.Router();
 dotenv.config();
 
@@ -19,10 +19,16 @@ route.get('/detail', async function(req,res){
     const id = String(req.query.id) || 0;
     let service = await serviceService.findByServiceId(id)
     let listService = await serviceService.findByPetType(service.petType)
+    let review = service.reviews
+      review = review.map(r => ({
+        ...r,  // Giữ lại các thông tin cũ của review
+        authUser: req.session.authUser  // Thêm thông tin người dùng vào review
+    }));
     res.render('vwService/detail',{
         service:service,
         list: listService,
-        authUser: req.session.authUser
+        authUser: req.session.authUser,
+        review:review
     })
 })
 route.get('/byCat', async function(req, res){
@@ -39,17 +45,36 @@ route.get('/byCat', async function(req, res){
 
 route.get('/booking', auth, async function(req,res){
     const id = req.session.authUser.id;
+    const pageAll = parseInt(req.query.pageAll) || 1;
+    const pagePending = parseInt(req.query.pagepending) || 1;
+    const pageConfirmed = parseInt(req.query.pageConfirmed) || 1;
+    const pagePaid = parseInt(req.query.pagePaid) || 1;
+    const pageCompleted = parseInt(req.query.pageCompleted) || 1;
+    const limit=5;
+
     let booking = await bookingService.findBookedServiceByCustomerId(id)
     let bookingPending = await bookingService.findPendingBookedService(id)
     let bookingCompleted = await bookingService.findCompletedBookedService(id)
     let bookingConfirmed = await bookingService.findScheduledBookedService(id)
     let bookingPaid = await bookingService.findPaidBookedService(id)
+
+    const paginatedBooking = await paginateQuery(booking, pageAll, limit);
+    const paginatedPending = await paginateQuery(bookingPending, pagePending, limit);
+    const paginatedConfirmed = await paginateQuery(bookingConfirmed,pageConfirmed, limit);
+    const paginatedCompleted = await paginateQuery(bookingCompleted, pageCompleted, limit);
+    const paginatedPaid = await paginateQuery(bookingPaid, pagePaid, limit);
     res.render('vwBooking/bookingOfCustomer',{
-        booking: booking,
-        bookingPending: bookingPending,
-        bookingCompleted: bookingCompleted,
-        bookingConfirmed: bookingConfirmed,
-        bookingPaid: bookingPaid
+        booking: paginatedBooking.data,
+        bookingPending:  paginatedPending.data,
+        bookingConfirmed: paginatedConfirmed.data,
+        bookingCompleted:paginatedCompleted.data,
+        bookingPaid: paginatedPaid.data,
+        bookingPagination: paginatedBooking,
+        bookingPendingPagination: paginatedPending,
+        bookingConfirmedPagination: paginatedConfirmed,
+        bookingCompletedPagination:paginatedCompleted,
+        bookingPaidPagination: paginatedPaid,
+        bookingcopy:booking
     })
 })
 route.post('/create-booking',async function(req,res){
@@ -226,13 +251,15 @@ route.post('/schedule', async function(req,res)
 route.get('/review',async function(req,res){
     const id = String(req.query.id) || 0;
     const bookedService = await bookingService.findBookedServiceUserServiceByBookedId(id)
+    const shift = await shiftService.findShiftByBookedService(id)
     if (req.session.authUser){
         res.render('vwBooking/review',{
             bookedService: bookedService,
             id:id,
             user: bookedService.customer,
             service: bookedService.service,
-            isHome:true
+            isHome:true,
+            shift:shift
         })
     }
     else{
@@ -241,7 +268,24 @@ route.get('/review',async function(req,res){
 });
 route.post('/review',async function(req,res){
     if (req.session.authUser) {
-        const url = '/service/booking';
+        const id = req.query.id
+        const rating = req.body.rating
+        const review = req.body.review
+        const service = await bookingService.findService(id)
+        const newReview =
+        {
+            rating : rating,
+            review : review,
+            bookedService: id,
+        }
+        const ret = await serviceService.saveReview(newReview)
+        const addedReview = await serviceService.findReviewByBookedId(id)
+        const retService = await serviceService.updateReviewSevice(service, addedReview._id)
+        const bookedStatus = await bookingService.findBookedById(id)
+        const statusContext = new ServiceContext(bookedStatus);
+        statusContext.review();
+        await statusContext.save(); 
+        const url = `/service/detail?id=${service.id}`;
         res.redirect(url);
     }
         

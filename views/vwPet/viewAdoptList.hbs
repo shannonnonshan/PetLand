@@ -16,14 +16,19 @@
           // Cập nhật nội dung sidebar
           const sidebar = document.getElementById('sidebar');
           sidebar.style.display = 'block';
-          const formattedDate = new Date(data.adoptDate).toLocaleDateString('vi-VN', {
+          const formattedDate = new Date(data.adoptDate).toLocaleDateString('vi-VN',{
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          });
+          const createdAt = new Date(data.createdAt).toLocaleDateString('vi-VN',{
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
           });
 
           sidebar.innerHTML = `
-          <div class="card tw-border tw-border-gray-300 tw-rounded-lg tw-shadow-md tw-p-4 mb-3">
+          <div class="card tw-border tw-border-gray-300 tw-rounded-lg tw-shadow-md tw-p-4 mb-3 tw-fixed w-parent">
               <div class="card-body tw-space-y-2 tw-border">
                 <h5 class="card-title tw-text-xl tw-font-bold tw-text-gray-800">${data.name}</h5>
                 <hr class="tw-my-2">
@@ -43,6 +48,12 @@
                 <p class="card-text">
                   <span class="tw-font-semibold tw-text-gray-600">Weight:</span>
                   <span class="tw-text-yellow-600">${data.weight} kg</span>
+                </p>
+                <p class="card-text">
+                  <span class="tw-font-semibold tw-text-gray-600">Created Date:</span>
+                  <span class="tw-text-pink-600">
+                    ${data.createdAt ? createdAt : 'Not Created Yet'}
+                  </span>
                 </p>
                 <p class="card-text">
                   <span class="tw-font-semibold tw-text-gray-600">Receive Date:</span>
@@ -142,24 +153,20 @@
   });
 </script>
 {{/section}}
-<div class="tw-flex tw-overflow-y-scroll tw-flex-col lg:tw-flex-row tw-gap-8 tw-px-[5%] tw-max-w-screen-xl tw-mx-auto tw-mt-10" 
-     style="overflow: scroll; scrollbar-width: none; ">
-
-
-  <!-- Cột trái: Nội dung chính (2/3) -->
-  <div class="tw-w-full lg:tw-w-2/3 card text-center tw-mt-10" style="border: 1px solid transparent !important;">
-    <nav class="tw-mb-3">
-      <div class="nav nav-tabs" id="booking-tab" role="tablist">
-        <button class="nav-link active" href="/pet/viewAdopted" id="tab-all" data-bs-toggle="tab" data-bs-target="#content-all" type="button" role="tab" aria-controls="content-all" aria-selected="true">All</button>
-        <button class="nav-link" href="/pet/viewAdopted?status=adopt_requested" id="tab-waitshifting" data-bs-toggle="tab" data-bs-target="#content-waitshifting" type="button" role="tab" aria-controls="content-waitshifting" aria-selected="false">Pending Request</button>
-        <button class="nav-link" href="/pet/viewAdopted?status=adopt_approved" id="tab-rejected" data-bs-toggle="tab" data-bs-target="#content-rejected" type="button" role="tab" aria-controls="content-rejected" aria-selected="false">Adopting</button>
-        <button class="nav-link" href="/pet/viewAdopted?status=adopt_completed" id="tab-completed" data-bs-toggle="tab" data-bs-target="#content-completed" type="button" role="tab" aria-controls="content-completed" aria-selected="false">Finish</button>
-        <button class="nav-link" id="tab-paid" data-bs-toggle="tab" data-bs-target="#content-paid" type="button" role="tab" aria-controls="content-paid" aria-selected="false">Paid</button>
+<hr class="tw-border-t tw-border-black tw-my-5">
+<div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-8 tw-px-[5%] tw-max-w-screen-xl tw-mx-auto tw-mt-20">
+  <div class="tw-w-full lg:tw-w-2/3 card text-center" style="border: 1px solid transparent !important;">
+    <nav class=" tw-top-20 tw-mb-10">
+      <div class="nav nav-tabs  id="booking-tab" role="tablist">
+        <a class="nav-link active tw-text-yellow-600"" href="/pet/viewAdopted" id="tab-all"  type="button" role="tab" aria-controls="content-all" aria-selected="true">All</a>
+        <a class="nav-link tw-text-yellow-600"" href="/pet/viewAdopted?status=adopt_requested" id="tab-waitshifting"  type="button" role="tab" aria-controls="content-waitshifting" aria-selected="false">Pending Request</a>
+        <a class="nav-link tw-text-yellow-600"" href="/pet/viewAdopted?status=adopt_approved" id="tab-rejected" type="button" role="tab" aria-controls="content-rejected" aria-selected="false">Adopting</a>
+        <a class="nav-link tw-text-yellow-600"" href="/pet/viewAdopted?status=adopt_completed" id="tab-completed" type="button" role="tab" aria-controls="content-completed" aria-selected="false">Finish</a>
       </div>
     </nav>
 
     <div class="tab-content" id="booking-tabContent">
-      <div class="tab-pane fade show active" id="content-all" role="tabpanel" aria-labelledby="tab-all" tabindex="0">
+      <div class="tab-pane tw-h-screen overflow-y-auto fade show active" id="content-all" role="tabpanel" aria-labelledby="tab-all" tabindex="0">
         {{#if list.length}}
           {{#each list}}
             <div class="card-calendar tw-bg-white tw-shadow-lg tw-rounded-xl tw-p-6 tw-text-sm tw-text-left tw-mb-4" style="border: 2px solid rgb(164, 164, 164);">
