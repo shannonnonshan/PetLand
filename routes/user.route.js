@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcryptjs'; 
 import dotenv from 'dotenv';
-import auth from '../middlewares/auth.mdw.js';
+import {auth} from '../middlewares/auth.mdw.js';
 import requireRole from '../middlewares/role.mdw.js'
 import userService from '../services/user.service.js';
 import configurePassportGoogle from '../controllers/passportGoogle.config.js';
@@ -21,9 +21,13 @@ route.get('/login', function (req, res) {
 });
 
 route.get('/popupLogin', function(req, res){
+    const message = req.session.message;
+    delete req.session.message;
+
     res.render('partials/loginRequired',
         { 
             showLoginModal: true,
+             message
         })
 });
 

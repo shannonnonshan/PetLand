@@ -1,7 +1,9 @@
 <!-- Nút Back -->
-<div class="tw-fixed tw-top-0 tw-left-11 tw-z-50">
-  <button onclick="history.back()" class="tw-bg-white tw-shadow tw-rounded-full tw-p-5 hover:tw-bg-gray-100 tw-transition">
-    <span class="tw-text-xl">←</span>
+<div class="tw-fixed tw-bottom-4 tw-left-1/2 tw-transform -tw-translate-x-1/2 tw-z-50">
+  <button onclick="history.back()" 
+          class="tw-bg-black tw-rounded-full tw-w-[4rem] tw-h-[4rem] tw-flex tw-items-center tw-justify-center tw-border tw-border-black" 
+          style="box-shadow: rgb(1, 0, 0);">
+    <i class="bi bi-x-lg tw-text-3xl tw-text-white"></i>
   </button>
 </div>
 
@@ -45,15 +47,16 @@
     }
 
     suggestionBox.innerHTML = suggestions.map(item => {
-      return `
-        <div class="tw-p-4 tw-border tw-rounded-md tw-mb-2 tw-flex tw-items-center tw-cursor-pointer hover:tw-bg-gray-100" onclick="location.href='${item.link}'">
-          <img src="${item.image}" alt="${item.name}" class="tw-w-[60px] tw-h-[60px] tw-object-cover tw-rounded mr-4">
-          <div>
-            <div class="tw-font-bold">${item.name}</div>
-            <div class="tw-text-sm">${item.type}</div>
-          </div>
+    const isPet = item.type === 'Pet';
+    return `
+      <div class="tw-p-4 tw-border tw-rounded-md tw-mb-2 tw-flex tw-items-center tw-cursor-pointer hover:tw-bg-gray-100" onclick="location.href='${item.link}'">
+        <img src="${item.image}" alt="${item.name}" class="tw-w-[60px] tw-h-[60px] tw-object-cover tw-rounded mr-4">
+        <div>
+          <div class="tw-font-bold">${item.name}${isPet && item.specie ? ` <span class='tw-text-gray-500 tw-text-sm'>(${item.specie})</span>` : ''}</div>
+          <div class="tw-text-sm">${item.type}</div>
         </div>
-      `;
-    }).join('');
+      </div>
+    `;
+  }).join('');
   });
 </script>

@@ -4,7 +4,7 @@ import multer from 'multer';
 import moment from 'moment';
 import { approvePet, adoptPet, completeAdoption, rejectPetAdoption, rejectPetDonation} from '../controllers/pet.controller.js';
 import Pet from '../models/Pet.js';
-import auth from '../middlewares/auth.mdw.js';
+import {auth} from '../middlewares/auth.mdw.js';
 const route = express.Router();
 
 route.get('/byCat', async function(req, res){

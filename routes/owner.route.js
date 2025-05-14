@@ -4,7 +4,7 @@ import userService from '../services/user.service.js';
 import shiftService from '../services/shift.service.js';
 import bcrypt from 'bcryptjs'; 
 import dotenv from 'dotenv';
-import auth from '../middlewares/auth.mdw.js';
+import {authOwner} from '../middlewares/auth.mdw.js';
 import nodemailer from 'nodemailer';
 import moment from 'moment';
 import bookingService from '../services/booking.service.js';
@@ -13,7 +13,7 @@ import {notifyEmailLater} from '../controllers/service.controller.js';
 
 const route = express.Router();
 
-route.get('/managePet/all',auth, async function(req, res){
+route.get('/managePet/all', authOwner, async function(req, res){
     
     const list = await petService.findAll().lean();
     res.render('vwOwner/pet/approved', {
@@ -22,7 +22,7 @@ route.get('/managePet/all',auth, async function(req, res){
     })
     
 })
-route.get('/managePet/pending',auth, async function(req, res){
+route.get('/managePet/pending',authOwner, async function(req, res){
     
 
     const list = await petService.findAllBy("pending").lean();
@@ -32,7 +32,7 @@ route.get('/managePet/pending',auth, async function(req, res){
     })
    
 })
-route.get('/managePet/approved',auth, async function(req, res){
+route.get('/managePet/approved',authOwner, async function(req, res){
     
 
     const list = await petService.findAllBy("approved").lean();
@@ -42,7 +42,7 @@ route.get('/managePet/approved',auth, async function(req, res){
     })
      
 })
-route.get('/managePet/adopt_requested',auth, async function(req, res){
+route.get('/managePet/adopt_requested', authOwner, async function(req, res){
     
 
     const list = await petService.findAllBy("adopt_requested").lean();
@@ -51,7 +51,7 @@ route.get('/managePet/adopt_requested',auth, async function(req, res){
         list: list
     })
 })
-route.get('/managePet/adopt_approved',auth, async function(req, res){
+route.get('/managePet/adopt_approved',authOwner , async function(req, res){
     
 
     const list = await petService.findAllBy("adopt_approved").lean();
@@ -60,7 +60,7 @@ route.get('/managePet/adopt_approved',auth, async function(req, res){
         list: list
     })
 })
-route.get('/managePet/rejected',auth, async function(req, res){
+route.get('/managePet/rejected',authOwner, async function(req, res){
     
 
     const list = await petService.findAllBy("rejected").lean();
@@ -70,7 +70,7 @@ route.get('/managePet/rejected',auth, async function(req, res){
     })
      
 })
-route.get('/managePet/adopt_completed',auth, async function(req, res){
+route.get('/managePet/adopt_completed',authOwner, async function(req, res){
     
 
     const list = await petService.findAllBy("adopt_completed").lean();
@@ -81,7 +81,7 @@ route.get('/managePet/adopt_completed',auth, async function(req, res){
      
 })
 
-route.get('/home', function(req, res){
+route.get('/home', authOwner, function(req, res){
     
 
     res.render('vwOwner/home', {
@@ -89,7 +89,7 @@ route.get('/home', function(req, res){
     })
      
 })
-route.get('/manageService/shift',auth, async function(req, res){
+route.get('/manageService/shift',authOwner, async function(req, res){
     const booking = await bookingService.findShiftedOwner()
     res.render('vwOwner/service/shift', {
         layout: 'owner-layout',
@@ -97,7 +97,7 @@ route.get('/manageService/shift',auth, async function(req, res){
     })
 })
 
-route.get('/manageService/booking', auth, async function(req, res){
+route.get('/manageService/booking', authOwner, async function(req, res){
     const booking = await bookingService.findBookingOwner()
     const bookingRejected = await bookingService.findRejectedOwner()
     const bookingWaitShifting = await bookingService.findWaitShiftingOwner()
@@ -113,7 +113,7 @@ route.get('/manageService/booking', auth, async function(req, res){
     })
     
 })
-route.post('/manageService/reject-booking',auth,async function(req,res){
+route.post('/manageService/reject-booking',authOwner,async function(req,res){
     const { bookedServiceIds } = req.body;
     try {
         const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceIds)
@@ -133,7 +133,7 @@ route.post('/manageService/reject-booking',auth,async function(req,res){
         }
 });
 
-route.get('/manageService/shift-staff', auth, async function(req,res)
+route.get('/manageService/shift-staff', authOwner, async function(req,res)
 {
     const id = req.query.id || 0;
     const bookedService = await bookingService.findOneWaitShiftingOwner(id)
@@ -173,7 +173,7 @@ route.get('/is-available', async function (req, res) {
     }
 });
 
-route.post('/manageService/shift-staff',  auth, async function(req,res)
+route.post('/manageService/shift-staff',  authOwner, async function(req,res)
 {
         const inCharge = req.body.inCharge
         const bookedServiceId = req.body.bookedServiceId

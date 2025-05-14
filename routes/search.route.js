@@ -23,6 +23,7 @@ const suggestions = [
   ...petList.map(pet => ({
     type: 'Pet',
     name: pet.name,
+    specie: pet.specie,
     image: pet.images[0],
     link: `/pet/detail?id=${pet._id}` // ← Sửa đúng router này
   })),
