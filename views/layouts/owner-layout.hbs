@@ -146,7 +146,7 @@
     </style>
     {{{_sections.css}}}
 </head>
-<body class="flex  h-screen w-full">
+<body id="mainContent"  class="flex  h-screen w-full">
     <aside id="sidebar" class="max-h-screen w-1/6 bg-white h-screen flex flex-col transition-all duration-300 ease-in-out overflow-y-auto">
         <div class="p-4 flex justify-center items-center border-b border-gray-200 ">
             <img src="/static/imgs/logo.jpg" alt="Logo" class="w-20 h-20 rounded-full object-cover">
@@ -281,11 +281,21 @@
                 <div class="p-2">
                     <a href="#" class="flex items-center text-gray-700  hover:text-yellow-800 dark:hover:text-white transition-colors duration-300">
                         <img src="https://i.pravatar.cc/40?img=1" alt="User avatar" class="w-8 h-8 rounded-full mr-3">
-                        <span class="font-medium">John Doe</span>
+                        <span class="font-medium">{{authUser.name}}</span>
                     </a>
                 </div>
+                {{#if authUser}}
+                <button onclick="handleLogoutClick()" class="tw-shadow-lg tw-shadow-black/50 tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center" >
+                <i class="bi bi-person tw-text-2xl"></i>
+                </button>
+                {{else}}
+                <button onclick="handleClick()" class="tw-shadow-lg tw-shadow-black/50 tw-bg-white tw-rounded-full tw-w-[3rem] tw-h-[3rem] tw-flex tw-items-center tw-border-0 tw-justify-center">
+                <i class="bi bi-person tw-text-2xl"></i>
+                </button>
+                {{/if}}
             </div>
-            
+            {{> loginRequired}}
+            {{> logoutRequired}}
         </div>
         <hr>
         <div class="mt-[8%] w-full flex-1 overflow-y-auto bg-gray-50 mx-auto">
@@ -294,6 +304,31 @@
         {{!-- </div> --}}
         
     </aside>
+    <script>
+      const authUser = {{#if authUser}}true{{else}}false{{/if}};
+      function handleClick() {
+        
+          if (!authUser) {
+            event.preventDefault();
+            const modal = document.getElementById('loginModal') ;
+            const main = document.querySelector('.mainContent');
+            modal.classList.remove('tw-hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            main.setAttribute('aria-hidden', 'true');
+          }
+      }
+      function handleLogoutClick() {
+        event.preventDefault();
+          if (authUser) {
+            const modal =  document.getElementById('logoutModal');
+            const main = document.getElementById('mainContent');
+            modal.classList.remove('tw-hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            main.setAttribute('aria-hidden', 'true');
+          }
+      }
+
+    </script>
     <script>
         document.querySelectorAll('.collapsible-toggle').forEach(toggle => {
             toggle.addEventListener('click', () => {
