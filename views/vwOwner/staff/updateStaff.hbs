@@ -40,3 +40,33 @@
         </button>
     </div>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('updateStaffForm');
+
+  form.addEventListener('submit', async function (e) {
+    const formData = new FormData(form);
+    const id = "{{staff._id}}";
+
+    try {
+      const response = await fetch(`/owner/updateStaff/${id}`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        window.location.href = `/staff/${id}`;
+      } else {
+        alert(data.message || 'Failed to update staff.');
+      }
+    } catch (error) {
+      console.error('Update request failed:', error);
+      alert('An error occurred while updating staff.');
+    }
+  });
+});
+
+</script>

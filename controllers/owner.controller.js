@@ -5,7 +5,6 @@ export default {
     async createStaff(req, res) {
         try {
             const { username, password, name, email, phone, gender } = req.body;
-
             const hashedPassword = await bcrypt.hash(password, 10);
 
             const staffData = {
@@ -29,12 +28,10 @@ export default {
     async updateStaff(req, res) {
         try {
             const { id } = req.params;
-            const { username, password, name, email, phone, gender } = req.body;
-            const hashedPassword = await bcrypt.hash(password, 10);
+            const { username, name, email, phone, gender } = req.body;
 
             const staffData = {
                 username,
-                password: hashedPassword,
                 name,
                 email,
                 phone,
