@@ -32,7 +32,10 @@ export default {
     }, 
     updateUserforShift(id,name, phone, email) {
         return User.findByIdAndUpdate(id,{name: name,phone:phone,email:email});
-    }, 
+    },
+    deleteStaff(id) {
+        return User.findByIdAndDelete(id);
+    },
     addOTP(entity) {
         const otp = new OtpUser(entity)
         return otp.save();

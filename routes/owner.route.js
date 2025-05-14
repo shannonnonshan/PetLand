@@ -2,14 +2,13 @@ import express from 'express';
 import petService from '../services/pet.service.js';
 import userService from '../services/user.service.js';
 import shiftService from '../services/shift.service.js';
-import bcrypt from 'bcryptjs'; 
-import dotenv from 'dotenv';
 import auth from '../middlewares/auth.mdw.js';
-import nodemailer from 'nodemailer';
-import moment from 'moment';
 import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
+import ownerController from '../controllers/owner.controller.js';
+import multer from 'multer';
+
 
 const route = express.Router();
 
@@ -188,5 +187,51 @@ route.post('/manageService/shift-staff',  auth, async function(req,res)
         }
       
 })
+
+route.get('/manageStaff/list',auth, async function(req, res){
+    const list = await userService.findStaff().lean();
+    res.render('vwOwner/staff/listStaff', {
+        layout: 'owner-layout',
+        list: list
+    })
+})
+
+
+route.get('/manageStaff/create',auth, async function(req, res){
+    res.render('vwOwner/staff/createStaff', {
+        layout: 'owner-layout',
+    })
+})
+
+route.get('/manageStaff/update', auth, async function(req, res) {
+    const id = req.query.id;
+    const staff = await userService.findById(id);
+    if (!staff) {
+        return res.status(404).send("Staff not found");
+    }
+    res.render('vwOwner/staff/updateStaff', {
+        layout: 'owner-layout',
+        staff
+    });
+});
+
+route.get('/api/staff', auth, async function(req, res){
+    try {
+        const list = await userService.findStaff().lean();
+        res.json(list);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to fetch staff list' });
+    }
+});
+
+
+const upload = multer({ dest: 'uploads/' }); // Or configure custom storage
+
+route.post('/createStaff', upload.single('avatar'), ownerController.createStaff);
+
+route.put('/updateStaff/:id', ownerController.updateStaff);
+
+route.delete('/deleteStaff/:id', ownerController.deleteStaff);
 
 export default route;

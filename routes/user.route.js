@@ -74,6 +74,7 @@ route.get('/customer', requireRole('Customer'), (req, res) => {
         isHome:true
     });
 });
+
 route.get('/staff', requireRole('Staff'), (req, res) => {
     if (req.session.authUser){
     res.render('vwStaff/service', {
