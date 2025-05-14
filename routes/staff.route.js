@@ -11,27 +11,38 @@ import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import BookingContext from '../state/serviceState/bookingContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
-
+import serviceService from '../services/service.service.js';
+import { paginateQuery } from '../utils/pagination.js';
 const route = express.Router();
 
 route.get('/manageService/all',auth, async function(req, res){
     if (req.session && req.session.authUser) {
         const id = req.session.authUser.id
+        const pageAll = parseInt(req.query.pageAll) || 1;
+        const pageMySchedule = parseInt(req.query.pageMySchedule) || 1;
+        const pageCheckOut = parseInt(req.query.pageCheckOut) || 1;
+        const pagePaid = parseInt(req.query.pagePaid) || 1;
+        const limit=5;
         const booking = await bookingService.findShiftedOwner()
-        const bookingMyShedule = await bookingService.findBookedByStaff(id)
+        const bookingMySchedule = await bookingService.findBookedByStaff(id)
         const bookingCheckOut = await bookingService.findBookedByStatus()
-        
         const bookingPaid = await bookingService.findAllPaid()
-        bookingPaid.forEach(booking => {
-            console.log(booking.bookedServices);
-        });
-        console.log(bookingPaid)
+
+        const paginatedBooking = await paginateQuery(booking, pageAll, limit);
+        const paginatedMySchedule = await paginateQuery(bookingMySchedule, pageMySchedule, limit);
+        const paginatedCheckOut = await paginateQuery(bookingCheckOut,pageCheckOut, limit);
+        const paginatedPaid = await paginateQuery(bookingPaid, pagePaid, limit);
+
         res.render('vwStaff/service', {
             layout: 'staff-layout',
-            booking: booking,
-            bookingMyShedule: bookingMyShedule,
-            bookingCheckOut: bookingCheckOut,
-            bookingPaid: bookingPaid
+            booking: paginatedBooking.data,
+            bookingMySchedule:  paginatedMySchedule.data,
+            bookingCheckOut: paginatedCheckOut.data,
+            bookingPaid: paginatedPaid.data,
+            bookingPagination: paginatedBooking,
+            bookingMySchedulePagination: paginatedMySchedule,
+            bookingCheckOutPagination: paginatedCheckOut,
+            bookingPaidPagination: paginatedPaid,
         })
     }else{
         res.render('partials/loginRequired',{ showLoginModal: true })
@@ -58,6 +69,38 @@ route.post('/manageService/checkout',auth,async function(req,res){
         statusContext.paid(req.session.authUser.id);
         await statusContext.save(); 
         await notifyEmailLater(bookingStatus.customer._id,"confirmPaid",bookingStatus)
+        res.redirect(req.get('referer'));
+        } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating booking');
+        }
+});
+route.post('/manageService/response-review',auth,async function(req,res){
+    const {reviewId,response } = req.body;
+    try {
+        const ret = await serviceService.updateReviewResponse(reviewId,response)
+        res.redirect(req.get('referer'));
+        } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating booking');
+        }
+});
+route.post('/manageService/hide-review',auth,async function(req,res){
+    const reviewId = req.query.id;
+    console.log(reviewId)
+    try {
+        const ret = await serviceService.updateReviewStatus(reviewId,false)
+        res.redirect(req.get('referer'));
+        } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating booking');
+        }
+});
+route.post('/manageService/unhide-review',auth,async function(req,res){
+    const reviewId = req.query.id;
+    console.log(reviewId)
+    try {
+        const ret = await serviceService.updateReviewStatus(reviewId,true)
         res.redirect(req.get('referer'));
         } catch (error) {
         console.error(error);

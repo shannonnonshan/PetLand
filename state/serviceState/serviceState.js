@@ -12,7 +12,9 @@ class ServiceState {
     complete() {
     throw new Error('Cannot complete in current state.');
     }
-    
+    review() {
+    throw new Error('Cannot review in current state.');
+    }
   }
   
 export default ServiceState;

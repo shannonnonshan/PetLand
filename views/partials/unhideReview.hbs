@@ -1,0 +1,30 @@
+
+<button onclick="handleUnHideClick()" class=" tw-w-[125px] tw-rounded-md tw-text-center tw-border-red-500 tw-p-2 tw-text-red-500 tw-bg-transparent hover:tw-bg-gray-400 hover:tw-text-red">
+Unhide
+</button>
+<form action="/staff/manageService/unhide-review?id={{reviewId}}" method="POST"
+    id="unhideReviewModal"
+    class="popupModel tw-fixed tw-inset-0 tw-bg-black/50 tw-items-center tw-flex tw-justify-center 
+    {{#if showLogoutModal}}tw-block{{else}}
+    tw-hidden
+    {{/if}} tw-z-[500]"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    >
+    <div class="tw-bg-white  tw-shadow-xl tw-p-6 tw-w-[90%] tw-max-w-md">
+        <h2 class="tw-text-lg tw-font-semibold tw-mb-4">Unhide Required</h2>
+        <p class="tw-mb-4">Do you want to unhide?</p>
+        <div class="tw-flex tw-justify-end tw-gap-2">
+        <button
+            class=" tw-bg-[#FF94BD] tw-px-4 tw-py-2 hover:tw-bg-gray-400"
+            onclick="closeModal()" type="button"
+        >
+            Cancel
+        </button>
+        <button class="tw-stroke-1 tw-bg-white tw-text-black tw-px-4 tw-py-2 hover:tw-bg-[#F3EC1C]">
+            Unhide
+        </button>
+        </div>
+    </div>
+</form>
