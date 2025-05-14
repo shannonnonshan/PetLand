@@ -21,8 +21,6 @@ app.use('/static', express.static('static'));
 app.use('/css', express.static(path.join(__dirname, 'static', 'css')));
 app.use('/imgs', express.static(path.join(__dirname, 'static', 'imgs')));
 
-app.use('/search', searchRoute);
-
 app.use(express.json()); 
 
 
