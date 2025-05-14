@@ -154,8 +154,16 @@
   right: 0px !important
 }
 
+.tw-right-2 {
+  right: 0.5rem !important
+}
+
 .tw-top-0 {
   top: 0px !important
+}
+
+.tw-top-1\/2 {
+  top: 50% !important
 }
 
 .tw-top-20 {
@@ -224,6 +232,11 @@
 .tw-my-5 {
   margin-top: 1.25rem !important;
   margin-bottom: 1.25rem !important
+}
+
+.tw-mx-\[10\%\] {
+  margin-left: 10% !important;
+  margin-right: 10% !important
 }
 
 .tw-mb-0 {
@@ -318,6 +331,10 @@
   display: none !important
 }
 
+.tw-h-12 {
+  height: 3rem !important
+}
+
 .tw-h-2 {
   height: 0.5rem !important
 }
@@ -394,6 +411,14 @@
   height: 100vh !important
 }
 
+.tw-h-10 {
+  height: 2.5rem !important
+}
+
+.tw-h-\[70px\] {
+  height: 70px !important
+}
+
 .tw-max-h-max {
   max-height: -moz-max-content !important;
   max-height: max-content !important
@@ -401,6 +426,10 @@
 
 .tw-w-1\/2 {
   width: 50% !important
+}
+
+.tw-w-12 {
+  width: 3rem !important
 }
 
 .tw-w-2 {
@@ -413,6 +442,10 @@
 
 .tw-w-\[100\%\] {
   width: 100% !important
+}
+
+.tw-w-\[1000px\] {
+  width: 1000px !important
 }
 
 .tw-w-\[125px\] {
@@ -495,6 +528,14 @@
   width: 100vw !important
 }
 
+.tw-w-\[75\%\] {
+  width: 75% !important
+}
+
+.tw-w-10 {
+  width: 2.5rem !important
+}
+
 .tw-max-w-\[100\%\] {
   max-width: 100% !important
 }
@@ -521,6 +562,11 @@
 
 .-tw-translate-x-1\/2 {
   --tw-translate-x: -50% !important;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important
+}
+
+.-tw-translate-y-1\/2 {
+  --tw-translate-y: -50% !important;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important
 }
 
@@ -861,6 +907,11 @@
   padding-bottom: 0.5rem !important
 }
 
+.tw-py-4 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important
+}
+
 .tw-py-5 {
   padding-top: 1.25rem !important;
   padding-bottom: 1.25rem !important
@@ -896,8 +947,16 @@
   padding-left: 1rem !important
 }
 
+.tw-pl-6 {
+  padding-left: 1.5rem !important
+}
+
 .tw-pr-1 {
   padding-right: 0.25rem !important
+}
+
+.tw-pr-16 {
+  padding-right: 4rem !important
 }
 
 .tw-pr-5 {
@@ -963,6 +1022,14 @@
 .tw-text-xl {
   font-size: 1.25rem !important;
   line-height: 1.75rem !important
+}
+
+.tw-text-\[15pt\] {
+  font-size: 15pt !important
+}
+
+.tw-text-\[10pt\] {
+  font-size: 10pt !important
 }
 
 .tw-font-bold {

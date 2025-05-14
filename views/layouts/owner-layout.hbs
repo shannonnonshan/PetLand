@@ -279,9 +279,9 @@
                     <img src="https://cdn-icons-png.flaticon.com/128/3031/3031293.png" alt="Pet Food Icon" class="w-6 h-6 rounded-full">
                 </div>
                 <div class="p-2">
-                    <a href="#" class="flex items-center text-gray-700  hover:text-yellow-800 dark:hover:text-white transition-colors duration-300">
+                    <a type="button" onclick="handleLogoutClick()" class="flex items-center text-gray-700  hover:text-yellow-800 dark:hover:text-white transition-colors duration-300">
                         <img src="https://i.pravatar.cc/40?img=1" alt="User avatar" class="w-8 h-8 rounded-full mr-3">
-                        <span class="font-medium">John Doe</span>
+                        <span class="font-medium">{{authUser.username}}</span>
                     </a>
                 </div>
             </div>
@@ -402,6 +402,18 @@
           window.location.reload();
         }
           
+      }
+  </script>
+  <script>
+    function handleLogoutClick() {
+        event.preventDefault();
+          if (authUser) {
+            const modal =  document.getElementById('logoutModal');
+            const main = document.getElementById('mainContent');
+            modal.classList.remove('tw-hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            main.setAttribute('aria-hidden', 'true');
+          }
       }
   </script>
 </body>
