@@ -1,9 +1,7 @@
 import UserService from '../services/user.service.js';
 import bcrypt from 'bcryptjs';
-import moment from 'moment';
 
 export default {
-    // Create new staff
     async createStaff(req, res) {
         try {
             const { username, password, name, email, phone, gender } = req.body;
@@ -22,11 +20,11 @@ export default {
                 role: "Staff",
             };
 
-            const newStaff = await UserService.add(staffData);
-            res.json({ success: true, message: 'Staff created successfully' });
+            await UserService.add(staffData);
+            res.send({ message: 'Staff created successfully' });
         } catch (error) {
             console.error("Error creating staff:", error);
-            res.json({ success: false, message: "Failed to create staff" })
+            res.send({ message: 'Failed to create staff' });
         }
     },
 
@@ -44,20 +42,20 @@ export default {
                 email,
                 phone,
                 gender: gender || 'none',
-                avatar : avatarPath,
+                avatar: avatarPath,
                 role: "Staff",
             };
             
             const updatedStaff = await UserService.updateStaff(id, staffData);
 
             if (!updatedStaff) {
-                return res.json({ success: false, message: 'Staff not found' });
+                return res.send({ message: 'Staff not found' });
             }
 
-            res.json({ success: true, message: 'Staff updated successfully' });
+            res.send({ message: 'Staff updated successfully' });
         } catch (error) {
             console.error('Error updating staff:', error);
-            res.json({ success: false, message: 'Failed to update staff' });
+            res.send({ message: 'Failed to update staff' });
         }
     },
 
@@ -68,13 +66,13 @@ export default {
             const result = await UserService.deleteStaff(staffId);
 
             if (!result) {
-                return res.json({ success: false, message: 'Staff not found' });
+                return res.send({ message: 'Staff not found' });
             }
             
-            res.json({ success: true, message: 'Staff deleted successfully' });
+            res.send({ message: 'Staff deleted successfully' });
         } catch (error) {
             console.error('Error deleting staff:', error);
-            res.json({ success: false, message: 'Error deleting staff' });
+            res.send({ message: 'Error deleting staff' });
         }
     },
 };
