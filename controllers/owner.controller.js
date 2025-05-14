@@ -5,8 +5,6 @@ export default {
     async createStaff(req, res) {
         try {
             const { username, password, name, email, phone, gender } = req.body;
-            const avatar = req.file ? req.file.filename : null;
-
             const hashedPassword = await bcrypt.hash(password, 10);
 
             const staffData = {
@@ -16,7 +14,6 @@ export default {
                 email,
                 phone,
                 gender: gender || 'none',
-                avatar,
                 role: "Staff",
             };
 
@@ -31,9 +28,7 @@ export default {
     async updateStaff(req, res) {
         try {
             const { id } = req.params;
-            const { username, password, name, email, phone, gender } = req.body;
-            const avatarPath = req.file ? req.file.path : null;
-            const hashedPassword = await bcrypt.hash(password, 10);
+            const { username, name, email, phone, gender } = req.body;
 
             const staffData = {
                 username,
@@ -42,20 +37,15 @@ export default {
                 email,
                 phone,
                 gender: gender || 'none',
-                avatar: avatarPath,
-                role: "Staff",
             };
-            
             const updatedStaff = await UserService.updateStaff(id, staffData);
 
             if (!updatedStaff) {
                 return res.send({ message: 'Staff not found' });
             }
-
-            res.send({ message: 'Staff updated successfully' });
+            res.redirect('back');
         } catch (error) {
             console.error('Error updating staff:', error);
-            res.send({ message: 'Failed to update staff' });
         }
     },
 
@@ -69,10 +59,10 @@ export default {
                 return res.send({ message: 'Staff not found' });
             }
             
-            res.send({ message: 'Staff deleted successfully' });
+            res.send({ success: true, message: 'Staff deleted successfully' });
         } catch (error) {
             console.error('Error deleting staff:', error);
-            res.send({ message: 'Error deleting staff' });
+            res.send({ success: false, message: 'Error deleting staff' });
         }
     },
 };

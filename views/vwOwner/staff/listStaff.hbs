@@ -22,7 +22,7 @@
         <td class="py-2 px-4">{{this.phone}}</td>
         <td class="py-2 px-4">{{this.gender}}</td>
         <td class="py-2 px-4">
-          <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded updateBtn" data-id="{{this._id}}">Update</button>
+          <button class="bg-pink-500 hover:bg-pink-600 text-white px-3 py-1 rounded updateBtn" data-id="{{this._id}}">Update</button>
           <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded deleteBtn" data-id="{{this._id}}">Delete</button>
         </td>
       </tr>
@@ -54,7 +54,7 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.updateBtn').forEach(btn => {
         btn.addEventListener('click', function () {
             const id = this.dataset.id;
@@ -68,26 +68,28 @@
             if (!confirm("Are you sure you want to delete this staff?")) return;
 
             try {
-            const response = await fetch(`/owner/deleteStaff/${id}`, {
-                method: 'DELETE',
-                headers: {
-                'Content-Type': 'application/json'
+                const response = await fetch(`/owner/deleteStaff/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    alert(data.message || 'Staff deleted successfully');
+                    location.reload();
+                } else {
+                    alert(data.message || 'Failed to delete staff.');
                 }
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                document.querySelector(`tr[data-id="${id}"]`).remove();
-                alert(data.message || 'Staff deleted successfully!');
-            } else {
-                alert(data.message || 'Failed to delete staff.');
-            }
             } catch (error) {
-            console.error('Delete request failed:', error);
-            alert('Error occurred while trying to delete staff.');
+                console.error('Delete request failed:', error);
+                alert('Error occurred while trying to delete staff.');
             }
         });
     });
 });
 </script>
+
+

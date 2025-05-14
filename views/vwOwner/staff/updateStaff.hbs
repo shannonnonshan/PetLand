@@ -1,13 +1,7 @@
-<form action="/owner/updateStaff/{{staff._id}}" method="POST" enctype="multipart/form-data">
+<form action="/owner/updateStaff/{{staff._id}}" method="POST">
     <div>
         <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
         <input type="text" id="username" name="username" value="{{staff.username}}" required
-            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-yellow-400 focus:border-yellow-400">
-    </div>
-
-    <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-        <input type="password" id="password" name="password" required
             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-yellow-400 focus:border-yellow-400">
     </div>
 
@@ -39,12 +33,6 @@
         </select>
     </div>
 
-    <div>
-        <label for="avatar" class="block text-sm font-medium text-gray-700">Avatar (optional)</label>
-        <input type="file" id="avatar" name="avatar" accept="image/*"
-            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-yellow-400 focus:border-yellow-400">
-    </div>
-
     <div class="pt-4">
         <button type="submit"
             class="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
@@ -52,3 +40,33 @@
         </button>
     </div>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('updateStaffForm');
+
+  form.addEventListener('submit', async function (e) {
+    const formData = new FormData(form);
+    const id = "{{staff._id}}";
+
+    try {
+      const response = await fetch(`/owner/updateStaff/${id}`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        window.location.href = `/staff/${id}`;
+      } else {
+        alert(data.message || 'Failed to update staff.');
+      }
+    } catch (error) {
+      console.error('Update request failed:', error);
+      alert('An error occurred while updating staff.');
+    }
+  });
+});
+
+</script>
