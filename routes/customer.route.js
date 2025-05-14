@@ -1,5 +1,5 @@
 import express from 'express';
-import auth from '../middlewares/auth.mdw.js'; // middleware kiểm tra đăng nhập
+import {auth} from '../middlewares/auth.mdw.js'; // middleware kiểm tra đăng nhập
 import SupportRequest from '../models/SupportRequest.js';
 
 const route = express.Router();

@@ -122,6 +122,10 @@
   inset: 0px !important
 }
 
+.tw-bottom-0 {
+  bottom: 0px !important
+}
+
 .tw-bottom-20 {
   bottom: 5rem !important
 }
@@ -403,6 +407,10 @@
   height: 50px !important
 }
 
+.tw-h-\[60px\] {
+  height: 60px !important
+}
+
 .tw-h-full {
   height: 100% !important
 }
@@ -646,6 +654,10 @@
 
 .tw-overflow-y-scroll {
   overflow-y: scroll !important
+}
+
+.tw-rounded {
+  border-radius: 0.25rem !important
 }
 
 .tw-rounded-\[10px\] {
@@ -1140,6 +1152,12 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important
 }
 
+.tw-shadow-md {
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color) !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important
+}
+
 .tw-shadow-xl {
   --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color) !important;
@@ -1204,6 +1222,11 @@
 .hover\:tw-bg-\[\#FF94BD\]:hover {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(255 148 189 / var(--tw-bg-opacity, 1)) !important
+}
+
+.hover\:tw-bg-gray-100:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1)) !important
 }
 
 .hover\:tw-bg-gray-400:hover {

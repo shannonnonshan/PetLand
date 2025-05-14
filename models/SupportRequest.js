@@ -1,5 +1,5 @@
 import { mongoose } from '../utils/db.js'; 
-import User from './User.js'; // Import model User để đảm bảo liên kết chính xác
+import User from './User.js'; 
 
 const SupportRequestSchema = new mongoose.Schema({
   customerId: {
