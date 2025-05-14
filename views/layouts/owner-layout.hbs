@@ -99,7 +99,7 @@
             }
             a:hover {
                 color: black !important;
-                text-decoration: none !important; /* Thêm gạch chân khi hover */
+                text-decoration: none !important;
             }
             @media (prefers-color-scheme: light) {
             }
@@ -167,13 +167,31 @@
                     </a>
                 </li>
                 <li class="animate-fade-in" style="animation-delay: 0.2s;">
-                    <a href="#" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100  transition-colors duration-300 menu-item-hover">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
-                        Analytics
-                    </a>
-                </li>
+                        <a href="/owner/statistics" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100  transition-colors duration-300 menu-item-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            Statistics
+                        </a>
+                    </li>
+                    <hr>
+                    <span class="tw-mt-3">Staff</span>
+                    <li class="animate-fade-in" style="animation-delay: 0.1s;">
+                        <a href="/owner/manageStaff/list" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100  transition-colors duration-300 menu-item-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            List Staff
+                        </a>
+                    </li>
+                    <li class="animate-fade-in" style="animation-delay: 0.1s;">
+                        <a href="/owner/manageStaff/create" class="flex items-center p-2 text-gray-700  rounded-lg hover:bg-yellow-100  transition-colors duration-300 menu-item-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            Create Staff
+                        </a>
+                    </li>
                 <hr>
                 <span class="inline-block mt-2">Service</span>
                 <li class="animate-fade-in" style="animation-delay: 0.3s;">
@@ -204,7 +222,7 @@
                 <span class="inline-block mt-2">Pet</span>
                 <div class="mt-6">
                     <!-- Toggle Button -->
-                    <div class="flex items-center cursor-pointer group collapsible-toggle">
+                    <li class="flex animate-fade-in items-center cursor-pointer group collapsible-toggle" style="animation-delay: 0.3s;">
                         <a href="#" class="flex items-center p-2 text-gray-700  rounded-lg transition-colors duration-300 menu-item-hover">
                         <a href="#" class="flex items-center p-2 text-gray-700  rounded-lg transition-colors duration-300 menu-item-hover">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -219,7 +237,7 @@
                         <path
                             d="M382.678 226.804 163.73 7.86C158.666 2.792 151.906 0 144.698 0s-13.968 2.792-19.032 7.86l-16.124 16.12c-10.492 10.504-10.492 27.576 0 38.064L293.398 245.9l-184.06 184.06c-5.064 5.068-7.86 11.824-7.86 19.028 0 7.212 2.796 13.968 7.86 19.04l16.124 16.116c5.068 5.068 11.824 7.86 19.032 7.86s13.968-2.792 19.032-7.86L382.678 265c5.076-5.084 7.864-11.872 7.848-19.088.016-7.244-2.772-14.028-7.848-19.108z" />
                         </svg>
-                    </div>
+                    </li>
 
                     <!-- Collapsible Content -->
                     <ul class="space-y-1 mt-2 pl-4 max-h-[500px] overflow-hidden transition-all duration-300">
@@ -413,34 +431,5 @@
         modal.setAttribute('aria-hidden', 'false');
     }
   </script>   
-  <script>
-    function closeModal(gohome = false) {
-        console.log("gohome:", gohome);
-        const modal = document.querySelector('.popupModel');
-        const main = document.getElementById('mainContent');
-        modal.classList.add('tw-hidden');
-        modal.setAttribute('aria-hidden', 'true');
-        main.setAttribute('aria-hidden', 'false');
-        
-        if (gohome) {
-          window.location.href = '/';
-        } else {
-          window.location.reload();
-        }
-          
-      }
-  </script>
-  <script>
-    function handleLogoutClick() {
-        event.preventDefault();
-          if (authUser) {
-            const modal =  document.getElementById('logoutModal');
-            const main = document.getElementById('mainContent');
-            modal.classList.remove('tw-hidden');
-            modal.setAttribute('aria-hidden', 'false');
-            main.setAttribute('aria-hidden', 'true');
-          }
-      }
-  </script>
 </body>
 </html>

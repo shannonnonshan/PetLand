@@ -78,6 +78,7 @@ route.get('/customer', requireRole('Customer'), (req, res) => {
         isHome:true
     });
 });
+
 route.get('/staff', requireRole('Staff'), (req, res) => {
     if (req.session.authUser){
     res.render('vwStaff/service', {
@@ -157,6 +158,8 @@ route.get('/is-available', async function (req, res) {
 route.post('/logout', auth, function (req, res) {
     req.session.auth = false;
     req.session.authUser = null;
+    req.session.retUrl = null;
+    req.session.message = null;
     res.redirect('/');
 });
 

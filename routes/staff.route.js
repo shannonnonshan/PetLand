@@ -140,9 +140,11 @@ route.get('/support/:id', auth, async (req, res) => {
 // Xử lý phản hồi
 route.post('/support/:id/reply', auth, async (req, res) => {
   const { reply } = req.body;
+
   if (!reply) {
-    const request = await supportService.findById(req.params.id);
-    request.customerEmail = request.customerId?.email || 'Unknown';
+    const request = await supportService.findFeedBackById(req.params.id);
+    request.id = request._id.toString();
+    request.createdAtFormatted = moment(request.createdAt).utcOffset(7).format('DD/MM/YYYY HH:mm:ss');
     return res.render('vwStaff/detail', {
       layout: 'staff-layout',
       request,
@@ -150,8 +152,32 @@ route.post('/support/:id/reply', auth, async (req, res) => {
     });
   }
 
+  // Cập nhật phản hồi
   await supportService.replyToRequest(req.params.id, reply);
-  res.redirect('/staff/requestSupport?success=true');
-});
 
+  // Lấy lại dữ liệu mới sau khi cập nhật
+  const updatedRequest = await supportService.findFeedBackById(req.params.id);
+
+  // Gửi email đến khách hàng
+  try {
+    await sendServiceEmail(
+      updatedRequest.customerEmail, // Địa chỉ email người nhận
+      'Your support request has been answered', // Tiêu đề email
+      `<p>Dear Customer,</p><p>${reply}</p><p>Thank you for contacting us.</p>` // Nội dung HTML
+    );
+  } catch (err) {
+    console.error('Error sending email:', err);
+  }
+
+  // Format thời gian
+  updatedRequest.id = updatedRequest._id.toString();
+  updatedRequest.createdAtFormatted = moment(updatedRequest.createdAt).utcOffset(7).format('DD/MM/YYYY HH:mm:ss');
+  updatedRequest.respondedAtFormatted = moment(updatedRequest.respondedAt).utcOffset(7).format('DD/MM/YYYY HH:mm:ss');
+
+  res.render('vwStaff/detail', {
+    layout: 'staff-layout',
+    request: updatedRequest,
+    success: 'The message is sent.'
+  });
+});
 export default route;

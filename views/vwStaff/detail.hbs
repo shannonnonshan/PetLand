@@ -41,7 +41,7 @@
           <p class="tw-font-semibold">Reply Content:</p>
           <p>{{request.response}}</p>
         {{else}}
-          <form action="/staff/support/{{request.id}}/reply" method="post">
+          <form action="/staff/support/{{request._id}}/reply" method="post">
             {{#if error}}
               <div class="alert alert-danger">{{error}}</div>
             {{/if}}

@@ -4,12 +4,15 @@ import userService from '../services/user.service.js';
 import shiftService from '../services/shift.service.js';
 import bcrypt from 'bcryptjs'; 
 import dotenv from 'dotenv';
-import {authOwner} from '../middlewares/auth.mdw.js';
+import {auth, authOwner} from '../middlewares/auth.mdw.js';
 import nodemailer from 'nodemailer';
 import moment from 'moment';
 import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
+import ownerController from '../controllers/owner.controller.js';
+import multer from 'multer';
+
 import { paginateQuery } from '../utils/pagination.js';
 const route = express.Router();
 
@@ -192,7 +195,7 @@ route.get('/is-available', async function (req, res) {
     }
 });
 
-route.post('/manageService/shift-staff',  authOwner, async function(req,res)
+route.post('/manageService/shift-staff', authOwner, async function(req,res)
 {
         const inCharge = req.body.inCharge
         const bookedServiceId = req.body.bookedServiceId
@@ -207,5 +210,46 @@ route.post('/manageService/shift-staff',  authOwner, async function(req,res)
         }
       
 })
+
+route.get('/statistics',authOwner, async function(req, res){
+    res.render('vwOwner/statistics', {
+        layout: 'owner-layout',
+    })
+})
+
+route.get('/manageStaff/list',authOwner, async function(req, res){
+    const list = await userService.findStaff().lean();
+    res.render('vwOwner/staff/listStaff', {
+        layout: 'owner-layout',
+        list: list
+    })
+})
+
+
+route.get('/manageStaff/create',authOwner, async function(req, res){
+    res.render('vwOwner/staff/createStaff', {
+        layout: 'owner-layout',
+    })
+})
+
+route.get('/manageStaff/update', authOwner, async function(req, res) {
+    const id = req.query.id;
+    const staff = await userService.findById(id).lean();
+    if (!staff) {
+        return res.status(404).send("Staff not found");
+    }
+    res.render('vwOwner/staff/updateStaff', {
+        layout: 'owner-layout',
+        staff
+    });
+});
+
+const upload = multer({ dest: 'uploads/' });
+
+route.post('/createStaff', upload.single('avatar'), ownerController.createStaff);
+
+route.post('/updateStaff/:id', upload.single('avatar'), ownerController.updateStaff);
+
+route.delete('/deleteStaff/:id', ownerController.deleteStaff);
 
 export default route;

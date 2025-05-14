@@ -45,10 +45,10 @@ export default function (app) {
           },
           section: hbs_sections(),
           formatDate: function (date) {
-              return moment(date).format('DD-MM-YYYY'); // Định dạng ngày theo YYYY-MM-DD
+              return moment(date).format('DD-MM-YYYY HH:mm'); // Định dạng ngày theo YYYY-MM-DD
           }, 
           formatDay: function (date) {
-              return moment(date).format('YYYY-MM-DD'); 
+              return moment(date).format('DD-MM-YYYY'); // Định dạng ngày theo YYYY-MM-DD
           }, 
           truncate: function (text, length) {
             if (text && text.length > length) {

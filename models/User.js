@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { mongoose } from '../utils/db.js'; 
 
 const { Schema, model } = mongoose;
