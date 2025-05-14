@@ -1,9 +1,8 @@
-
-
 import User from '../models/User.js';
 import OtpUser from "../models/OtpUser.js";
 import { BookedService } from '../models/Booking.js';
 import { Shift } from '../models/Booking.js';
+
 
 export default {
     findAll() {
@@ -96,5 +95,6 @@ export default {
                 }).distinct('inCharge')
             }
         }).lean();
-    }
-};
+    },
+
+}

@@ -12,10 +12,10 @@ dotenv.config();
 
 route.get('/login', function (req, res) {
     const url = req.session.retUrl || null;
-    console.log(url);
     res.render('vwUser/login', {
         layout: 'account-layout',
-        url: url
+        url: url,
+        hasLoginError: false 
     });
     
 });
@@ -23,11 +23,10 @@ route.get('/login', function (req, res) {
 route.get('/popupLogin', function(req, res){
     const message = req.session.message;
     delete req.session.message;
-
     res.render('partials/loginRequired',
         { 
             showLoginModal: true,
-             message
+            message
         })
 });
 
@@ -36,17 +35,16 @@ route.post('/login', async function (req, res) {
     if(!user){
         return res.render('vwUser/login', {
             layout: 'account-layout',
-            showErrors: true
+             hasLoginError: true
         });
     }
     if (!bcrypt.compareSync(req.body.raw_password, user.password)) {
         return res.render('vwUser/login', {
             layout: 'account-layout',
-            showErrors: true,
+             hasLoginError: true,
         });
     }
     req.session.auth = true;
-
     req.session.authUser = {
         name: user.name || user.username || null,
         id: user._id,

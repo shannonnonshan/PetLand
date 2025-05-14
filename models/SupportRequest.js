@@ -4,12 +4,8 @@ import User from './User.js';
 const SupportRequestSchema = new mongoose.Schema({
   customerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Liên kết với model User
+    ref: 'User', // Tham chiếu đến User
     required: true
-  },
-  customerEmail: {
-    type: String,
-    required: true // Đảm bảo email luôn có
   },
   subject: {
     type: String,

@@ -1,23 +1,23 @@
+
 import SupportRequest from '../models/SupportRequest.js';
-
 export default {
-  findAll() {
+    findAllFeedBack() {
     return SupportRequest.find()
-      .populate('customerId', 'email') // chỉ lấy field email
+      .populate('customerId', 'email name')
       .sort({ createdAt: -1 })
       .lean();
   },
 
-  findByStatus(status) {
+  findFeedBackByStatus(status) {
     return SupportRequest.find({ status })
-      .populate('customerId', 'email')
+      .populate('customerId', 'email name')
       .sort({ createdAt: -1 })
       .lean();
   },
 
-  findById(id) {
+  findFeedBackById(id) {
     return SupportRequest.findById(id)
-      .populate('customerId', 'email')
+      .populate('customerId', 'email name')
       .lean();
   },
 
@@ -33,7 +33,7 @@ export default {
     );
   },
 
-  countByStatus() {
+  countFeedBackByStatus() {
     return SupportRequest.aggregate([
       {
         $group: {
@@ -44,7 +44,7 @@ export default {
     ]);
   },
 
-  countTotal() {
+  countTotalFeedBack() {
     return SupportRequest.countDocuments();
   }
 };
