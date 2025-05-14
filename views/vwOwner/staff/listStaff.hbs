@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    alert(data.message || 'Staff deleted successfully!');
+                    alert(data.message || 'Staff deleted successfully');
                     location.reload();
                 } else {
                     alert(data.message || 'Failed to delete staff.');

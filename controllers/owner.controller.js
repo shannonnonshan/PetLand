@@ -45,10 +45,10 @@ export default {
                 return res.send({ message: 'Staff not found' });
             }
 
-            res.send({ message: 'Staff updated successfully' });
+            res.send({ success: true, message: 'Staff updated successfully' });
         } catch (error) {
             console.error('Error updating staff:', error);
-            res.send({ message: 'Failed to update staff' });
+            res.send({ success: false, message: 'Failed to update staff' });
         }
     },
 
@@ -62,10 +62,10 @@ export default {
                 return res.send({ message: 'Staff not found' });
             }
             
-            res.send({ message: 'Staff deleted successfully' });
+            res.send({ success: true, message: 'Staff deleted successfully' });
         } catch (error) {
             console.error('Error deleting staff:', error);
-            res.send({ message: 'Error deleting staff' });
+            res.send({ success: false, message: 'Error deleting staff' });
         }
     },
 };
