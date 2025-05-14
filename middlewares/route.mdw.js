@@ -4,7 +4,11 @@ import serviceRoute from '../routes/service.route.js';
 import petRoute from '../routes/pet.route.js';
 import ownerRoute from '../routes/owner.route.js';
 import staffRoute from'../routes/staff.route.js';
+<<<<<<< HEAD
 import searchRoute from './routes/search.route.js';
+=======
+import searchRoute from '../routes/search.route.js';
+>>>>>>> decd4f4a65c2a9bcc4b99064350631c06079c0d1
 export default function (app) {
     
     app.get('/', function (req, res) {
@@ -18,12 +22,16 @@ export default function (app) {
     });
 
   });
-
+    app.use('/search', searchRoute);
     app.use('/user', userRoute);
     app.use('/service', serviceRoute);
     app.use('/pet', petRoute);
     app.use('/owner', ownerRoute);
     app.use('/staff', staffRoute);
+<<<<<<< HEAD
     app.use('/search', searchRoute);
+=======
+    
+>>>>>>> decd4f4a65c2a9bcc4b99064350631c06079c0d1
 }
 

@@ -1,15 +1,15 @@
 import express from 'express';
 import searchService from '../services/search.service.js'; // Đổi lại đường dẫn nếu cần
 
-const router = express.Router();
+const route= express.Router();
 
 // Hiển thị trang tìm kiếm
-router.get('/', (req, res) => {
-  res.render('search');
+route.get('/', async function(req, res){
+  res.render('search')
 });
 
 // Trả về gợi ý tìm kiếm
-router.get('/suggest', async (req, res) => {
+route.get('/suggest', async (req, res) => {
   const query = req.query.q;
   try {
     const suggestions = await searchService.getSuggestions(query);
@@ -20,4 +20,4 @@ router.get('/suggest', async (req, res) => {
   }
 });
 
-export default router;
+export default route;

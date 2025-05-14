@@ -4,7 +4,7 @@ import userService from '../services/user.service.js';
 import shiftService from '../services/shift.service.js';
 import bcrypt from 'bcryptjs'; 
 import dotenv from 'dotenv';
-import {auth} from '../middlewares/auth.mdw.js';
+import {auth,authStaff} from '../middlewares/auth.mdw.js';
 import nodemailer from 'nodemailer';
 import moment from 'moment';
 import bookingService from '../services/booking.service.js';
@@ -15,7 +15,7 @@ import serviceService from '../services/service.service.js';
 import { paginateQuery } from '../utils/pagination.js';
 const route = express.Router();
 
-route.get('/manageService/all',auth, async function(req, res){
+route.get('/manageService/all',authStaff, async function(req, res){
     if (req.session && req.session.authUser) {
         const id = req.session.authUser.id
         const pageAll = parseInt(req.query.pageAll) || 1;
@@ -48,7 +48,7 @@ route.get('/manageService/all',auth, async function(req, res){
         res.render('partials/loginRequired',{ showLoginModal: true })
     } 
 })
-route.post('/manageService/complete',auth,async function(req,res){
+route.post('/manageService/complete',authStaff,async function(req,res){
     const { bookedServiceIds } = req.body;
     try {
         const bookedStatus = await bookingService.findBookedById(bookedServiceIds)
@@ -61,7 +61,7 @@ route.post('/manageService/complete',auth,async function(req,res){
         res.status(500).send('Error updating booking');
         }
 });
-route.post('/manageService/checkout',auth,async function(req,res){
+route.post('/manageService/checkout',authStaff,async function(req,res){
     const {bookingId } = req.body;
     try {
         const bookingStatus = await bookingService.findBookingByIdStatus(bookingId)
@@ -75,7 +75,7 @@ route.post('/manageService/checkout',auth,async function(req,res){
         res.status(500).send('Error updating booking');
         }
 });
-route.post('/manageService/response-review',auth,async function(req,res){
+route.post('/manageService/response-review',authStaff,async function(req,res){
     const {reviewId,response } = req.body;
     try {
         const ret = await serviceService.updateReviewResponse(reviewId,response)
@@ -85,7 +85,7 @@ route.post('/manageService/response-review',auth,async function(req,res){
         res.status(500).send('Error updating booking');
         }
 });
-route.post('/manageService/hide-review',auth,async function(req,res){
+route.post('/manageService/hide-review',authStaff,async function(req,res){
     const reviewId = req.query.id;
     console.log(reviewId)
     try {
@@ -96,7 +96,7 @@ route.post('/manageService/hide-review',auth,async function(req,res){
         res.status(500).send('Error updating booking');
         }
 });
-route.post('/manageService/unhide-review',auth,async function(req,res){
+route.post('/manageService/unhide-review',authStaff,async function(req,res){
     const reviewId = req.query.id;
     console.log(reviewId)
     try {
