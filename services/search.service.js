@@ -1,13 +1,15 @@
-const PetModel = require("../models/Pet.js");
+import PetModel from "../models/Pet.js";
 
-exports.searchPets = async (keyword) => {
-  const regex = new RegExp(keyword, "i");
-  return await PetModel.find({
-    $or: [
-      { name: regex },
-      { specie: regex },
-      { gender: regex },
-      { description: regex }
-    ]
-  });
+export default {
+  async searchPets(keyword) {
+    const regex = new RegExp(keyword, "i");
+    return PetModel.find({
+      $or: [
+        { name: regex },
+        { specie: regex },
+        { gender: regex },
+        { description: regex }
+      ]
+    });
+  }
 };
