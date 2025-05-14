@@ -29,29 +29,24 @@ export default {
     async updateStaff(req, res) {
         try {
             const { id } = req.params;
-            const { username, password, name, email, phone, gender } = req.body;
-            const hashedPassword = await bcrypt.hash(password, 10);
-
+            const { username, name, email, phone, gender } = req.body;
+            // const hashedPassword = await bcrypt.hash(password, 10);
             const staffData = {
                 username,
-                password: hashedPassword,
+                // password: hashedPassword,
                 name,
                 email,
                 phone,
                 gender: gender || 'none',
-                role: "Staff",
             };
-
             const updatedStaff = await UserService.updateStaff(id, staffData);
 
             if (!updatedStaff) {
                 return res.send({ message: 'Staff not found' });
             }
-
-            res.send({ message: 'Staff updated successfully' });
+            res.redirect('back');
         } catch (error) {
             console.error('Error updating staff:', error);
-            res.send({ message: 'Failed to update staff' });
         }
     },
 
