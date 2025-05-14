@@ -19,10 +19,9 @@ route.get('/detail', async function(req,res){
     const id = String(req.query.id) || 0;
     let service = await serviceService.findByServiceId(id)
     let listService = await serviceService.findByPetType(service.petType)
-    let review = service.reviews
-      review = review.map(r => ({
-        ...r,  // Giữ lại các thông tin cũ của review
-        authUser: req.session.authUser  // Thêm thông tin người dùng vào review
+    let review = (service.reviews || []).map(r => ({
+        ...r,
+        authUser: req.session.authUser
     }));
     res.render('vwService/detail',{
         service:service,
