@@ -15,25 +15,29 @@ router.get('/suggest', async (req, res) => {
   if (!query) return res.json([]);
 
   const [petList, serviceList] = await Promise.all([
-    Pet.find({ name: new RegExp(query, 'i') }).limit(5),
+    Pet.find({ 
+      name: new RegExp(query, 'i'), 
+      status: 'approved' // 👈 lọc chỉ approved pet
+    }).limit(5),
     Service.find({ serviceName: new RegExp(query, 'i') }).limit(5)
   ]);
 
-const suggestions = [
-  ...petList.map(pet => ({
-    type: 'Pet',
-    name: pet.name,
-    specie: pet.specie,
-    image: pet.images[0],
-    link: `/pet/detail?id=${pet._id}` // ← Sửa đúng router này
-  })),
-  ...serviceList.map(service => ({
-    type: 'Service',
-    name: service.serviceName,
-    image: service.imageUrl,
-    link: `/service/detail?id=${service.id}`
-  }))
-];
+  const suggestions = [
+    ...petList.map(pet => ({
+      type: 'Pet',
+      name: pet.name,
+      specie: pet.specie,
+      image: pet.images[0],
+      link: `/pet/detail?id=${pet._id}`
+    })),
+    ...serviceList.map(service => ({
+      type: 'Service',
+      name: service.serviceName,
+      image: service.imageUrl,
+      link: `/service/detail?id=${service.id}`
+    }))
+  ];
+
   res.json(suggestions);
 });
 

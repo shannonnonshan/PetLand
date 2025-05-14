@@ -33,7 +33,7 @@ route.get('/detail', async function(req, res){
 route.get('/api/detail/:id', async function(req, res) {
   try {
     const petId = req.params.id || null;
-    const pet = await Pet.findById(petId).lean();
+    const pet = await petService.findPetById(petId).lean();
 
     if (!pet) {
       return res.status(404).json({ message: 'Pet not found' });
