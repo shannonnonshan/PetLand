@@ -209,7 +209,7 @@ route.get('/manageStaff/create',auth, async function(req, res){
 
 route.get('/manageStaff/update', auth, async function(req, res) {
     const id = req.query.id;
-    const staff = await userService.findById(id);
+    const staff = await userService.findById(id).lean();
     if (!staff) {
         return res.status(404).send("Staff not found");
     }
