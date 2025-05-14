@@ -15,10 +15,13 @@ router.get('/suggest', async (req, res) => {
   if (!query) return res.json([]);
 
   const [petList, serviceList] = await Promise.all([
-    Pet.find({ 
-      name: new RegExp(query, 'i'), 
-      status: 'approved' // 👈 lọc chỉ approved pet
-    }).limit(5),
+  Pet.find({
+    $or: [
+      { name: new RegExp(query, 'i') },
+      { specie: new RegExp(query, 'i') }
+    ],
+    status: 'approved'
+  }).limit(5),
     Service.find({ serviceName: new RegExp(query, 'i') }).limit(5)
   ]);
 
