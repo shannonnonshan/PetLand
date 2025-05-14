@@ -1,45 +1,58 @@
-    <hr class="my-6">
+<hr class="my-6">
 
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Staff List</h2>
+<h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Staff List</h2>
 
-    <table id="staffTable" class="min-w-full bg-white rounded-lg shadow-md overflow-hidden">
-    <thead class="bg-yellow-400 text-white">
-        <tr>
-        <th class="py-2 px-4">Username</th>
-        <th class="py-2 px-4">Name</th>
-        <th class="py-2 px-4">Email</th>
-        <th class="py-2 px-4">Phone</th>
-        <th class="py-2 px-4">Gender</th>
-        <th class="py-2 px-4">Actions</th>
-        </tr>
-    </thead>
-    <tbody class="text-center" id="staffTableBody"></tbody>
-    </table>
+<table id="staffTable" class="min-w-full bg-white rounded-lg shadow-md overflow-hidden">
+  <thead class="bg-yellow-400 text-white">
+    <tr>
+      <th class="py-2 px-4">Username</th>
+      <th class="py-2 px-4">Name</th>
+      <th class="py-2 px-4">Email</th>
+      <th class="py-2 px-4">Phone</th>
+      <th class="py-2 px-4">Gender</th>
+      <th class="py-2 px-4">Actions</th>
+    </tr>
+  </thead>
+  <tbody class="text-center" id="staffTableBody">
+    {{#each list}} <!-- Loop through the 'list' passed from the server -->
+      <tr data-id="{{this._id}}">
+        <td class="py-2 px-4">{{this.username}}</td>
+        <td class="py-2 px-4">{{this.name}}</td>
+        <td class="py-2 px-4">{{this.email}}</td>
+        <td class="py-2 px-4">{{this.phone}}</td>
+        <td class="py-2 px-4">{{this.gender}}</td>
+        <td class="py-2 px-4">
+          <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded updateBtn" data-id="{{this._id}}">Update</button>
+          <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded deleteBtn" data-id="{{this._id}}">Delete</button>
+        </td>
+      </tr>
+    {{else}}
+      <tr>
+        <td colspan="6">No staff found</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
 
-    <!-- Update Form (Hidden by default) -->
-    <div id="updateFormWrapper" class="hidden mt-6 p-6 bg-gray-50 rounded-lg shadow-inner">
-    <h3 class="text-xl font-semibold mb-4 text-gray-800">Update Staff Info</h3>
-    <form id="staffUpdateForm">
-        <input type="hidden" id="staffId">
-        <div class="grid grid-cols-2 gap-4">
-        <input type="text" id="updateName" placeholder="Name" required
-            class="border p-2 rounded-md w-full">
-        <input type="email" id="updateEmail" placeholder="Email" required
-            class="border p-2 rounded-md w-full">
-        <input type="text" id="updatePhone" placeholder="Phone" required
-            class="border p-2 rounded-md w-full">
-        <select id="updateGender" class="border p-2 rounded-md w-full">
-            <option value="none">None</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-        </div>
-        <button type="submit"
-        class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-        Confirm Update
-        </button>
-    </form>
+<!-- Update Form (Hidden by default) -->
+<div id="updateFormWrapper" class="hidden mt-6 p-6 bg-gray-50 rounded-lg shadow-inner">
+  <h3 class="text-xl font-semibold mb-4 text-gray-800">Update Staff Info</h3>
+  <form id="staffUpdateForm">
+    <input type="hidden" id="staffId">
+    <div class="grid grid-cols-2 gap-4">
+      <input type="text" id="updateName" placeholder="Name" required class="border p-2 rounded-md w-full">
+      <input type="email" id="updateEmail" placeholder="Email" required class="border p-2 rounded-md w-full">
+      <input type="text" id="updatePhone" placeholder="Phone" required class="border p-2 rounded-md w-full">
+      <select id="updateGender" class="border p-2 rounded-md w-full">
+        <option value="none">None</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
     </div>
+    <button type="submit" class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">Confirm Update</button>
+  </form>
+</div>
+
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
