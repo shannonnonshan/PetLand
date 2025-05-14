@@ -11,7 +11,7 @@ import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import BookingContext from '../state/serviceState/bookingContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
-import supportService from '../services/staff.service.js';
+import supportService from '../services/user.service.js';
 import { sendServiceEmail } from '../utils/mailer.js';
 
 const route = express.Router();
@@ -24,10 +24,10 @@ route.get('/manageService/all',auth, async function(req, res){
         const bookingCheckOut = await bookingService.findBookedByStatus()
         
         const bookingPaid = await bookingService.findAllPaid()
-        bookingPaid.forEach(booking => {
-            console.log(booking.bookedServices);
-        });
-        console.log(bookingPaid)
+        // bookingPaid.forEach(booking => {
+        //     console.log(booking.bookedServices);
+        // });
+        // console.log(bookingPaid)
         res.render('vwStaff/service', {
             layout: 'staff-layout',
             booking: booking,
@@ -74,9 +74,9 @@ route.get('/requestSupport', auth, async (req, res) => {
   const { status } = req.query;
 
   const [requests, countsAgg, totalCount] = await Promise.all([
-    status ? supportService.findByStatus(status) : supportService.findAll(),
-    supportService.countByStatus(),
-    supportService.countTotal()
+    status ? supportService.findFeedBackByStatus(status) : supportService.findAllFeedBack(),
+    supportService.countFeedBackByStatus(),
+    supportService.countTotalFeedBack()
   ]);
 
   const counts = {
@@ -90,15 +90,16 @@ route.get('/requestSupport', auth, async (req, res) => {
     if (c._id === 'responded') counts.responded = c.count;
   });
 
-  // Gắn customerEmail từ customerId
-  requests.forEach(req => {
-    req.customerEmail = req.customerId?.email || 'Unknown';
-    req.createdAtFormatted = moment(req.createdAt).utcOffset(7).format('DD/MM/YYYY HH:mm:ss');
-  });
+  const formattedRequests = requests.map(r => ({
+    ...r,
+    customerEmail: r.customerId?.email || '',
+    customerName: r.customerId?.name || '',
+    createdAtFormatted: moment(r.createdAt).utcOffset(7).format('DD/MM/YYYY HH:mm:ss'),
+  }));
 
   res.render('vwStaff/list', {
     layout: 'staff-layout',
-    requests,
+    requests: formattedRequests,
     counts,
     queryStatus: status,
     success: req.query.success
@@ -107,14 +108,11 @@ route.get('/requestSupport', auth, async (req, res) => {
 
 // Trang xem chi tiết & trả lời
 route.get('/support/:id', auth, async (req, res) => {
-  const request = await supportService.findById(req.params.id);
+  const request = await supportService.findFeedBackById(req.params.id);
   if (!request) {
     return res.status(404).send('Not found');
   }
   request.id = request._id.toString();
-  // Gắn customerEmail
-  request.customerEmail = request.customerId?.email || 'Unknown';
-  // Format time
   request.createdAtFormatted = moment(request.createdAt).utcOffset(7).format('DD/MM/YYYY HH:mm:ss');
   if (request.respondedAt) {
     request.respondedAtFormatted = moment(request.respondedAt).utcOffset(7).format('DD/MM/YYYY HH:mm:ss');
@@ -131,9 +129,9 @@ route.post('/support/:id/reply', auth, async (req, res) => {
   const { reply } = req.body;
 
   if (!reply) {
-    const request = await supportService.findById(req.params.id);
-    request.customerEmail = request.customerId?.email || 'Unknown';
+    const request = await supportService.findFeedBackById(req.params.id);
     request.id = request._id.toString();
+    request.createdAtFormatted = moment(request.createdAt).utcOffset(7).format('DD/MM/YYYY HH:mm:ss');
     return res.render('vwStaff/detail', {
       layout: 'staff-layout',
       request,
@@ -145,8 +143,7 @@ route.post('/support/:id/reply', auth, async (req, res) => {
   await supportService.replyToRequest(req.params.id, reply);
 
   // Lấy lại dữ liệu mới sau khi cập nhật
-  const updatedRequest = await supportService.findById(req.params.id);
-  updatedRequest.customerEmail = updatedRequest.customerId?.email || 'Unknown';
+  const updatedRequest = await supportService.findFeedBackById(req.params.id);
 
   // Gửi email đến khách hàng
   try {
@@ -157,7 +154,6 @@ route.post('/support/:id/reply', auth, async (req, res) => {
     );
   } catch (err) {
     console.error('Error sending email:', err);
-    // Có thể thêm thông báo lỗi trên giao diện nếu cần
   }
 
   // Format thời gian

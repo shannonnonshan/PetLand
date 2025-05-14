@@ -3,12 +3,8 @@ import mongoose from 'mongoose';
 const SupportRequestSchema = new mongoose.Schema({
   customerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // liên kết với bảng User
+    ref: 'User', // Tham chiếu đến User
     required: true
-  },
-  customerEmail: {
-    type: String,
-    required: true // đảm bảo email luôn có
   },
   subject: {
     type: String,
