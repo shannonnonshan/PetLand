@@ -108,12 +108,12 @@ route.post('/manageService/unhide-review',authStaff,async function(req,res){
         } catch (error) {
         console.error(error);
         res.status(500).send('Error updating booking');
-        }
+      }
+    });
 
 
-// Request Support của Tinh
-// Trang danh sách yêu cầu hỗ trợ
 route.get('/requestSupport', auth, async (req, res) => {
+  try{
   const { status } = req.query;
 
   const [requests, countsAgg, totalCount] = await Promise.all([
@@ -147,11 +147,16 @@ route.get('/requestSupport', auth, async (req, res) => {
     queryStatus: status,
     success: req.query.success
   });
+}catch( err)
+  {
+      console.error(err);
+  }
 });
 
 // Trang xem chi tiết & trả lời
 route.get('/support/:id', auth, async (req, res) => {
-  const request = await supportService.findFeedBackById(req.params.id);
+  const request = await supportService.findFeedBackById(req.params.id).lean();
+  const email = (request.customerId.email) || null;
   if (!request) {
     return res.status(404).send('Not found');
   }
@@ -162,14 +167,15 @@ route.get('/support/:id', auth, async (req, res) => {
   }
   res.render('vwStaff/detail', {
     layout: 'staff-layout',
-    request
+    request,
+    email
   });
 });
 
 // Xử lý phản hồi
 route.post('/support/:id/reply', auth, async (req, res) => {
-  const { reply } = req.body;
-
+  const { reply, email } = req.body;
+  
   if (!reply) {
     const request = await supportService.findFeedBackById(req.params.id);
     request.id = request._id.toString();
@@ -190,7 +196,7 @@ route.post('/support/:id/reply', auth, async (req, res) => {
   // Gửi email đến khách hàng
   try {
     await sendServiceEmail(
-      updatedRequest.customerEmail, // Địa chỉ email người nhận
+      email, // Địa chỉ email người nhận
       'Your support request has been answered', // Tiêu đề email
       `<p>Dear Customer,</p><p>${reply}</p><p>Thank you for contacting us.</p>` // Nội dung HTML
     );
@@ -210,6 +216,5 @@ route.post('/support/:id/reply', auth, async (req, res) => {
   });
 });
   
-});
 
 export default route;

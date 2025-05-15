@@ -26,7 +26,8 @@
     <div class="card tw-mb-4">
       <div class="card-header tw-font-bold">
         {{request.subject}} <br/>
-        <span class="tw-text-sm tw-text-gray-600">From: {{request.customerEmail}}</span>
+        
+        <span class="tw-text-sm tw-text-gray-600">From: {{email}}</span>
       </div>
       <div class="card-body">
         <p class="tw-font-semibold">Message:</p>
@@ -45,7 +46,7 @@
             {{#if error}}
               <div class="alert alert-danger">{{error}}</div>
             {{/if}}
-
+            <input type="hidden" name="email" value="{{email}}">
             <div class="form-group">
               <label for="reply" class="tw-font-semibold">Your Reply</label>
               <textarea name="reply" id="reply" rows="4" class="form-control" required></textarea>
