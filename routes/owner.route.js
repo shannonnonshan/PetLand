@@ -86,7 +86,7 @@ route.get('/managePet/adopt_completed',authOwner, async function(req, res){
 route.get('/home', authOwner, function(req, res){
     
 
-    res.render('vwOwner/viewStatis', {
+    res.render('vwOwner/home', {
         layout: 'owner-layout',
     })
      
