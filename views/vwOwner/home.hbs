@@ -13,3 +13,53 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
+<div class="card tw-border-black tw-w-full tw-mx-auto">
+      <div class="card-header tw-bg-[#faf0cb] tw-border-black">
+          <h4>Do you want to announce anything for your customer and staff?</h4>
+      </div>
+      <div class="card-body tw-flex tw-flex-row tw-gap-2">
+          <p>Click the button below to create an announcement</p>
+          <button onclick="handleNotifyClick(event)" class=" tw-rounded-md tw-text-center tw-border-0 tw-p-2 tw-text-white tw-bg-pink-400 hover:tw-bg-yellow-400 hover:tw-text-black">
+            Click to create an announcement
+          </button>
+      </div>
+  </div>
+  <div
+    id="NotificationModal"
+    class="popupModel tw-fixed tw-inset-0  tw-bg-black/50 tw-items-center tw-flex tw-justify-center tw-hidden tw-z-[500]"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    >
+    <form action="/owner/notify-all" method="POST">
+    <div id="mainContent" class="tw-bg-white  tw-shadow-xl tw-p-6 tw-w-[50vh] tw-max-w-lg tw-h-[65%]">
+        <h2 class="tw-text-lg tw-font-semibold tw-mb-4">Your Announcement</h2>
+        <div class="tw-flex tw-flex-col tw-w-full tw-gap-2 tw-justify-center tw-items-center">
+          <textarea type="text"class="tw-h-[250px] tw-border tw-border-md tw-w-full " name="message" required>
+          </textarea>
+          <div>
+            <button type="submit" class=" tw-rounded-md tw-text-center tw-border-0 tw-p-2 tw-text-white tw-bg-red-400 hover:tw-bg-gray-400 hover:tw-text-white">
+            Confirm Notification
+            </button>
+             <button type="button"
+            class="tw-border tw-rounded-md tw-stroke-1 tw-px-4 tw-py-2 hover:tw-bg-gray-400"
+            onclick="closeModal()">
+            Cancel
+            </button>
+            </div>
+        </div>
+        </div>
+    </form>
+</div>
+
+{{#section "owner"}}
+<script>
+     function handleNotifyClick(event) {
+        event.preventDefault();
+        const modal = document.getElementById('NotificationModal');
+        modal.classList.remove('tw-hidden');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+  </script>  
+{{/section}}
+

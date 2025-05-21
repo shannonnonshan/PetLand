@@ -48,7 +48,7 @@ export default {
     },
     findBookedAfterAddShiftById(id)
     {
-        return BookedService.findById(id).populate('service').populate('shift')
+        return BookedService.findById(id).populate('service').populate('shift').populate('customer')
     },
     findExistBooking(customerId)
     {
@@ -58,7 +58,7 @@ export default {
             createAt: null
         });
     },
-    findExistBookingWhioutTime(customerId)
+    findExistBookingWithoutTime(customerId)
     {
         return Booking.findOne({
             customer:customerId,

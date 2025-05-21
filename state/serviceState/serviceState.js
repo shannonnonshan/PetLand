@@ -7,7 +7,7 @@ class ServiceState {
         throw new Error('Cannot confirm in current state.');
     }
     cancel() {
-      throw new Error('Cannot confirm in current state.');
+      throw new Error('Cannot cancel in current state.');
     }
     complete() {
     throw new Error('Cannot complete in current state.');

@@ -166,7 +166,7 @@
 
             </nav>
             <div class="tw-flex tw-flex-row tw-items-center tw-gap-1">
-                <div class="dropdown">
+                <div id="calendar" class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 3rem; height: 3rem; padding: 0; background: transparent; border: transparent">
                         <i class="bi bi-calendar tw-drop-shadow-2xl tw-text-[20pt] tw-pr-5 text-white" style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"></i>
                     </button>
@@ -176,13 +176,23 @@
                     </div>
                 </div>
 
-                <a href="javascript:void(0)">
+                <div class="dropdown tw-relative">
+                  <button id="notificationBell" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" dropdown-toggle width: 3rem; height: 3rem; padding: 0; background: transparent; border: transparent">
                   <i class="bi bi-bell-fill tw-drop-shadow-2xl tw-text-[20pt] text-white" style="text-shadow: 2px 2px 4px rgb(1, 0, 0);"></i>
-                </a>
+                  <span class="tw-absolute top-0 right-0 tw-inline-block tw-w-5 tw-h-5 tw-bg-red-600 tw-rounded-full tw-text-emerald-50">{{countIf notification "isRead" false}}</span>
+                  </button>
+                <div id="notificationDropdown" aria-labelledby="notificationBell"
+                    class="dropdown-menu right-0 mt-2 bg-white rounded-lg tw-max-h-[50vh] tw-w-[80vh] tw-overflow-y-auto">
+                  {{#each notification}}
+                  <a href="/service/notification/detail?id={{_id}}">
+                  <p class="dropdown-item tw-py-1 {{#if isRead}}tw-bg-gray-100{{else}}bg-white{{/if}} py-0 my-0 tw-border tw-border-s-amber-300 tw-whitespace-normal break-words" data-id="{{_id}}">
+                    {{formatDate createAt}} <br>{{content}}
+                  </p></a>
+                  <hr class="bg-black m-0">
+                  {{/each}}
+                </div>
+              </div>
             </div>
-            
-
-            
       </div>
     </div>
     <div class="tw-h-screen">
@@ -307,7 +317,37 @@
       clearTimeout(hideTimeout);
     }
   </script>
-  
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropdown = document.getElementById('notificationDropdown');
+
+    dropdown.addEventListener('click', async (event) => {
+      const target = event.target;
+
+      // Nếu người dùng click vào phần tử <p> chứa thông báo
+      if (target.tagName === 'P' && target.dataset.id) {
+        const notiId = target.dataset.id;
+
+        // Gửi yêu cầu đánh dấu là đã đọc lên server
+        try {
+          await fetch('/service/notification/read', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: notiId }),
+          });
+
+          // (Tuỳ chọn) Thay đổi giao diện sau khi đọc, ví dụ làm mờ
+          target.classList.add('opacity-50');
+        } catch (err) {
+          console.error('Failed to mark notification as read:', err);
+        }
+      }
+    });
+  });
+</script>
+
 </body>
 
 </html>

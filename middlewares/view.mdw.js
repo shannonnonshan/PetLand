@@ -35,6 +35,17 @@ export default function (app) {
             });
             return count;
           },
+          countIf: function(array, feature, condition) {
+              let count = 0;
+              if (!Array.isArray(array)) return 0; // tránh lỗi khi array không tồn tại
+              array.forEach(item => {
+                if (item[feature] === condition) {
+                  count++;
+                }
+              });
+              return count;
+            },
+
           count: function(array) {
               let count = 0;
               array.forEach(item => {

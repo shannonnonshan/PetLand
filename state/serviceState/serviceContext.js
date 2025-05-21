@@ -41,7 +41,7 @@ class ServiceContext {
     this._state.complete();  // Hoàn thành nếu thuộc trạng thái Pending hoặc Confirmed
   }
   cancel() {
-    this._state.cancel?.();
+    this._state.cancel();
   }
   review()
   {
