@@ -299,6 +299,10 @@
   margin-top: 1.25rem !important
 }
 
+.tw-mt-6 {
+  margin-top: 1.5rem !important
+}
+
 .tw-mt-8 {
   margin-top: 2rem !important
 }
@@ -1304,6 +1308,11 @@
 .hover\:tw-bg-yellow-400:hover {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(250 204 21 / var(--tw-bg-opacity, 1)) !important
+}
+
+.hover\:tw-bg-yellow-500:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(234 179 8 / var(--tw-bg-opacity, 1)) !important
 }
 
 .hover\:tw-text-black:hover {

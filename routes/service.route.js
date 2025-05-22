@@ -41,15 +41,9 @@ route.get('/byCat', async function(req, res){
         list: list,
     });
 })
-route.get('/notification/detail', auth, async function(req, res){
-    const id = String(req.query.id) || 0;
-    let notifications = await notificationService.findNotificationById(id)
-    res.render('notification', {
-        notifications: notifications,
-    });
-})
+
 route.get('/booking', auth, async function(req,res){
-    const id = req.session.authUser.id;
+    const id = req.session.authUser._id;
     const pageAll = parseInt(req.query.pageAll) || 1;
     const pagePending = parseInt(req.query.pagepending) || 1;
     const pageConfirmed = parseInt(req.query.pageConfirmed) || 1;
@@ -85,7 +79,7 @@ route.get('/booking', auth, async function(req,res){
 route.post('/create-booking', async function(req,res){
     if (req.session.authUser) {
     const { bookedServiceIds } = req.body;
-    const customerId = req.session.authUser.id;
+    const customerId = req.session.authUser._id;
     const entity = {
         service: bookedServiceIds,
         status: 'pending',
@@ -117,7 +111,7 @@ route.post('/create-booking', async function(req,res){
 route.post('/cancel-booking',async function(req,res){
     if (req.session.authUser) {
     const { bookedServiceIds } = req.body;
-    const customerId = req.session.authUser.id;
+    const customerId = req.session.authUser._id;
     try {
         const booked = await bookingService.findBookedAfterAddShiftById(bookedServiceIds).lean()
         notifier.notify({
@@ -203,7 +197,7 @@ route.get('/is-available', async function (req, res) {
 route.post('/schedule', async function(req,res)
 {
     if (req.session.authUser){
-        const customer = await userService.findById(req.session.authUser.id)
+        const customer = await userService.findById(req.session.authUser._id)
         const name = req.body.name
         const phone = req.body.phone
         const email = req.body.email
@@ -333,14 +327,5 @@ route.post('/review',async function(req,res){
     else{
         res.render('partials/loginRequired',{ showLoginModal: true })
     }
-});
-route.post('/notification/read',async function(req,res){
-    const { id } = req.body;
-  try {
-    const ret = await notificationService.findNotificationByIdAndUpdateStatus(id)
-
-  } catch (err) {
-    console.error(err);
-  }
 });
 export default route;

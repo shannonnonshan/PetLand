@@ -184,7 +184,7 @@
                 <div id="notificationDropdown" aria-labelledby="notificationBell"
                     class="dropdown-menu right-0 mt-2 bg-white rounded-lg tw-max-h-[50vh] tw-w-[80vh] tw-overflow-y-auto">
                   {{#each notification}}
-                  <a href="/service/notification/detail?id={{_id}}">
+                  <a href="/user/notification/detail?id={{_id}}">
                   <p class="dropdown-item tw-py-1 {{#if isRead}}tw-bg-gray-100{{else}}bg-white{{/if}} py-0 my-0 tw-border tw-border-s-amber-300 tw-whitespace-normal break-words" data-id="{{_id}}">
                     {{formatDate createAt}} <br>{{content}}
                   </p></a>
@@ -330,7 +330,7 @@
 
         // Gửi yêu cầu đánh dấu là đã đọc lên server
         try {
-          await fetch('/service/notification/read', {
+          await fetch('/user/notification/read', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

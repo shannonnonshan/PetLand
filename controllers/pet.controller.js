@@ -5,7 +5,8 @@ import PetContext from '../state/petState/petContext.js';
 import petService from '../services/pet.service.js';
 import { sendEmail } from '../utils/mailer.js';
 import moment from 'moment';
-
+import notifier from '../observer/notificationObserver.js';
+import { STATUS } from '../constants/petStatus.js';
 function buildEmailTemplate(type, pet, date = '') {
   switch (type) {
     case 'approveDonation':
@@ -95,11 +96,16 @@ export const approvePet = async (req, res) => {
     const { petid } = req.body;
     const pet = await Pet.findById(petid);
     if (!pet) return res.status(404).json({ error: 'Pet not found.' });
-    if (pet.status === 'approved') return res.status(400).json({ error: 'The pet has been approved.' });
+    if (pet.status === 2) return res.status(400).json({ error: 'The pet has been approved.' });
 
     await handlePetTransition({ pet, contextMethod: 'approve' });
     res.status(200).json({ message: 'Successful' });
-
+    await notifier.notify({
+          entity: pet,
+          newStatus: STATUS.APPROVAL_DONATION,
+          triggeredBy: req.user?._id || null,
+          entityType: 'Pet',
+        });
     notifyLater(pet.donator, 'approveDonation', pet, pet.dod);
   } catch (error) {
     console.error('ApprovePet Error:', error);
@@ -115,7 +121,12 @@ export const adoptPet = async (req, res) => {
 
     await handlePetTransition({ pet, contextMethod: 'adopt' });
     res.status(200).json({ message: 'Successful' });
-
+    await notifier.notify({
+          entity: pet,
+          newStatus: STATUS.APPROVAL_ADOPTION,
+          triggeredBy: req.user?._id || null,
+          entityType: 'Pet',
+        });
     notifyLater(pet.adopter, 'approveAdoption', pet, pet.adoptDate);
   } catch (error) {
     console.error('AdoptPet Error:', error);
@@ -143,8 +154,14 @@ export const rejectPetAdoption = async (req, res) => {
     const pet = await petService.findPetById(req.body.petid);
     if (!pet) return res.status(404).send('Pet not found.');
 
-    await handlePetTransition({ pet, contextMethod: 'rejectPetAdoption' });
+    await handlePetTransition({ pet, contextMethod: 'rejectAdoption' });
     res.status(200).json({ message: 'Successful' });
+    await notifier.notify({
+          entity: pet,
+          newStatus: STATUS.REJECTED,
+          triggeredBy: req.user?._id || null,
+          entityType: 'Pet',
+        });
     notifyLater(pet.adopter, 'rejectAdoption', pet);
   } catch (error) {
     console.error('RejectPetAdoption Error:', error);
@@ -157,10 +174,16 @@ export const rejectPetDonation = async (req, res) => {
     const pet = await petService.findPetById(req.body.petid);
     if (!pet) return res.status(404).send('Pet not found.');
 
-    await handlePetTransition({ pet, contextMethod: 'rejectPetDonation' });
+    await handlePetTransition({ pet, contextMethod: 'rejectDonation' });
     res.status(200).json({ message: 'Successful' });
-
-    notifyLater(pet.donator, 'rejectDonation', pet);
+    await notifier.notify({
+          entity: pet,
+          newStatus: STATUS.REJECTED,
+          triggeredBy: req.user?._id || null,
+          entityType: 'Pet',
+        });
+    notifyLater(pet.donator, 'reject', pet);
+    
   } catch (error) {
     console.error('RejectPetDonation Error:', error);
     res.status(500).send('Something went wrong!');

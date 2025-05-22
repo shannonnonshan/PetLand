@@ -288,25 +288,73 @@
 
     
     <aside class="w-5/6 flex flex-col overflow-hidden">
-        {{!-- <div class=" w-full flex flex-col"> --}}
-        <div class="fixed left-1/5 top-0 w-5/6 right-0 h-[8%] bg-white flex justify-between items-center p-4 shadow z-10">
-            <a href="#" class="m-3 flex items-center justify-center w-10 h-10 rounded-full hover:bg-yellow-100 dark:bg-yellow-100 hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-colors duration-300">
-                <img src="https://cdn-icons-png.flaticon.com/128/8338/8338801.png" alt="Pet Food Icon" class="w-6 h-6 rounded-full">
-            </a>
-            <div class="flex items-center">
-                <div class="search-container">
-                    <input type="text" name="search" placeholder="Search..." class="search-input">
-                    <img src="https://cdn-icons-png.flaticon.com/128/3031/3031293.png" alt="Pet Food Icon" class="w-6 h-6 rounded-full">
-                </div>
-                <div class="p-2">
-                    <a type="button" onclick="handleLogoutClick()" class="flex items-center text-gray-700  hover:text-yellow-800 dark:hover:text-white transition-colors duration-300">
-                        <img src="https://i.pravatar.cc/40?img=1" alt="User avatar" class="w-8 h-8 rounded-full mr-3">
-                        <span class="font-medium">{{authUser.name}}</span>
-                    </a>
+      <div class="fixed left-1/5 top-0 w-5/6 right-0 h-[8%] bg-white flex justify-between items-center p-4 shadow z-10">
+        <div class="relative inline-block text-left">
+            <!-- Trigger Button -->
+            <button
+            id="dropdownButton"
+            onclick="toggleDropdown()"
+            class="m-3 flex items-center justify-center w-10 h-10 rounded-full hover:bg-yellow-100 dark:bg-yellow-100 hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-colors duration-300"
+            >
+            <img
+                src="https://cdn-icons-png.flaticon.com/128/8338/8338801.png"
+                alt="Pet Food Icon"
+                class="w-6 h-6 rounded-full"
+            />
+            <span class="tw-absolute top-0 mt-3 mr-2 right-0 tw-inline-block tw-w-5 tw-h-5 tw-bg-red-600 text-[10pt] tw-rounded-full tw-text-emerald-50">
+                {{countIf notification "isRead" false}}
+            </span>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div
+                id="dropdownMenu"
+                class="hidden absolute left-50 w-[30vw] max-h-[60vh] overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                >
+                {{#if notification.length}}
+                    {{#each notification}}
+                    <div class="px-2 w-full">
+                        <div class="flex justify-between items-start">
+                        <h6 class="text-base underline underline-offset-3 decoration-8 decoration-blue-400 dark:decoration-blue-600">
+                            {{entityType}}
+                        </h6>
+                        <button onclick="deleteNotification('{{_id}}')" class="text-gray-500 hover:text-gray-800">
+                            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+                            <path
+                                d="M16.24 14.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 0 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12l2.83 2.83z"
+                            />
+                            </svg>
+                        </button>
+                        </div>
+                        <a href="/user/notification/detail?id={{_id}}">
+                        <p
+                            class="text-sm text-gray-600 tracking-tight p-3 cursor-pointer {{#if isRead}}bg-gray-100 opacity-60{{else}}bg-white{{/if}}"
+                            data-id="{{_id}}"
+                        >
+                            {{formatDate createAt}} <br />{{content}}
+                        </p>
+                        </a>
+                    </div>
+                    {{/each}}
+                {{else}}
+                    <div class="text-sm px-4 py-3 text-gray-500">No notifications.</div>
+                {{/if}}
                 </div>
             </div>
-            {{> loginRequired}}
-            {{> logoutRequired}}
+        <div class="flex items-center">
+            <div class="search-container">
+                <input type="text" name="search" placeholder="Search..." class="search-input">
+                <img src="https://cdn-icons-png.flaticon.com/128/3031/3031293.png" alt="Pet Food Icon" class="w-6 h-6 rounded-full">
+            </div>
+            <div class="p-2">
+                <a type="button" onclick="handleLogoutClick()" class="flex items-center text-gray-700  hover:text-yellow-800 dark:hover:text-white transition-colors duration-300">
+                    <img src="https://i.pravatar.cc/40?img=1" alt="User avatar" class="w-8 h-8 rounded-full mr-3">
+                    <span class="font-medium">{{authUser.name}}</span>
+                </a>
+            </div>
+        </div>
+        {{> loginRequired}}
+        {{> logoutRequired}}
         </div>
         <hr>
         <div class="mt-[8%] w-full flex-1 overflow-y-auto bg-gray-50 mx-auto">
@@ -427,6 +475,52 @@
     });
   });
 </script>
+<script>
+  function toggleDropdown() {
+    const menu = document.getElementById("dropdownMenu");
+    menu.classList.toggle("hidden");
+  }
+
+  // Đóng dropdown khi click ra ngoài
+  document.addEventListener("click", function (event) {
+    const dropdown = document.getElementById("dropdownMenu");
+    const button = document.getElementById("dropdownButton");
+
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });
+
+  // Đánh dấu thông báo đã đọc khi click
+  document.addEventListener("DOMContentLoaded", () => {
+    const dropdown = document.getElementById("dropdownMenu");
+
+    dropdown.addEventListener("click", async (event) => {
+      const target = event.target;
+
+      if (target.tagName === "P" && target.dataset.id) {
+        const notiId = target.dataset.id;
+
+        try {
+          await fetch("/user/notification/read", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: notiId }),
+          });
+
+          target.classList.remove("bg-white");
+          target.classList.add("bg-gray-100", "opacity-60");
+          window.location.reload();
+        } catch (err) {
+          console.error("Failed to mark notification as read:", err);
+        }
+      }
+    });
+  });
+</script>
+
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -34,7 +34,7 @@ route.post('/feedback', auth, async (req, res) => {
 
   // Tạo feedback mới
   const supportRequest = await SupportRequest.create({
-    customerId: req.session.authUser.id,  // ID người dùng từ session
+    customerId: req.session.authUser._id,  // ID người dùng từ session
     customerEmail: req.session.authUser.email,  // Email của khách hàng từ session
     subject: type,
     message: message,

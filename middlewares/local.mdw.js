@@ -1,4 +1,4 @@
-import serviceRoute from '../routes/service.route.js';
+
 import serviceService from '../services/service.service.js';
 import notificationService from '../services/notification.service.js';
 
@@ -29,7 +29,7 @@ export default function (app) {
         res.locals.catLimitCate = catLimitCate;
         res.locals.generalLimitCate = generalLimitCate;
         if (res.locals.authUser) {
-            const notification = await notificationService.findNotificationByUserId(res.locals.authUser.id);
+            const notification = await notificationService.findNotificationByUserId(res.locals.authUser._id);
             res.locals.notification = notification;
         }
         next();

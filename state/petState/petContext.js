@@ -1,5 +1,5 @@
-import PendingState from './pendingState.js';
-import ApprovedState from './approvedState.js';
+import RequestDonationState from './pendingState.js';
+import ApprovedDonationState from './approvedState.js';
 import RejectedState from './rejectedState.js';
 import AdoptApprovedState from './adoptApprovedState.js';
 import AdoptRequestedState from './adoptRequestedState.js';
@@ -11,10 +11,10 @@ class PetContext {
 
     switch (pet.status) {
       case 1:
-        this._state = new PendingState(this);
+        this._state = new RequestDonationState(this);
         break;
       case 2:
-        this._state = new ApprovedState(this);
+        this._state = new ApprovedDonationState(this);
         break;
       case 3:
         this._state = new AdoptRequestedState(this);
@@ -49,9 +49,13 @@ class PetContext {
     this._state.completeAdoption();
   }
 
-  reject() {
-    this._state.reject?.();
+  rejectDonation() {
+    this._state.rejectDonation?.();
   }
+  rejectAdoption() {
+    this._state.rejectAdoption?.();
+  }
+
 }
 
 export default PetContext;

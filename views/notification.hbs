@@ -4,8 +4,29 @@
         <div class="card-header tw-bg-[#faf0cb] tw-border-black">
             <h4>{{formatDate notifications.createAt}}</h4>
         </div>
-         <div class="card-body tw-flex tw-flex-row tw-gap-2">
+        <div class="card-body tw-flex tw-flex-row tw-gap-2">
             <p>{{notifications.content}}</p>      
         </div>
     </div>
+
+    <!-- Nút Back kèm reload -->
+    <div class="tw-w-full tw-flex tw-justify-start tw-mt-6">
+        <button
+            onclick="goBackAndReload()"
+            class="tw-bg-yellow-400 hover:tw-bg-yellow-500 tw-text-white tw-font-semibold tw-py-2 tw-px-4 tw-rounded"
+        >
+            ← Back
+        </button>
+    </div>
 </div>
+
+<script>
+  function goBackAndReload() {
+    const previousUrl = document.referrer;
+    if (previousUrl) {
+      window.location.href = previousUrl; // quay lại và reload trang trước
+    } else {
+      window.history.back(); // fallback nếu không có referrer
+    }
+  }
+</script>

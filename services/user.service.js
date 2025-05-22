@@ -100,6 +100,12 @@ export default {
     {
         return User.find({ role: {  $ne: 'Owner' } })
             .then(users => users.map(user => user._id));
+    },
+    
+    getOwners()
+    {
+        return User.find({role: 'Owner'})
+            .then(users => users.map(user => user._id))
     }
 
 }

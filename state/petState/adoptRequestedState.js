@@ -11,7 +11,7 @@ class AdoptRequestedState extends PetState {
 
   async adopt() {
     console.log("Approving pet...");
-    this.petContext.pet.status = 2;
+    this.petContext.pet.status = 4;
     this.petContext.setState(new AdoptApprovedState(this.petContext));
   }
   async rejectAdoption() {

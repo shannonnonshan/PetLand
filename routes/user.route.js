@@ -6,6 +6,7 @@ import requireRole from '../middlewares/role.mdw.js'
 import userService from '../services/user.service.js';
 import configurePassportGoogle from '../controllers/passportGoogle.config.js';
 import passport from 'passport';
+import notificationService from '../services/notification.service.js'
 import { sendEmailRegister, sendEmailResetPassword } from '../utils/mailer.js';
 const route = express.Router();
 dotenv.config();
@@ -47,7 +48,7 @@ route.post('/login', async function (req, res) {
     req.session.auth = true;
     req.session.authUser = {
         name: user.name || user.username || null,
-        id: user._id,
+        _id: user._id,
         email: user.email,
         role: user.role
     };
@@ -175,7 +176,7 @@ route.get('/login/googleAuth/callback',
     req.session.auth = true;
     req.session.authUser = {
         name: user.name || user.username || null,
-        id: user._id,
+        _id: user._id,
         email: user.email,
         role: user.role
     };
@@ -372,5 +373,20 @@ route.post('/reset-password', async function (req, res) {
         res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
     }
 });
+route.post('/notification/read',async function(req,res){
+    const { id } = req.body;
+  try {
+    const ret = await notificationService.findNotificationByIdAndUpdateStatus(id)
 
+  } catch (err) {
+    console.error(err);
+  }
+});
+route.get('/notification/detail', auth, async function(req, res){
+    const id = String(req.query.id) || 0;
+    let notifications = await notificationService.findNotificationById(id)
+    res.render('notification', {
+        notifications: notifications,
+    });
+})
 export default route;

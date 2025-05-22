@@ -20,7 +20,7 @@ const route = express.Router();
 
 route.get('/manageService/all',authStaff, async function(req, res){
     if (req.session && req.session.authUser) {
-        const id = req.session.authUser.id
+        const id = req.session.authUser._id
         const pageAll = parseInt(req.query.pageAll) || 1;
         const pageMySchedule = parseInt(req.query.pageMySchedule) || 1;
         const pageCheckOut = parseInt(req.query.pageCheckOut) || 1;
@@ -69,7 +69,7 @@ route.post('/manageService/checkout',authStaff,async function(req,res){
     try {
         const bookingStatus = await bookingService.findBookingByIdStatus(bookingId)
         const statusContext = new BookingContext(bookingStatus);
-        statusContext.paid(req.session.authUser.id);
+        statusContext.paid(req.session.authUser._id);
         await statusContext.save(); 
         await notifyEmailLater(bookingStatus.customer._id,"confirmPaid",bookingStatus)
         res.redirect(req.get('referer'));

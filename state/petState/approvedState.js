@@ -5,7 +5,7 @@ import AdoptRequestedState from './adoptRequestedState.js';
 class ApprovedState extends PetState {
   adopt() {
     console.log("Adopting pet...");
-    this.petContext.pet.status = 1;
+    this.petContext.pet.status = 4;
     this.petContext.setState(new AdoptRequestedState(this.petContext));
   }
 }

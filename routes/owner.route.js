@@ -27,7 +27,7 @@ route.get('/managePet/all', authOwner, async function(req, res){
 route.get('/managePet/pending',authOwner, async function(req, res){
     
 
-    const list = await petService.findAllBy("pending").lean();
+    const list = await petService.findAllBy(1).lean();
     res.render('vwOwner/pet/pending', {
         layout: 'owner-layout',
         list: list
@@ -37,7 +37,7 @@ route.get('/managePet/pending',authOwner, async function(req, res){
 route.get('/managePet/approved',authOwner, async function(req, res){
     
 
-    const list = await petService.findAllBy("approved").lean();
+    const list = await petService.findAllBy(2).lean();
     res.render('vwOwner/pet/approved', {
         layout: 'owner-layout',
         list: list
@@ -47,7 +47,7 @@ route.get('/managePet/approved',authOwner, async function(req, res){
 route.get('/managePet/adopt_requested', authOwner, async function(req, res){
     
 
-    const list = await petService.findAllBy("adopt_requested").lean();
+    const list = await petService.findAllBy(3).lean();
     res.render('vwOwner/pet/pending-adopt', {
         layout: 'owner-layout',
         list: list
@@ -56,7 +56,7 @@ route.get('/managePet/adopt_requested', authOwner, async function(req, res){
 route.get('/managePet/adopt_approved',authOwner , async function(req, res){
     
 
-    const list = await petService.findAllBy("adopt_approved").lean();
+    const list = await petService.findAllBy(4).lean();
     res.render('vwOwner/pet/completed-adopt', {
         layout: 'owner-layout',
         list: list
@@ -65,7 +65,7 @@ route.get('/managePet/adopt_approved',authOwner , async function(req, res){
 route.get('/managePet/rejected',authOwner, async function(req, res){
     
 
-    const list = await petService.findAllBy("rejected").lean();
+    const list = await petService.findAllBy(6).lean();
     res.render('vwOwner/pet/approved', {
         layout: 'owner-layout',
         list: list
@@ -75,7 +75,7 @@ route.get('/managePet/rejected',authOwner, async function(req, res){
 route.get('/managePet/adopt_completed',authOwner, async function(req, res){
     
 
-    const list = await petService.findAllBy("adopt_completed").lean();
+    const list = await petService.findAllBy(5).lean();
     res.render('vwOwner/pet/approved', {
         layout: 'owner-layout',
         list: list
@@ -106,7 +106,7 @@ route.post('/notify-all', authOwner, async function(req,res)
         notifier.notify({
             message: message,
             entityType: 'Maintenance',
-            triggeredBy: req.session.authUser.id,
+            triggeredBy: req.session.authUser._id,
         });
     res.redirect(req.get('referer'));
     }catch (error) {

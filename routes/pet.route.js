@@ -4,7 +4,12 @@ import multer from 'multer';
 import moment from 'moment';
 import { approvePet, adoptPet, completeAdoption, rejectPetAdoption, rejectPetDonation} from '../controllers/pet.controller.js';
 import Pet from '../models/Pet.js';
+import User from '../models/User.js';
+import { NotificationService } from '../services/notification.service.js';
 import {auth} from '../middlewares/auth.mdw.js';
+import userService from '../services/user.service.js';
+import notifier from '../observer/notificationObserver.js';
+import { STATUS } from '../constants/petStatus.js';
 const route = express.Router();
 
 route.get('/byCat', async function(req, res){
@@ -52,9 +57,9 @@ route.get('/viewAdopted', auth, async function(req, res) {
   const status = req.query.status;
   let list = [];
   if (status) {
-    list = await petService.findAllByAdoptIdAndStatus(adopter.id, status).lean();
+    list = await petService.findAllByAdoptIdAndStatus(adopter._id, status).lean();
   } else {
-    list = await petService.findAllByAdoptId(adopter.id).lean();
+    list = await petService.findAllByAdoptId(adopter._id).lean();
   }
 
   res.render('vwPet/viewAdoptList', {
@@ -106,8 +111,14 @@ const storage = multer.diskStorage({
       images: imagePaths,
     };
   
-    await petService.add(newPet);
-  
+    const pet = await petService.add(newPet);
+
+    await notifier.notify({
+      entity: pet,
+      newStatus: STATUS.REQUEST_DONATION,
+      triggeredBy: req.user?._id || null,
+      entityType: 'Pet',
+    });
     res.redirect('/pet/viewAdopted');
 });
 
@@ -137,11 +148,16 @@ route.post('/adopt', async function(req, res) {
       status: 3,
       adoptDate: ymd_dor
     });
-
+ 
     if (!pet) {
       return res.status(404).json({ message: 'Pet not found' });
     }
-
+    await notifier.notify({
+      entity: pet,
+      newStatus: STATUS.REQUEST_ADOPTION,
+      triggeredBy: req.user?._id || null,
+      entityType: 'Pet',
+    });
     return res.status(200).json({
       successMessage: 'Adoption request submitted successfully!',
       pet
@@ -152,20 +168,41 @@ route.post('/adopt', async function(req, res) {
   }
 });
 
-route.post('/cancel-adopt', async function(req, res){
+
+route.post('/cancel-adopt', async function(req, res) {
   const { petid } = req.body;
   try {
+    const pet = await Pet.findById(petid);
+
+    if (!pet) {
+      return res.status(404).json({ message: 'Pet not found' });
+    }
+
     await Pet.findByIdAndUpdate(petid, {
-      status: 4, 
+      status: 2,
       adopter: null,
       adoptDate: null
     });
-    return res.status(200).json({ message: 'You have successfully canceled the pet adoption.' }); // Custom message here
+
+    const owners = await userService.getOwners();
+
+    if (owners.length > 0) {
+      const message = `The adoption request for pet "${pet.name}" has been cancelled at ${moment().format('HH:mm DD/MM/YYYY')}`;
+      await NotificationService.notify({
+        toUsers: owners,
+        content: message,
+        relatedEntity: pet._id,
+        entityType: 'Pet',
+        triggeredBy: null
+      });
+    }
+    return res.status(200).json({ message: 'You have successfully canceled the pet adoption.' });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Đã xảy ra lỗi! Không thể hủy phê duyệt.' });
   }
 });
+
 
 route.post('/approved', approvePet);
 route.post('/rejected-adopt', rejectPetAdoption);
