@@ -10,7 +10,7 @@ import { Booking } from '../models/Booking.js';
 import shiftService from '../services/shift.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
-import { paginateQuery } from '../utils/pagination.js';
+import { paginateQuery } from '../utils/features.js';
 import notifier from '../observer/notificationObserver.js';
 import notificationService from '../services/notification.service.js';
 const route = express.Router();

@@ -1,48 +1,17 @@
-function auth(req, res, next) {
-    if (!req.session.auth || !req.session.authUser) {
-        req.session.retUrl = req.originalUrl || null;
-        req.session.message = "Please log in first.";
-        return res.redirect('/user/popupLogin');
-    }
-    next();
+// middlewares/auth.js
+import { BasicAuthStrategy } from '../strategies/basicAuthStrategy.js';
+import { OwnerAuthStrategy } from '../strategies/ownerAuthStrategy.js';
+import { StaffAuthStrategy } from '../strategies/staffAuthStrategy.js';
+
+function useAuthStrategy(StrategyClass) {
+  return (req, res, next) => {
+    const strategy = new StrategyClass();
+    strategy.handle(req, res, next);
+  };
 }
 
-function authOwner(req, res, next) {
-    if (!req.session.auth || !req.session.authUser) {
-        req.session.retUrl = req.originalUrl || null;
-        req.session.message = "Please log in first.";
-        return res.redirect('/user/popupLogin');
-    }
+const auth = useAuthStrategy(BasicAuthStrategy);
+const authOwner = useAuthStrategy(OwnerAuthStrategy);
+const authStaff = useAuthStrategy(StaffAuthStrategy);
 
-    if (req.session.authUser.role !== "Owner") {
-        req.session.retUrl = null;
-        req.session.message = "You do not have permission to access this page. Please log in with an owner account.";
-        return res.redirect('/user/popupLogin');
-    }
-    else {
-        req.session.retUrl = req.originalUrl;
-    }
-
-    next();
-}
-
-function authStaff(req, res, next) {
-    if (!req.session.auth || !req.session.authUser) {
-        req.session.retUrl = req.originalUrl || null;
-        req.session.message = "Please log in first.";
-        return res.redirect('/user/popupLogin');
-    }
-
-    if (req.session.authUser.role !== "Staff") {
-        req.session.retUrl = null;
-        req.session.message = "You do not have permission to access this page. Please log in with an owner account.";
-        return res.redirect('/user/popupLogin');
-    }
-    else {
-        req.session.retUrl = req.originalUrl;
-    }
-
-    next();
-}
-
-export { auth, authOwner,authStaff };
+export { auth, authOwner, authStaff };

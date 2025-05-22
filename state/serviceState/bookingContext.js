@@ -4,7 +4,6 @@ import PendingBookingState from "./pendingBookingState.js";
 class BookingContext {
   constructor(booking) {
     this.booking = booking;
-    console.log(this.booking.paymentStatus);
 
     switch (booking.paymentStatus) {
       case 'PAID':

@@ -1,0 +1,106 @@
+{{#section 'css'}}
+<style>
+    .input-box{
+        margin-bottom: 15px;
+        height: auto;
+        width: 100%;
+    }
+    .input-box input[readonly]{
+        width: 100%;
+        margin-top: 5px;
+        border: 1px solid white; /* thêm độ dày */
+        border-radius: 5px;        /* thêm giá trị hợp lệ */
+        padding: 10px;
+        background-color: #edebc6 !important; 
+        color: black;            /* chống chữ bị mờ */
+        cursor: pointer; 
+    }
+</style>
+{{/section}}
+<div style="background: linear-gradient(135deg, #FF94BD, #F3EC1C); overflow: scroll;" 
+class=" tw-h-max-full tw-overflow-y-scroll tw-h-full tw-w-full tw-border-black tw-py-[5%] tw-scrollbar-none">
+<form action="/owner/create-service" method="POST" class="tw-max-w-xl tw-mx-auto tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6 tw-space-y-4">
+  <h2 class="tw-text-2xl tw-font-semibold tw-text-center">Create New Service</h2>
+
+  <div class="input-box">
+    <label for="serviceName" class="tw-block tw-font-medium">Service Name</label>
+    <input type="text" id="serviceName" name="serviceName" required
+           class="tw-w-full tw-border tw-rounded tw-p-2 tw-mt-1 tw-shadow-sm" />
+  </div>
+
+  <div class="input-box">
+    <label for="petType" class="tw-block tw-font-medium">Pet Type</label>
+    <select id="petType" name="petType" required
+            class="tw-w-full tw-border tw-rounded tw-p-2 tw-mt-1 tw-shadow-sm">
+      <option value="1">Dog</option>
+      <option value="2">Cat</option>
+      <option value="3">Both</option>
+    </select>
+  </div>
+
+  <div class="input-box">
+    <label for="shortDescription" class="tw-block tw-font-medium">Short Description</label>
+    <input type="text" id="shortDescription" name="shortDescription"
+           class="tw-w-full tw-border tw-rounded tw-p-2 tw-mt-1 tw-shadow-sm" />
+  </div>
+
+  <div class="input-box">
+    <label for="description" class="tw-block tw-font-medium">Full Description (HTML allowed)</label>
+    <textarea id="description" name="description" rows="4"
+              class="tw-w-full tw-h-[250px] tw-border tw-rounded tw-p-2 tw-mt-1 tw-shadow-sm"></textarea>
+  </div>
+
+  <div class="input-box">
+    <label for="price" class="tw-block tw-font-medium">Price (VND)</label>
+    <input type="number" id="price" name="price" min="0" required
+           class="tw-w-full tw-border tw-rounded tw-p-2 tw-mt-1 tw-shadow-sm" />
+  </div>
+
+  <div class="input-box">
+    <label for="duration" class="tw-block tw-font-medium">Duration (minutes)</label>
+    <input type="number" id="duration" name="duration" min="0" required
+           class="tw-w-full tw-border tw-rounded tw-p-2 tw-mt-1 tw-shadow-sm" />
+  </div>
+
+  <div class="input-box">
+    <label for="imageUrl" class="tw-block tw-font-medium">Image URL</label>
+    <input type="text" id="imageUrl" name="imageUrl"
+           placeholder="Leave blank to use default logo"
+           class="tw-w-full tw-border tw-rounded tw-p-2 tw-mt-1 tw-shadow-sm" oninput="previewImage(this.value)" />
+    <img id="preview" src="" alt="Image preview"
+       class="tw-w-48 tw-h-48 tw-object-cover tw-rounded tw-shadow"
+       style="display: none;" />
+  </div>
+
+  <div class="tw-flex tw-items-center tw-space-x-2">
+    <input type="checkbox" id="hidden" name="hidden" class="tw-w-4 tw-h-4" />
+    <label for="hidden" class="tw-font-medium">Hide this service?</label>
+  </div>
+
+  <div class="tw-flex tw-justify-end tw-gap-4">
+    <button type="submit"
+            class="tw-bg-green-500 tw-text-white tw-px-4 tw-py-2 tw-rounded hover:tw-bg-green-600">
+      Create Service
+    </button>
+    <a href="/owner/service-list"
+       class="tw-bg-gray-300 tw-text-black tw-px-4 tw-py-2 tw-rounded hover:tw-bg-gray-400">
+      Cancel
+    </a>
+  </div>
+</form>
+</div>
+
+{{#section 'owner'}}
+<script>
+  function previewImage(url) {
+    const img = document.getElementById("preview");
+    if (url && url.startsWith("http")) {
+      img.src = url;
+      img.style.display = "block";
+    } else {
+      img.src = "";
+      img.style.display = "none";
+    }
+  }
+</script>
+{{/section}}

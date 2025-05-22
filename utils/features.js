@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-
+import { v4 as uuidv4 } from 'uuid';
 dotenv.config();
 
 export const paginateQuery = async (array, page = 1, limit = 6) =>{
@@ -15,4 +15,8 @@ export const paginateQuery = async (array, page = 1, limit = 6) =>{
         total,
         totalPages
     };
+}
+
+export function generateServiceId() {
+  return `SRV-${uuidv4().slice(0, 8)}`; // VD: SRV-a1b2c3d4
 }

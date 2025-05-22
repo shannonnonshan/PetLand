@@ -23,11 +23,19 @@
       style=" -ms-overflow-style: none; scrollbar-width: none; ">
           {{#each this.list}}
              <div class="tw-shadow-lg tw-rounded-sm tw-w-[250px] tw-h-[350px] tw-mr-2 tw-flex tw-flex-col tw-items-start tw-p-4 " >
-                <img class="tw-w-[200px] tw-h-[150px] tw-self-center tw-mb-2" src="{{imageUrl}}" alt="{{imageUrl}}">
-                <span class="  tw-text-xl tw-font-bold tw-font-spartan">{{serviceName}}</span>
-                <p class="tw-mb-0">{{shortDescription}}</p>
+                <div class="tw-w-[200px] tw-h-[150px] tw-overflow-hidden tw-mx-auto">
+                    <img
+                    class="tw-w-full tw-h-full tw-object-cover"
+                    src="{{imageUrl}}"
+                    alt="{{imageUrl}}"
+                    />
+                </div>
+                <div class="tw-h-[220px]">
+                <span class=" tw-text-lg tw-font-bold tw-font-spartan">{{serviceName}}</span>
+                <p class="tw-mb-0 tw-line-clamp-2">{{shortDescription}}</p>
                 <span>Duration: {{duration}} minutes</span>
                 <a href="detail?id={{id}}">
+                 </div>
                 <button type="submit" class=" tw-w-full tw-bg-[#F3EC1C] hover:tw-bg-yellow-400 tw-rounded-md tw-font-bold tw-text-center tw-border-0 tw-p-2 transition-colors duration-200"
                 >
                 View detail

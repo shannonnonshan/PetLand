@@ -184,7 +184,8 @@ export default {
             populate: [
                 { path: 'inCharge' },
                 { path: 'service' },
-                { path: 'shift' }
+                { path: 'shift' },
+                { path: 'customer' }
             ]
         })
         .sort({ updatedAt: -1 }) 
@@ -294,14 +295,12 @@ export default {
                 { path: 'shift' }
             ]
         }).sort({ updatedAt: -1 }) .lean();
-        console.log(bookings)
         const filteredBookings = bookings.filter(booking =>
             booking.bookedServices.length > 0 &&
             booking.bookedServices.every(bs => 
                 typeof bs.status === 'string' && bs.status.trim().toLowerCase() === 'completed'
             )
         );
-        console.log(filteredBookings)
         return filteredBookings;
     },
     

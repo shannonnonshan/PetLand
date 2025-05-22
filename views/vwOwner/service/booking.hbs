@@ -46,6 +46,7 @@
                         <h5 class="card-title tw-text-xl tw-font-bold tw-bg-clip-text tw-bg-gradient-to-r tw-from-pink-400 tw-to-yellow-300">{{service.serviceName}}</h5>
                         </a>
                         <p class="card-text">{{service.shortDescription}}</p>
+                        <p>Customer: {{customer.name}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <p>Start Time: {{formatDate shift.startTime}}</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
@@ -94,6 +95,7 @@
                         <h5 class="card-title tw-text-xl tw-font-bold tw-bg-clip-text tw-bg-gradient-to-r tw-from-pink-400 tw-to-yellow-300">{{service.serviceName}}</h5>
                         </a>
                         <p class="card-text">{{service.shortDescription}}</p>
+                        <p>Customer: {{customer.name}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
                       
@@ -132,6 +134,7 @@
                         <h5 class="card-title tw-text-xl tw-font-bold tw-bg-clip-text tw-bg-gradient-to-r tw-from-pink-400 tw-to-yellow-300">{{service.serviceName}}</h5>
                         </a>
                         <p class="card-text">{{service.shortDescription}}</p>
+                        <p>Customer: {{customer.name}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
                         <span>Status: {{status}}</span>                       
@@ -162,6 +165,7 @@
                         <h5 class="card-title tw-text-xl tw-font-bold tw-bg-clip-text tw-bg-gradient-to-r tw-from-pink-400 tw-to-yellow-300">{{service.serviceName}}</h5>
                         </a>
                         <p class="card-text">{{service.shortDescription}}</p>
+                        <p>Customer: {{customer.name}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">Staff: {{inCharge.name}}</h4>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
@@ -195,7 +199,8 @@
                         <a href="/service/detail?id={{service.id}}">
                         <h5 class="card-title tw-text-xl tw-font-bold tw-bg-clip-text tw-bg-gradient-to-r tw-from-pink-400 tw-to-yellow-300">{{service.serviceName}}</h5>
                         </a>
-                        <p class="card-text">{{status.description}}</p>
+                        <p class="card-text">{{{service.shortDescription}}}</p>
+                        <p>Customer: {{customer.name}}</p>
                         <p>Duration: {{service.duration}} minute</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
                         <span>Status: {{status}}</span>
