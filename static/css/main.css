@@ -1,4 +1,4 @@
-.dropdown-item {
+#calendar .dropdown-item {
     width: 100px;
     font-size: 12pt !important;
     height: fit-content;
@@ -10,14 +10,14 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.dropdown-item:hover {
+#calendar .dropdown-item:hover {
     background-color: rgba(255, 255, 255, 255); /* Nền đậm hơn khi hover */
     color: #000000; /* Màu chữ đậm hơn khi hover */
     transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi hover */
 }
 
 
-.dropdown-toggle {
+#calendar .dropdown-toggle {
     background: transparent !important; 
     border: none !important; 
     box-shadow: none !important; 
@@ -26,7 +26,7 @@
     font-size: inherit !important;
 }
 
-.dropdown-menu {
+#calendar .dropdown-menu {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;

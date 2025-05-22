@@ -12,10 +12,10 @@ class ConfirmedState extends ServiceState {
       }
     
       complete() {
-        this.context.status = 'completed'; // <- rất quan trọng
+        this.context.status = 'completed'; 
       }
       cancel() {
-        this.bookedService.status = 'cancelled';
+        this.context.status = 'cancelled';
       }
 }
 

@@ -6,7 +6,7 @@ class AdoptApprovedState extends PetState {
   completeAdoption() {
     console.log("Completing adoption...");
 
-    this.petContext.pet.status = 'adopt_completed';
+    this.petContext.pet.status = 5;
     this.petContext.setState(new AdoptCompletedState(this.petContext));
   }
 }

@@ -96,5 +96,10 @@ export default {
             }
         }).lean();
     },
+    getAllUsersAndStaff()
+    {
+        return User.find({ role: {  $ne: 'Owner' } })
+            .then(users => users.map(user => user._id));
+    }
 
 }

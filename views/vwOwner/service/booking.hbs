@@ -49,7 +49,7 @@
                         <p>Duration: {{service.duration}} minute</p>
                         <p>Start Time: {{formatDate shift.startTime}}</p>
                         <h4 class="tw-text-[#FF94BD]">{{price_number service.price}} VND</h4>
-                        {{#if (or (eq status "cancelled") (eq status "completed"))}}
+                        {{#if (or (eq status "cancelled")(or (eq status "completed") (eq status "reviewed")))}}
                         <span>Status: {{status}}</span>
                         {{else}}
                         {{#unless inCharge}}

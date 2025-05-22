@@ -13,7 +13,6 @@ route.get('/feedback', auth, (req, res) => {
 
 // Route POST cho feedback
 route.post('/feedback', auth, async (req, res) => {
-    console.log('Session Auth User:', req.session.authUser); 
   const { type, message } = req.body;
   
 
@@ -43,7 +42,6 @@ route.post('/feedback', auth, async (req, res) => {
     createdAt: new Date(),
   });
 
-  console.log('Support Request Created:', supportRequest);  // Log thông tin đối tượng tạo mới
   res.render('vwCustomer/customer-support', {
     layout: 'main',
     success: 'Your request has been sent.',

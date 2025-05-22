@@ -1,8 +1,7 @@
+import { mongoose } from '../utils/db.js';
+import { STATUS } from '../constants/petStatus.js';
 
-import { mongoose } from '../utils/db.js'; 
 const { Schema, model } = mongoose;
-
-
 
 const petSchema = new Schema({
   name: String,
@@ -26,9 +25,9 @@ const petSchema = new Schema({
   description: String,
   dod: Date,
   status: {
-    type: String,
-    enum: ['pending', 'approved', 'adopt_requested', 'adopt_approved', 'adopt_completed', 'rejected'],
-    default: 'pending'
+    type: Number,
+    enum: Object.values(STATUS),
+    default: STATUS.REQUEST_DONATION
   },
   donator: {
     type: Schema.Types.ObjectId,
@@ -46,6 +45,7 @@ const petSchema = new Schema({
   }
 }, { collection: 'Pet' });
 
+// Optional: FSM methods
 petSchema.methods.setState = function (state) {
   this._state = state;
 };
@@ -61,11 +61,10 @@ petSchema.methods.adopt = function () {
 petSchema.methods.completeAdoption = function () {
   this._state?.completeAdoption?.();
 };
+
 petSchema.methods.reject = function () {
   this._state?.reject?.();
 };
 
-
 const Pet = model('Pet', petSchema);
-
 export default Pet;

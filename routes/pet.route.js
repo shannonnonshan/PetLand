@@ -8,7 +8,7 @@ import {auth} from '../middlewares/auth.mdw.js';
 const route = express.Router();
 
 route.get('/byCat', async function(req, res){
-    let list = await petService.findApproved("approved").lean();
+    let list = await petService.findApproved(2).lean();
 
     if (req.query.specie) {
         list = list.filter(pet => pet.specie === req.query.specie);
@@ -23,7 +23,7 @@ route.get('/byCat', async function(req, res){
 route.get('/detail', async function(req, res){
     const id = (req.query.id).toString() || '0';
     const pet = await petService.findPetById(id).lean();
-    let suggest = await petService.findBySpecie(pet.specie, pet._id, 3, 'approved').lean();
+    let suggest = await petService.findBySpecie(pet.specie, pet._id, 3, 2).lean();
     res.render('vwPet/viewPetDetail', {
         pet: pet,
         suggest: suggest
@@ -104,7 +104,6 @@ const storage = multer.diskStorage({
       dod: ymd_dod,
       description,
       images: imagePaths,
-      status: 'pending'
     };
   
     await petService.add(newPet);
@@ -135,7 +134,7 @@ route.post('/adopt', async function(req, res) {
     const pet = await Pet.findByIdAndUpdate(petid, {
       adopter: id,
       createdAt: createdAt,
-      status: 'adopt_requested',
+      status: 3,
       adoptDate: ymd_dor
     });
 
@@ -157,7 +156,7 @@ route.post('/cancel-adopt', async function(req, res){
   const { petid } = req.body;
   try {
     await Pet.findByIdAndUpdate(petid, {
-      status: 'approved', 
+      status: 4, 
       adopter: null,
       adoptDate: null
     });

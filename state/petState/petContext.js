@@ -10,22 +10,22 @@ class PetContext {
     this.pet = pet;
 
     switch (pet.status) {
-      case 'pending':
+      case 1:
         this._state = new PendingState(this);
         break;
-      case 'approved':
+      case 2:
         this._state = new ApprovedState(this);
         break;
-      case 'adopt_requested':
+      case 3:
         this._state = new AdoptRequestedState(this);
         break;
-      case 'adopt_approved':
+      case 4:
         this._state = new AdoptApprovedState(this);
         break;
-      case 'adopt_completed':
+      case 5:
         this._state = new AdoptCompletedState(this);
         break;
-      case 'rejected':
+      case 6:
         this._state = new RejectedState(this);
         break;
       default:

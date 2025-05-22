@@ -35,6 +35,17 @@ export default function (app) {
             });
             return count;
           },
+          countIf: function(array, feature, condition) {
+              let count = 0;
+              if (!Array.isArray(array)) return 0; // tránh lỗi khi array không tồn tại
+              array.forEach(item => {
+                if (item[feature] === condition) {
+                  count++;
+                }
+              });
+              return count;
+            },
+
           count: function(array) {
               let count = 0;
               array.forEach(item => {
@@ -86,7 +97,19 @@ export default function (app) {
             }
             return result;
         }, 
-        }
+        statusText: function (status) {
+          const map = {
+            1: 'Request Donation',
+            2: 'Approval Donation',
+            3: 'Request Adoption',
+            4: 'Approval Adoption',
+            5: 'Completed Adoption',
+            6: 'Rejected'
+          };
+          return map[status] || 'Unknown';
+        },
+
+      }
   }));
   app.set('view engine', 'hbs');
   app.set('views', './views');

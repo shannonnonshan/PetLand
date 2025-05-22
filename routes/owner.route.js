@@ -11,7 +11,7 @@ import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
 import ownerController from '../controllers/owner.controller.js';
-
+import notifier from '../observer/notificationObserver.js';
 import { paginateQuery } from '../utils/pagination.js';
 const route = express.Router();
 
@@ -99,6 +99,22 @@ route.get('/manageService/shift',authOwner, async function(req, res){
     })
 })
 
+route.post('/notify-all', authOwner, async function(req,res)
+{
+    const message = req.body.message
+    try {
+        notifier.notify({
+            message: message,
+            entityType: 'Maintenance',
+            triggeredBy: req.session.authUser.id,
+        });
+    res.redirect(req.get('referer'));
+    }catch (error) {
+        console.error(error);
+    }
+
+})
+
 route.get('/manageService/booking', authOwner, async function(req, res){
     const pageAll = parseInt(req.query.pageAll) || 1;
     const pageWaitShifting = parseInt(req.query.pageWaitShifting) || 1;
@@ -137,6 +153,19 @@ route.get('/manageService/booking', authOwner, async function(req, res){
 route.post('/manageService/reject-booking',authOwner,async function(req,res){
     const { bookedServiceIds } = req.body;
     try {
+        const booked = await bookingService.findBookedAfterAddShiftById(bookedServiceIds).lean()
+        notifier.notify({
+            entity: {
+                _id: bookedServiceIds,
+                name: booked.service.serviceName, // hoặc tên dịch vụ
+                notifyUsers: [booked.customer._id], // người nhận
+                date: booked.shift?.startTime || new DateNow(),// thời gian bắt đầu
+            },
+            entityType: 'BookedService',
+            newStatus:"CANCELLED",
+            triggeredBy:booked.inCharge,  
+            content: " because of the store schedule. Thank you for your understanding",
+        });
         const shiftAdded = await shiftService.findShiftByBookedService(bookedServiceIds)
         if(shiftAdded)
         {

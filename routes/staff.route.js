@@ -90,7 +90,6 @@ route.post('/manageService/response-review',authStaff,async function(req,res){
 });
 route.post('/manageService/hide-review',authStaff,async function(req,res){
     const reviewId = req.query.id;
-    console.log(reviewId)
     try {
         const ret = await serviceService.updateReviewStatus(reviewId,false)
         res.redirect(req.get('referer'));
@@ -101,7 +100,6 @@ route.post('/manageService/hide-review',authStaff,async function(req,res){
 });
 route.post('/manageService/unhide-review',authStaff,async function(req,res){
     const reviewId = req.query.id;
-    console.log(reviewId)
     try {
         const ret = await serviceService.updateReviewStatus(reviewId,true)
         res.redirect(req.get('referer'));

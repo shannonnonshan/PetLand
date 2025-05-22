@@ -6,7 +6,7 @@ import requireRole from '../middlewares/role.mdw.js'
 import userService from '../services/user.service.js';
 import configurePassportGoogle from '../controllers/passportGoogle.config.js';
 import passport from 'passport';
-import { sendEmail } from '../utils/mailer.js';
+import { sendEmailRegister, sendEmailResetPassword } from '../utils/mailer.js';
 const route = express.Router();
 dotenv.config();
 
@@ -135,7 +135,7 @@ route.post('/register', async function (req, res) {
     `;
 
     setTimeout(() => {
-        sendEmail(tempUser.email, subject, html)
+        sendEmailRegister(tempUser.email, subject, html)
             .then(() => console.log('Verification email sent.'))
             .catch(err => console.error('Failed to send email:', err));
     }, 500);
@@ -294,7 +294,7 @@ route.post('/forgot-password', async function(req, res) {
             <strong>The Petland Team</strong></p>
         </div>
         `;
-        await sendEmail(email, subject, html);
+        await sendEmailResetPassword(email, subject, html);
 
         // Chuyển đến trang nhập OTP
         res.redirect(`/user/otp?email=${email}&&username=${username}`);
