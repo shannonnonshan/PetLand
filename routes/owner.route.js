@@ -3,13 +3,10 @@ import petService from '../services/pet.service.js';
 import userService from '../services/user.service.js';
 import shiftService from '../services/shift.service.js';
 import bcrypt from 'bcryptjs'; 
-import dotenv from 'dotenv';
-import {auth, authOwner} from '../middlewares/auth.mdw.js';
-import serviceService from '../services/service.service.js';
+import {authOwner} from '../middlewares/auth.mdw.js';
 import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
-import ownerController from '../controllers/owner.controller.js';
 import notifier from '../observer/notificationObserver.js';
 import { paginateQuery, generateServiceId } from '../utils/features.js';
 const route = express.Router();
@@ -244,7 +241,7 @@ route.get('/statistics',authOwner, async function(req, res){
     })
 })
 
-route.get('/manageStaff/list',authOwner, async function(req, res){
+route.get('/manageStaff/listStaff',authOwner, async function(req, res){
     const list = await userService.findStaff().lean();
     res.render('vwOwner/staff/listStaff', {
         layout: 'owner-layout',
@@ -271,49 +268,54 @@ route.get('/manageStaff/update', authOwner, async function(req, res) {
         staff
     });
 });
-route.get('/service-list', authOwner, async (req, res) => {
-  try {
-    let list = await serviceService.findAll().lean();
-    if (req.query.id) {
-        list = list.filter(service  => service.petType === Number(req.query.id));
-    } 
-    res.render('vwOwner/service/serviceList', {
-      layout: 'owner-layout',
-      list: list,
-    });
-  } catch (err) {
-    console.error('Error fetching services:', err);
-    res.status(500).send('Internal Server Error');
-  }
+
+
+route.post('/createStaff', async function(req, res) {
+
+        const { username, name, email, phone, gender } = req.body;
+        const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
+
+        const staff = {
+            name: name,
+            username: username,
+            password: hash_password,
+            phone: phone,
+            gender: gender,
+            email: email,
+            role: 'Staff',
+            createAt: Date.now()
+        };
+
+        await userService.add(staff);
+       res.redirect('/owner/manageStaff/listStaff');
 });
-route.get('/create-service', authOwner, async (req, res) => {
-  try {
-    res.render('vwOwner/service/createService', {
-      layout: 'owner-layout',
-    });
-  } catch (err) {
-    console.error('Error fetching pet types:', err);
-    res.status(500).send('Internal Server Error');
-  }
+
+
+route.post('/updateStaff/:id', async function(req, res) {
+    const { id } = req.params;
+    const { username, name, email, phone, gender } = req.body;
+    const user = await userService.findById(id) || null;
+    if(user){
+         const staffData = {
+            username,
+            name,
+            email,
+            phone,
+            gender,
+        };
+        await userService.updateStaff(id, staffData);
+        res.redirect('/owner/manageStaff/listStaff');
+    }
+    else{
+        res.send({message: "Not found!"});
+    }
+   
 });
-route.post('/create-service', async (req, res) => {
-  try {
-    const generatedId = generateServiceId();
 
-    const data = { ...req.body, id: generatedId };
-
-    await serviceService.createService(data);
-
-    res.redirect('/owner/service-list');
-  } catch (err) {
-    console.error('Error creating service:', err);
-    res.status(500).send('Internal Server Error');
-  }
+route.post('/deleteStaff/:id', async function(req, res){
+    const {id} = req.params;
+    await userService.deleteStaff(id);
+    res.json({ success: true, message: "Staff deleted successfully" });
 });
-route.post('/createStaff', upload.none(),ownerController.createStaff);
-
-route.post('/updateStaff/:id', upload.none(),ownerController.updateStaff);
-
-route.delete('/deleteStaff/:id', ownerController.deleteStaff);
 
 export default route;

@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             try {
                 const response = await fetch(`/owner/deleteStaff/${id}`, {
-                    method: 'DELETE',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     }

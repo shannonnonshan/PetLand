@@ -10,7 +10,8 @@ const userSchema = new Schema({
   password: String,
   gender: {
     type: String,
-    enum: ['Male', 'Female', 'none']
+    enum: ['Male', 'Female', 'none'],
+    default: 'none'
   },
   address: String,
   phone: String,
