@@ -337,6 +337,21 @@
             main.setAttribute('aria-hidden', 'true');
           }
       }
+      function closeModal(gohome = false) {
+        console.log("gohome:", gohome);
+        const modal = document.querySelector('.popupModel');
+        const main = document.getElementById('mainContent');
+        modal.classList.add('tw-hidden');
+        modal.setAttribute('aria-hidden', 'true');
+        main.setAttribute('aria-hidden', 'false');
+        
+        if (gohome) {
+          window.location.href = '/';
+        } else {
+          window.location.reload();
+        }
+          
+      }
 
     </script>
     <script>

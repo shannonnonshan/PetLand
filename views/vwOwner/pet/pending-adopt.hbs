@@ -13,7 +13,7 @@
                     if (response.ok) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Phê duyệt thành công!',
+                            title: 'Successful',
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
@@ -22,8 +22,8 @@
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Phê duyệt thất bại!',
-                            text: 'Vui lòng thử lại sau.'
+                            title: 'Failed',
+                            text: 'Please try again'
                         });
                     }
                 })
@@ -31,7 +31,7 @@
                     console.error('Lỗi:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Đã xảy ra lỗi!',
+                        title: 'Error!',
                         text: 'Không thể kết nối tới máy chủ.'
                     });
                 });
@@ -50,7 +50,7 @@
                     if (response.ok) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Từ chối thành công!',
+                            title: 'Successful Rejected',
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
@@ -59,7 +59,7 @@
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Từ chối thất bại!',
+                            title: 'Failed Reject',
                             text: 'Vui lòng thử lại sau.'
                         });
                     }

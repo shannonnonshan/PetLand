@@ -399,12 +399,12 @@
   height: 4rem !important
 }
 
-.tw-h-\[50\%\] {
-  height: 50% !important
-}
-
 .tw-h-\[50px\] {
   height: 50px !important
+}
+
+.tw-h-\[60\%\] {
+  height: 60% !important
 }
 
 .tw-h-\[60px\] {

@@ -6,11 +6,11 @@
         btn.addEventListener('click', function () {
             const petId = this.getAttribute('data-id');
             Swal.fire({
-                title: 'Bạn có chắc muốn phê duyệt?',
+                title: 'Are you sure?',
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Phê duyệt',
-                cancelButtonText: 'Hủy'
+                confirmButtonText: 'Approve',
+                cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('/pet/approved', {
@@ -22,7 +22,7 @@
                         if (response.ok) {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Phê duyệt thành công!',
+                                title: 'Successful!',
                                 showConfirmButton: false,
                                 timer: 1500
                             }).then(() => {
@@ -31,8 +31,8 @@
                         } else {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Phê duyệt thất bại!',
-                                text: 'Vui lòng thử lại.'
+                                title: 'Failed',
+                                text: 'Please try again.'
                             });
                         }
                     })
@@ -40,7 +40,7 @@
                         console.error('Lỗi:', error);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Lỗi kết nối!',
+                            title: 'Error connection',
                             text: 'Không thể gửi yêu cầu.'
                         });
                     });
