@@ -3,14 +3,10 @@ import petService from '../services/pet.service.js';
 import userService from '../services/user.service.js';
 import shiftService from '../services/shift.service.js';
 import bcrypt from 'bcryptjs'; 
-import dotenv from 'dotenv';
-import {auth, authOwner} from '../middlewares/auth.mdw.js';
-import nodemailer from 'nodemailer';
-import moment from 'moment';
+import {authOwner} from '../middlewares/auth.mdw.js';
 import bookingService from '../services/booking.service.js';
 import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
-import ownerController from '../controllers/owner.controller.js';
 import notifier from '../observer/notificationObserver.js';
 import { paginateQuery } from '../utils/pagination.js';
 const route = express.Router();
@@ -245,7 +241,7 @@ route.get('/statistics',authOwner, async function(req, res){
     })
 })
 
-route.get('/manageStaff/list',authOwner, async function(req, res){
+route.get('/manageStaff/listStaff',authOwner, async function(req, res){
     const list = await userService.findStaff().lean();
     res.render('vwOwner/staff/listStaff', {
         layout: 'owner-layout',
@@ -273,10 +269,53 @@ route.get('/manageStaff/update', authOwner, async function(req, res) {
     });
 });
 
-route.post('/createStaff', upload.none(),ownerController.createStaff);
 
-route.post('/updateStaff/:id', upload.none(),ownerController.updateStaff);
+route.post('/createStaff', async function(req, res) {
 
-route.delete('/deleteStaff/:id', ownerController.deleteStaff);
+        const { username, name, email, phone, gender } = req.body;
+        const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
+
+        const staff = {
+            name: name,
+            username: username,
+            password: hash_password,
+            phone: phone,
+            gender: gender,
+            email: email,
+            role: 'Staff',
+            createAt: Date.now()
+        };
+
+        await userService.add(staff);
+       res.redirect('/owner/manageStaff/listStaff');
+});
+
+
+route.post('/updateStaff/:id', async function(req, res) {
+    const { id } = req.params;
+    const { username, name, email, phone, gender } = req.body;
+    const user = await userService.findById(id) || null;
+    if(user){
+         const staffData = {
+            username,
+            name,
+            email,
+            phone,
+            gender,
+        };
+        await userService.updateStaff(id, staffData);
+        res.redirect('/owner/manageStaff/listStaff');
+    }
+    else{
+        res.send({message: "Not found!"});
+    }
+   
+});
+
+route.post('/deleteStaff/:id', async function(req, res){
+    const {id} = req.params;
+    await userService.deleteStaff(id);
+    res.json({ success: true, message: "Staff deleted successfully" });
+});
 
 export default route;
