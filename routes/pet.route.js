@@ -4,12 +4,12 @@ import multer from 'multer';
 import moment from 'moment';
 import { approvePet, adoptPet, completeAdoption, rejectPetAdoption, rejectPetDonation} from '../controllers/pet.controller.js';
 import Pet from '../models/Pet.js';
-import User from '../models/User.js';
+import DonateProcess from '../processes/pet/DonateProcess.js';
+import AdoptProcess from '../processes/pet/AdoptProcess.js';
 import { NotificationService } from '../services/notification.service.js';
 import {auth} from '../middlewares/auth.mdw.js';
 import userService from '../services/user.service.js';
-import notifier from '../observer/notificationObserver.js';
-import { STATUS } from '../constants/petStatus.js';
+
 const route = express.Router();
 
 route.get('/byCat', async function(req, res){
@@ -87,40 +87,11 @@ const storage = multer.diskStorage({
   });
   
   const upload = multer({ storage: storage });
-  
   route.post('/donate', upload.array('images', 3), async function (req, res) {
-    const {
-      petname, specie, petbreed, age, weight,
-      gender, vaccine, description, id
-    } = req.body;
-  
-    // Danh sách file ảnh đã upload
-    const imagePaths = req.files.map(file => '/uploads/' + file.filename); // đường dẫn để client dùng
-    const ymd_dod= moment(req.body.raw_dod).toDate();
-    const newPet = {
-      name: petname,
-      specie,
-      breed: petbreed,
-      age: parseInt(age),
-      weight: parseFloat(weight),
-      donator: id,
-      gender,
-      vaccine,
-      dod: ymd_dod,
-      description,
-      images: imagePaths,
-    };
-  
-    const pet = await petService.add(newPet);
+    const process = new DonateProcess(req, res);
+    await process.handle();
+  });
 
-    await notifier.notify({
-      entity: pet,
-      newStatus: STATUS.REQUEST_DONATION,
-      triggeredBy: req.user?._id || null,
-      entityType: 'Pet',
-    });
-    res.redirect('/pet/viewAdopted');
-});
 
 route.get('/adopt', auth, async function(req, res){
     const user = req.session.authUser || null;
@@ -132,41 +103,11 @@ route.get('/adopt', auth, async function(req, res){
         user: user
     });
 })
-
-route.post('/adopt', async function(req, res) {
-  const { id, petid } = req.body || {};
-  const ymd_dor =  moment(req.body.raw_dor).toDate();
-  const createdAt =  moment(Date.now()).toDate();
-  if (!id || !petid) {
-    return res.status(400).json({ message: 'Pet ID and User ID are required' });
-  }
-
-  try {
-    const pet = await Pet.findByIdAndUpdate(petid, {
-      adopter: id,
-      createdAt: createdAt,
-      status: 3,
-      adoptDate: ymd_dor
-    });
- 
-    if (!pet) {
-      return res.status(404).json({ message: 'Pet not found' });
-    }
-    await notifier.notify({
-      entity: pet,
-      newStatus: STATUS.REQUEST_ADOPTION,
-      triggeredBy: req.user?._id || null,
-      entityType: 'Pet',
-    });
-    return res.status(200).json({
-      successMessage: 'Adoption request submitted successfully!',
-      pet
-    });
-  } catch (error) {
-    console.error('Error during adoption request:', error);
-    return res.status(500).json({ message: 'An error occurred while processing the adoption request' });
-  }
+route.post('/adopt', async function (req, res) {
+  const process = new AdoptProcess(req, res);
+  await process.handle();
 });
+
 
 
 route.post('/cancel-adopt', async function(req, res) {
