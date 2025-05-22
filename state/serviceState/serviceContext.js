@@ -7,7 +7,6 @@ import ReviewedState from "./reviewedState.js";
 class ServiceContext {
   constructor(bookedService) {
     this.bookedService = bookedService;
-    console.log(this.bookedService.status);
     switch (bookedService.status) {
       case 'pending':
         this._state = new PendingState(this.bookedService);

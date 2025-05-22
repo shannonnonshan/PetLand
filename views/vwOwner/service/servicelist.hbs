@@ -1,0 +1,48 @@
+<div class="m-auto px-2">
+<div class=" flex flex-col justify-between ">
+    <a href="/owner/service-list">
+    <h2 class="font-bold text-2xl">Our Services</h2></a>
+    <div class="flex flex-row justify-end gap-1">
+    <a href="/owner/create-service">
+        <button class=" rounded-md text-center hover:border-2 hover:bg-white hover:border-red-300 p-2 hover:text-red-500 bg-red-400 text-white">
+    Add service
+    </button>
+    </a>
+    <a href="/owner/service-list?id=1">
+        <button class=" rounded-md text-center hover:border-2 hover:bg-white hover:border-red-300 p-2 hover:text-red-500 bg-red-400 text-white">
+    Dog
+    </button>
+    </a>
+    <a href="/owner/service-list?id=2">
+        <button class=" rounded-md text-center hover:border-2 hover:bg-white hover:border-yellow-300 p-2 hover:text-yellow-500 bg-yellow-400 text-white">
+    Cat
+    </button>
+    </a>
+    <a href="/owner/service-list?id=3">
+        <button class=" rounded-md text-center hover:border-2 hover:bg-white hover:border-green-300 p-2 hover:text-green-500 bg-green-400 text-white">
+    Both
+    </button>
+    </a>
+</div>
+</div>
+<hr style="color: #E2E1E1; border: 1px solid; width: 100%">
+<div class="card-body">
+    <div class="row">
+        {{#each list}}
+           <div class="col-12 col-sm-6 col-md-4 mb-3">
+             <div class="card border-2 w-[100%] h-[350px] mr-2 flex flex-col items-start p-4 justify-center" >
+                <img class="h-[150px] w-full self-center mb-2 object-cover" src="{{imageUrl}}" alt="{{imageUrl}}">
+                <span class="  text-xl font-bold font-spartan">{{serviceName}}</span>
+                <p class="mb-0">{{shortDescription}}</p>
+                <span>Duration: {{duration}} minutes</span>
+                <a href="/service/detail?id={{id}}" class="w-full">
+                <button type="submit" class="bg-[#F3EC1C] hover:bg-yellow-400 rounded-md font-bold text-center border-0 w-[100%] p-2 transition-colors duration-200"
+                >
+                View detail
+                </button>
+                </a>
+             </div>
+            </div>
+        {{/each}}
+    </div>
+</div>

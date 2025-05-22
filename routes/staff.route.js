@@ -15,7 +15,7 @@ import supportService from '../services/support.service.js';
 import { sendServiceEmail } from '../utils/mailer.js';
 
 import serviceService from '../services/service.service.js';
-import { paginateQuery } from '../utils/pagination.js';
+import { paginateQuery } from '../utils/features.js';
 const route = express.Router();
 
 route.get('/manageService/all',authStaff, async function(req, res){
