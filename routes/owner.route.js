@@ -9,6 +9,7 @@ import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
 import notifier from '../observer/notificationObserver.js';
 import { paginateQuery, generateServiceId } from '../utils/features.js';
+import serviceService from '../services/service.service.js';
 const route = express.Router();
 
 route.get('/managePet/all', authOwner, async function(req, res){
