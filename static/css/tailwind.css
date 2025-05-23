@@ -309,14 +309,6 @@
   margin-top: 50px !important
 }
 
-.tw-mb-\[0\.5\] {
-  margin-bottom: 0.5 !important
-}
-
-.tw-mb-\[1\.5px\] {
-  margin-bottom: 1.5px !important
-}
-
 .tw-line-clamp-2 {
   overflow: hidden !important;
   display: -webkit-box !important;
@@ -374,6 +366,10 @@
 
 .tw-h-\[150px\] {
   height: 150px !important
+}
+
+.tw-h-\[220px\] {
+  height: 220px !important
 }
 
 .tw-h-\[250px\] {
@@ -446,14 +442,6 @@
 
 .tw-h-screen {
   height: 100vh !important
-}
-
-.tw-h-\[380px\] {
-  height: 380px !important
-}
-
-.tw-h-\[220px\] {
-  height: 220px !important
 }
 
 .tw-max-h-\[50vh\] {
@@ -741,12 +729,6 @@
   overflow-y: scroll !important
 }
 
-.tw-truncate {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important
-}
-
 .tw-whitespace-normal {
   white-space: normal !important
 }
@@ -960,11 +942,6 @@
 .tw-object-cover {
   -o-object-fit: cover !important;
      object-fit: cover !important
-}
-
-.tw-object-fill {
-  -o-object-fit: fill !important;
-     object-fit: fill !important
 }
 
 .tw-p-2 {

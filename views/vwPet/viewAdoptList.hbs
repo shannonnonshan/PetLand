@@ -189,7 +189,7 @@
               </div>
 
 
-              {{#if (eq status 'adopt_completed')}}
+              {{#if (or (eq status 5) (eq status 6))}}
               <div class="button-container button flex justify-end space-x-4 mt-6">
                 <a data-id="{{_id}}" class="btn-view tw-cursor-pointer">
                   <i class="cart-icon ion-bag tw-mr-2"></i>VIEW DETAIL

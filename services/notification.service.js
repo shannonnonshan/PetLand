@@ -1,4 +1,4 @@
-import { Notification } from '../models/notification.js';
+import Notification from '../models/Notification.js';
 
 class NotificationService {
   static async notify({ toUsers, content, relatedEntity, entityType, triggeredBy }) {

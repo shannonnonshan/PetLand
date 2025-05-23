@@ -88,6 +88,9 @@ export default function (app) {
               return average.toFixed(1);
             },
             add: function (a, b) {
+            return a || b;
+          },
+          or: function (a, b) {
             return a + b;
           },
           range: function(start, end) {
