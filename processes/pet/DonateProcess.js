@@ -1,32 +1,31 @@
+// DonateProcess.js
 import PetProcess from './petProcess.js';
 import petService from '../../services/pet.service.js';
 import notifier from '../../observer/notificationObserver.js';
-import moment from 'moment';
+import PetBuilder from '../../builder/petBuilder.js'; // import builder
 import { STATUS } from '../../constants/petStatus.js';
 
 class DonateProcess extends PetProcess {
   async process() {
     const {
       petname, specie, petbreed, age, weight,
-      gender, vaccine, description, id
+      gender, vaccine, description, id, raw_dod
     } = this.req.body;
 
-    const imagePaths = this.req.files.map(file => '/uploads/' + file.filename);
-    const ymd_dod = moment(this.req.body.raw_dod).toDate();
-
-    const newPet = {
-      name: petname,
-      specie,
-      breed: petbreed,
-      age: parseInt(age),
-      weight: parseFloat(weight),
-      donator: id,
-      gender,
-      vaccine,
-      dod: ymd_dod,
-      description,
-      images: imagePaths,
-    };
+    const builder = new PetBuilder();
+    const newPet = builder
+      .setName(petname)
+      .setSpecie(specie)
+      .setBreed(petbreed)
+      .setAge(age)
+      .setWeight(weight)
+      .setDonator(id)
+      .setGender(gender)
+      .setVaccine(vaccine)
+      .setDescription(description)
+      .setDod(raw_dod)
+      .setImages(this.req.files)
+      .build();
 
     return await petService.add(newPet);
   }
