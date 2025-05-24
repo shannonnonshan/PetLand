@@ -9,6 +9,7 @@ import ServiceContext from '../state/serviceState/serviceContext.js';
 import {notifyEmailLater} from '../controllers/service.controller.js';
 import notifier from '../observer/notificationObserver.js';
 import { paginateQuery, generateServiceId } from '../utils/features.js';
+import serviceService from '../services/service.service.js';
 const route = express.Router();
 
 route.get('/managePet/all', authOwner, async function(req, res){
@@ -317,5 +318,43 @@ route.post('/deleteStaff/:id', async function(req, res){
     await userService.deleteStaff(id);
     res.json({ success: true, message: "Staff deleted successfully" });
 });
+route.get('/service-list', authOwner, async (req, res) => {
+  try {
+    let list = await serviceService.findAll().lean();
+    if (req.query.id) {
+        list = list.filter(service  => service.petType === Number(req.query.id));
+    } 
+    res.render('vwOwner/service/serviceList', {
+      layout: 'owner-layout',
+      list: list,
+    });
+  } catch (err) {
+    console.error('Error fetching services:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+route.get('/create-service', authOwner, async (req, res) => {
+  try {
+    res.render('vwOwner/service/createService', {
+      layout: 'owner-layout',
+    });
+  } catch (err) {
+    console.error('Error fetching pet types:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+route.post('/create-service', async (req, res) => {
+  try {
+    const generatedId = generateServiceId();
 
+    const data = { ...req.body, id: generatedId };
+
+    await serviceService.createService(data);
+
+    res.redirect('/owner/service-list');
+  } catch (err) {
+    console.error('Error creating service:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 export default route;
