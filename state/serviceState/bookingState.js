@@ -1,7 +1,7 @@
 //bookingState.js
 class BookingState {
-    constructor(bookingContext) {
-      this.bookingContext = bookingContext;
+    constructor(booking) {
+      this.booking = booking;
     }
     paid(accountant) {
       throw new Error('Cannot confirm in current state.');
