@@ -2,7 +2,6 @@
 import PetProcess from './petProcess.js';
 import petService from '../../services/pet.service.js';
 import notifier from '../../observer/notificationObserver.js';
-import PetBuilder from '../../builder/petBuilder.js'; // import builder
 import { STATUS } from '../../constants/petStatus.js';
 
 class DonateProcess extends PetProcess {
@@ -12,22 +11,20 @@ class DonateProcess extends PetProcess {
       gender, vaccine, description, id, raw_dod
     } = this.req.body;
 
-    const builder = new PetBuilder();
-    const newPet = builder
-      .setName(petname)
-      .setSpecie(specie)
-      .setBreed(petbreed)
-      .setAge(age)
-      .setWeight(weight)
-      .setDonator(id)
-      .setGender(gender)
-      .setVaccine(vaccine)
-      .setDescription(description)
-      .setDod(raw_dod)
-      .setImages(this.req.files)
-      .build();
-
-    return await petService.add(newPet);
+    const newPet = {
+      petname: petname,
+      specie: specie,
+      petbreed: petbreed,
+      age: age,
+      weight: weight,
+      id: id,
+      gender: gender,
+      vaccine: vaccine,
+      description: description,
+      raw_dod: raw_dod,
+      files: this.req.files
+    };
+    await petService.createPet(newPet);
   }
 
   async notify(pet) {

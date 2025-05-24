@@ -1,4 +1,5 @@
 import Pet from '../models/Pet.js';
+import PetBuilder from '../../builder/petBuilder.js'; // import builder
 
 export default {
     findAll(){
@@ -31,6 +32,22 @@ export default {
     findAllByAdoptId(id){
         return Pet.find({adopter: id});
     },
+    createPet(petData) {
+        const builder = new PetBuilder()
+            .setName(petData.petname)
+            .setSpecie(petData.specie)
+            .setBreed(petData.petbreed)
+            .setAge(petData.age)
+            .setWeight(petData.weight)
+            .setDonator(petData.id)
+            .setGender(petData.gender)
+            .setVaccine(petData.vaccine)
+            .setDescription(petData.description)
+            .setDod(petData.raw_dod)
+            .setImages(petData.files)
+            .build();
+        return this.add(builder);
 
+    }
 
 };
