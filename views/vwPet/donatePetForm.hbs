@@ -47,8 +47,43 @@
         e.target.value = formatPhoneNumber(e.target.value);
       });
     });
-
   </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('fmAdopt');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault(); // Ngăn gửi form mặc định
+
+    const formData = new FormData(form);
+
+    const res = await fetch('/pet/donate', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await res.json();
+    
+    if (data.successMessage) {
+      Swal.fire({
+        title: 'Success',
+        text: data.successMessage,
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = '/pet/viewAdopted';
+      });
+    } else if (data.message) {
+      Swal.fire({
+        title: 'Error',
+        text: data.message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
+  });
+});
+</script>
 
 {{/section}}
 <div class="container">

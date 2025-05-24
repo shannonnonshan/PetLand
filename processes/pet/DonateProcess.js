@@ -24,20 +24,24 @@ class DonateProcess extends PetProcess {
       raw_dod: raw_dod,
       files: this.req.files
     };
-    await petService.createPet(newPet);
+    const pet = await petService.createPet(newPet);
+    return pet;
   }
 
-  async notify(newPet) {
+  async notify(pet) {
     await notifier.notify({
-      entity: newPet,
+      entity: pet,
       newStatus: STATUS.REQUEST_DONATION,
       triggeredBy: this.req.user?._id || null,
       entityType: 'Pet',
     });
   }
 
-  success(newPet) {
-    this.res.redirect('/pet/viewAdopted');
+  success(pet) {
+    this.res.status(200).json({
+      successMessage: 'Donation request submitted successfully!',
+      pet,
+    });
   }
 }
 
