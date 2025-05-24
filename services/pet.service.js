@@ -1,5 +1,5 @@
 import Pet from '../models/Pet.js';
-import PetBuilder from '../../builder/petBuilder.js'; // import builder
+import PetBuilder from '../builder/petBuilder.js'; // import builder
 
 export default {
     findAll(){
@@ -34,7 +34,7 @@ export default {
     },
     createPet(petData) {
         const builder = new PetBuilder()
-            .setName(petData.petname)
+            .setName(petData.name)
             .setSpecie(petData.specie)
             .setBreed(petData.petbreed)
             .setAge(petData.age)

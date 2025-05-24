@@ -12,7 +12,7 @@ class DonateProcess extends PetProcess {
     } = this.req.body;
 
     const newPet = {
-      petname: petname,
+      name: petname,
       specie: specie,
       petbreed: petbreed,
       age: age,
@@ -27,16 +27,16 @@ class DonateProcess extends PetProcess {
     await petService.createPet(newPet);
   }
 
-  async notify(pet) {
+  async notify(newPet) {
     await notifier.notify({
-      entity: pet,
+      entity: newPet,
       newStatus: STATUS.REQUEST_DONATION,
       triggeredBy: this.req.user?._id || null,
       entityType: 'Pet',
     });
   }
 
-  success(pet) {
+  success(newPet) {
     this.res.redirect('/pet/viewAdopted');
   }
 }
