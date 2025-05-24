@@ -53,11 +53,11 @@
         btn.addEventListener('click', function () {
             const petId = this.getAttribute('data-id');
             Swal.fire({
-                title: 'Bạn có chắc muốn từ chối?',
+                title: 'Do you want to reject',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Từ chối',
-                cancelButtonText: 'Hủy'
+                confirmButtonText: 'Reject',
+                cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('/pet/rejected-donate', {
@@ -69,7 +69,7 @@
                         if (response.ok) {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Từ chối thành công!',
+                                title: 'Successful',
                                 showConfirmButton: false,
                                 timer: 1500
                             }).then(() => {
@@ -78,7 +78,7 @@
                         } else {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Từ chối thất bại!',
+                                title: 'Fail',
                                 text: 'Vui lòng thử lại.'
                             });
                         }

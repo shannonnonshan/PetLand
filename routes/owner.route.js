@@ -19,65 +19,32 @@ route.get('/managePet/all', authOwner, async function(req, res){
         layout: 'owner-layout',
         list: list
     })
-    
 })
-route.get('/managePet/pending',authOwner, async function(req, res){
-    
-
-    const list = await petService.findAllBy(1).lean();
-    res.render('vwOwner/pet/pending', {
-        layout: 'owner-layout',
-        list: list
-    })
-   
-})
-route.get('/managePet/approved',authOwner, async function(req, res){
-    
-
-    const list = await petService.findAllBy(2).lean();
-    res.render('vwOwner/pet/approved', {
-        layout: 'owner-layout',
-        list: list
-    })
-     
-})
-route.get('/managePet/adopt_requested', authOwner, async function(req, res){
-    
-
-    const list = await petService.findAllBy(3).lean();
-    res.render('vwOwner/pet/pending-adopt', {
-        layout: 'owner-layout',
-        list: list
-    })
-})
-route.get('/managePet/adopt_approved',authOwner , async function(req, res){
-    
-
-    const list = await petService.findAllBy(4).lean();
-    res.render('vwOwner/pet/completed-adopt', {
-        layout: 'owner-layout',
-        list: list
-    })
-})
-route.get('/managePet/rejected',authOwner, async function(req, res){
-    
-
-    const list = await petService.findAllBy(6).lean();
-    res.render('vwOwner/pet/approved', {
-        layout: 'owner-layout',
-        list: list
-    })
-     
-})
-route.get('/managePet/adopt_completed',authOwner, async function(req, res){
-    
-
-    const list = await petService.findAllBy(5).lean();
-    res.render('vwOwner/pet/approved', {
-        layout: 'owner-layout',
-        list: list
-    })
-     
+route.get('/managePet',authOwner, async function(req, res){
+    const status = parseInt(req.query.status);
+    const list = await petService.findAllBy(status).lean();
+    var view;
+    switch(status){
+        case 1:
+            view = "pending";
+            break;
+        case 2, 5, 6:
+            view = "approved";
+            break;
+        case 3:
+            view = "pendingAdopt";
+            break;
+        case 4:
+            view = "completedAdopt"
+            break;
+        default:
+            view = "pending";
+            break;
+    }
+    res.render(`vwOwner/pet/${view}`, {
+                layout: 'owner-layout',
+                list: list
+            })
 })
 
 route.get('/home', authOwner, function(req, res){
