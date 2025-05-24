@@ -291,7 +291,7 @@ route.get('/service-list', authOwner, async (req, res) => {
     if (req.query.id) {
         list = list.filter(service  => service.petType === Number(req.query.id));
     } 
-    res.render('vwOwner/service/serviceList', {
+    res.render('vwOwner/service/servicelist', {
       layout: 'owner-layout',
       list: list,
     });
