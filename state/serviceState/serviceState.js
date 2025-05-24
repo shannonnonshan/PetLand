@@ -1,7 +1,7 @@
 //serviceState.js
 class ServiceState {
-    constructor(bookedService) {
-      this.bookedService = bookedService;
+    constructor(serviceContext) {
+      this.serviceContext = serviceContext;
     }
     confirm(shiftId) {
         throw new Error('Cannot confirm in current state.');
