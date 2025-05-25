@@ -22,7 +22,7 @@ export default {
           { name: new RegExp(query, 'i') },
           { specie: new RegExp(query, 'i') }
         ],
-        status: 'approved'
+        status: 2
       }).limit(5).lean(),
       Service.find({ $or: serviceConditions }).limit(5).lean()
     ]);
