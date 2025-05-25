@@ -26,7 +26,7 @@ const sendCustomEmail = async (to, subject, html, senderName = "Pet Service") =>
 
 // Các hàm chuyên biệt gọi lại hàm chung với tên phù hợp
 export const sendEmail = (to, subject, html) =>
-  sendCustomEmail(to, subject, html, "Pet Donation");
+  sendCustomEmail(to, subject, html, "PetLand - News for you!");
 
 export const sendServiceEmail = (to, subject, html) =>
   sendCustomEmail(to, subject, html, "Pet Service");
