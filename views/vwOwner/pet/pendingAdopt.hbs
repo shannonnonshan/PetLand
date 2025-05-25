@@ -17,7 +17,7 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
-                            window.location.href = '/owner/managePet/adopt_approved';
+                            window.location.href = '/owner/managePet?status=4';
                         });
                     } else {
                         Swal.fire({
@@ -54,7 +54,7 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
-                            window.location.href = '/owner/managePet/rejected';
+                            window.location.href = '/owner/managePet?status=6';
                         });
                     } else {
                         Swal.fire({
